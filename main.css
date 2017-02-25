@@ -1,0 +1,51 @@
+html, body {
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #eee;
+}
+
+body {
+    margin: 30px;
+}
+
+div.repl {
+    word-wrap: break-word;
+    font-size: 18px;
+    font-family: 'Source Code Pro', monospace;
+    color: #fff;
+}
+
+div.repl div.jquery-console-inner {
+    width: 900px;
+    max-width: 95%;
+    height: 380px;
+    background: #333;
+    padding: 0.8em;
+    overflow: auto;
+    border-radius: 5px;
+    box-shadow: 0px 5px 10px #333;
+}
+
+div.repl div.jquery-console-prompt-box {
+    color: #fff;
+}
+
+div.repl div.jquery-console-focus span.jquery-console-cursor {
+    background: #fefefe;
+    color: #333;
+    font-weight: bold
+}
+
+div.repl div.jquery-console-message-error {
+    color: #FF4136;
+    font-weight: bold;
+    padding: 0.1em;
+}
+
+div.repl div.jquery-console-message-value {
+    color: #9cf;
+    padding: 0.1em;
+}
+
+div.repl span.jquery-console-prompt-label {
+    font-weight: bold
+}

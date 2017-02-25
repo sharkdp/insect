@@ -1,0 +1,20 @@
+{
+  "name": "calc",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output"
+  ],
+  "dependencies": {
+    "purescript-prelude": "^2.4.0",
+    "purescript-quantities": "^2.0.0",
+    "purescript-string-parsers": "^2.0.1",
+    "purescript-integers": "^2.1.1",
+    "purescript-globals": "^2.0.0",
+    "jquery-console": "*"
+  },
+  "devDependencies": {
+    "purescript-psci-support": "^2.0.0"
+  }
+}

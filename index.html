@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Source+Code+Pro" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+    <script src="insect.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-console/jquery.console.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var repl = $('<div class="repl">');
+        $('body').append(repl);
+        var controller = repl.console({
+          promptLabel: '> ',
+          commandValidate: function(line) {
+            if (line == "") return false;
+            else return true;
+          },
+          commandHandle: function(line) {
+            var res = PS.Insect.repl(line);
+            return [{ msg: res.out,
+                      className: "jquery-console-message-" + res.divClass }]
+          },
+          autofocus: true,
+          animateScroll: true,
+          promptHistory: true,
+
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>insect</h1>
+    <p><b>in</b>teractive <b>s</b>ci<b>e</b>ntific <b>c</b>alcula<b>t</b>or</p>
+    <div id="output"></div>
+  </body>
+</html>
