@@ -79,16 +79,8 @@ pSIPrefix =
   <|> (string "E" *> pure exa)
   <|> pure id
 
-pImperialUnit :: Parser DerivedUnit
-pImperialUnit =
-      (string "miles" *> pure mile)
-  <|> (string "mile"  *> pure mile)
-  <|> (string "mph"   *> pure (mile ./ hour))
-  <|> (string "in"    *> pure inch)
-  <|> (string "ft"    *> pure foot)
-
-pUnit :: Parser DerivedUnit
-pUnit =
+pNormalUnit :: Parser DerivedUnit
+pNormalUnit =
       (string "sec"   *> pure second)
   <|> (string "min"   *> pure minute)
   <|> (string "hours" *> pure hour)
@@ -106,17 +98,29 @@ pUnit =
   <|> (string "s"     *> pure second)
   <?> "Expected unit"
 
+pImperialUnit :: Parser DerivedUnit
+pImperialUnit =
+      (string "miles" *> pure mile)
+  <|> (string "mile"  *> pure mile)
+  -- <|> (string "mi"    *> pure mile)    TODO: this is incompatibel with 'min'
+  <|> (string "mph"   *> pure (mile ./ hour))
+  <|> (string "in"    *> pure inch)
+  <|> (string "ft"    *> pure foot)
 
 pUnitWithSIPrefix :: Parser DerivedUnit
-pUnitWithSIPrefix = try withPrefix <|> try pUnit <|> pure unity
-  where
-    withPrefix = do
-      p <- pSIPrefix
-      u <- pUnit
-      pure $ p u
+pUnitWithSIPrefix = do
+  p <- pSIPrefix
+  u <- pNormalUnit
+  pure $ p u
+
+pUnit :: Parser DerivedUnit
+pUnit = try pUnitWithSIPrefix
+    <|> try pImperialUnit
+    <|> try pNormalUnit
+    <|> pure unity
 
 pQuantity :: Parser Quantity
-pQuantity = quantity <$> pNumber <*> pUnitWithSIPrefix
+pQuantity = quantity <$> pNumber <*> pUnit
 
 
 qS ea eb = do
@@ -138,13 +142,13 @@ pExpr = buildExprParser [ [ Infix (string "/" $> lift2 (⊘)) AssocRight ]
                         ] (pure <$> pQuantity)
 
 pInput :: Parser (Either UnificationError Quantity)
-pInput = try (map toStandard <$> (pExpr <* eof))
-  <|> conversion
+pInput = try conversion
+  <|> (pExpr <* eof)
   where
     conversion = do
       expr <- pExpr
       string " to "
-      target <- pUnitWithSIPrefix
+      target <- pUnit
       eof
       pure (expr >>= (flip convertTo) target)
 
