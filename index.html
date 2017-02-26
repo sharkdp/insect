@@ -14,11 +14,10 @@
         $('body').append(repl);
         var controller = repl.console({
           promptLabel: '> ',
-          commandValidate: function(line) {
-            if (line == "") return false;
-            else return true;
-          },
           commandHandle: function(line) {
+            if (line.trim() === "") {
+              return [""];
+            }
             var res = PS.Insect.repl(line);
             return [{ msg: res.out,
                       className: "jquery-console-message-" + res.divClass }]
