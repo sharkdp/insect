@@ -2,7 +2,7 @@ module Insect (
   repl
   ) where
 
-import Prelude
+import Prelude hiding (degree)
 
 import Control.Alt ((<|>))
 import Control.Apply (lift2)
@@ -81,31 +81,60 @@ pSIPrefix =
 
 pNormalUnit :: Parser DerivedUnit
 pNormalUnit =
-      (string "sec"   *> pure second)
-  <|> (string "min"   *> pure minute)
-  <|> (string "hours" *> pure hour)
-  <|> (string "hour"  *> pure hour)
-  <|> (string "h"     *> pure hour)
-  <|> (string "days"  *> pure day)
-  <|> (string "day"   *> pure day)
-  <|> (string "d"     *> pure day)
-  <|> (string "weeks" *> pure week)
-  <|> (string "week"  *> pure week)
-  <|> (string "m/h"   *> pure (meter ./ hour)) -- TODO
-  <|> (string "m/s"   *> pure (meter ./ second)) -- TODO
-  <|> (string "g"     *> pure gram)
-  <|> (string "m"     *> pure meter)
-  <|> (string "s"     *> pure second)
+      (string "radians" *> pure radian)
+  <|> (string "radian"  *> pure radian)
+  <|> (string "rad"     *> pure radian)
+  <|> (string "degrees" *> pure degree)
+  <|> (string "degree"  *> pure degree)
+  <|> (string "deg"     *> pure degree)
+  <|> (string "hertz"   *> pure hertz)
+  <|> (string "Hz"      *> pure hertz)
+  <|> (string "N"       *> pure newton)
+  <|> (string "J"       *> pure joule)
+  <|> (string "W"       *> pure watt)
+  <|> (string "bytes"   *> pure byte)
+  <|> (string "byte"    *> pure byte)
+  <|> (string "bits"    *> pure bit)
+  <|> (string "bit"     *> pure bit)
+  <|> (string "bps"     *> pure (bit ./ second))
+  <|> (string "b"       *> pure byte)
+  <|> (string "sec"     *> pure second)
+  <|> (string "min"     *> pure minute)
+  <|> (string "hours"   *> pure hour)
+  <|> (string "hour"    *> pure hour)
+  <|> (string "h"       *> pure hour)
+  <|> (string "days"    *> pure day)
+  <|> (string "day"     *> pure day)
+  <|> (string "d"       *> pure day)
+  <|> (string "weeks"   *> pure week)
+  <|> (string "week"    *> pure week)
+  <|> (string "m/h"     *> pure (meter ./ hour)) -- TODO: handle this differently
+  <|> (string "m/s"     *> pure (meter ./ second)) -- TODO: handle this differently
+  <|> (string "g"       *> pure gram)
+  <|> (string "m"       *> pure meter)
+  <|> (string "s"       *> pure second)
   <?> "Expected unit"
 
 pImperialUnit :: Parser DerivedUnit
 pImperialUnit =
-      (string "miles" *> pure mile)
-  <|> (string "mile"  *> pure mile)
-  -- <|> (string "mi"    *> pure mile)    TODO: this is incompatibel with 'min'
-  <|> (string "mph"   *> pure (mile ./ hour))
-  <|> (string "in"    *> pure inch)
-  <|> (string "ft"    *> pure foot)
+      (string "miles"  *> pure mile)
+  <|> (string "mile"   *> pure mile)
+  -- <|> (string "mi"     *> pure mile)    TODO: this is incompatible with 'min'
+  <|> (string "mph"    *> pure (mile ./ hour))
+  <|> (string "inches" *> pure inch)
+  <|> (string "inch"   *> pure inch)
+  <|> (string "in"     *> pure inch)
+  <|> (string "yards"  *> pure yard)
+  <|> (string "yard"   *> pure yard)
+  <|> (string "yd"     *> pure yard)
+  <|> (string "feet"   *> pure foot)
+  <|> (string "foot"   *> pure foot)
+  <|> (string "ft"     *> pure foot)
+  <|> (string "ounces" *> pure ounce)
+  <|> (string "ounce"  *> pure ounce)
+  <|> (string "oz"     *> pure ounce)
+  <|> (string "pound"  *> pure pound)
+  <|> (string "lb"     *> pure pound)
 
 pUnitWithSIPrefix :: Parser DerivedUnit
 pUnitWithSIPrefix = do
