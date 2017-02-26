@@ -4,35 +4,61 @@ module Insect (
 
 import Prelude
 
-import Control.Monad.Eff (Eff)
-
-import Control.Alt
-import Control.Apply
+import Control.Alt ((<|>))
+import Control.Apply (lift2)
 
 import Data.Quantity
+import Data.Quantity.Math
+
 import Data.Units
 import Data.Units.SI
 import Data.Units.SI.Derived
+import Data.Units.SI.Accepted
 import Data.Units.Imperial
 import Data.Units.Time
+import Data.Units.Bit
+
+import Data.Array (fromFoldable)
+import Data.Either (Either(..))
+import Data.Maybe
+import Data.String
+
+import Global (readFloat, isFinite)
+
+import Partial.Unsafe
 
 import Text.Parsing.StringParser
 import Text.Parsing.StringParser.Combinators
-import Text.Parsing.StringParser.String
 import Text.Parsing.StringParser.Expr
-import Data.Either
-import Data.Int (fromString, toNumber)
-import Data.Foldable
-import Data.String
-import Data.Maybe
-import Data.Array (fromFoldable)
-import Partial.Unsafe
-import Global (readFloat)
+import Text.Parsing.StringParser.String
 
 pNumber :: Parser Number
 pNumber = do
-  nums <- many1 anyDigit
-  pure $ readFloat (fromCharArray (fromFoldable nums))
+  intPart <- signAndDigits
+
+  mFracPart <- optionMaybe (append <$> string "." <*> digits)
+  let fracPart = fromMaybe "" mFracPart
+
+  mExpPart <- optionMaybe (append <$> string "e" <*> signAndDigits)
+  let expPart = fromMaybe "" mExpPart
+
+  let num = readFloat (intPart <> fracPart <> expPart)
+
+  if isFinite num
+    then pure num
+    else fail "Could not parse Number"
+
+  where
+    digits :: Parser String
+    digits = do
+      ds <- many1 anyDigit
+      pure $ fromCharArray (fromFoldable ds)
+
+    signAndDigits :: Parser String
+    signAndDigits = do
+      sign <- singleton <$> option '+' (oneOf ['+', '-'])
+      intPart <- digits
+      pure $ sign <> intPart
 
 pPrefix :: Parser (DerivedUnit → DerivedUnit)
 pPrefix =
