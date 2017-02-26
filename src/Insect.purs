@@ -60,15 +60,23 @@ pNumber = do
       intPart <- digits
       pure $ sign <> intPart
 
-pPrefix :: Parser (DerivedUnit → DerivedUnit)
-pPrefix =
-      (string "µ" *> pure micro)
+pSIPrefix :: Parser (DerivedUnit → DerivedUnit)
+pSIPrefix =
+      (string "a" *> pure atto)
+  <|> (string "f" *> pure femto)
+  <|> (string "p" *> pure pico)
+  <|> (string "n" *> pure nano)
+  <|> (string "µ" *> pure micro)
   <|> (string "m" *> pure milli)
   <|> (string "c" *> pure centi)
+  <|> (string "d" *> pure deci)
   <|> (string "h" *> pure hecto)
   <|> (string "k" *> pure kilo)
   <|> (string "M" *> pure mega)
   <|> (string "G" *> pure giga)
+  <|> (string "T" *> pure tera)
+  <|> (string "P" *> pure peta)
+  <|> (string "E" *> pure exa)
   <|> pure id
 
 pImperialUnit :: Parser DerivedUnit
@@ -99,16 +107,16 @@ pUnit =
   <?> "Expected unit"
 
 
-pUnitWithPrefix :: Parser DerivedUnit
-pUnitWithPrefix = try withPrefix <|> try pUnit <|> pure unity
+pUnitWithSIPrefix :: Parser DerivedUnit
+pUnitWithSIPrefix = try withPrefix <|> try pUnit <|> pure unity
   where
     withPrefix = do
-      p <- pPrefix
+      p <- pSIPrefix
       u <- pUnit
       pure $ p u
 
 pQuantity :: Parser Quantity
-pQuantity = quantity <$> pNumber <*> pUnitWithPrefix
+pQuantity = quantity <$> pNumber <*> pUnitWithSIPrefix
 
 
 qS ea eb = do
@@ -136,7 +144,7 @@ pInput = try (map toStandard <$> (pExpr <* eof))
     conversion = do
       expr <- pExpr
       string " to "
-      target <- pUnitWithPrefix
+      target <- pUnitWithSIPrefix
       eof
       pure (expr >>= (flip convertTo) target)
 
