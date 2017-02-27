@@ -108,6 +108,7 @@ pNormalUnit =
   <|> (string "d"       *> pure day)
   <|> (string "weeks"   *> pure week)
   <|> (string "week"    *> pure week)
+  <|> (string "kmh"     *> pure (kilo meter ./ hour))
   <|> (string "m/h"     *> pure (meter ./ hour)) -- TODO: handle this differently
   <|> (string "m/s"     *> pure (meter ./ second)) -- TODO: handle this differently
   <|> (string "g"       *> pure gram)
@@ -162,6 +163,11 @@ qA ea eb = do
   b <- eb
   a ⊕ b
 
+qPow eBase eExp = do
+  base <- eBase
+  exp <- eExp
+  expNumber <- exp `asValueIn` unity
+  pure $ base `pow` expNumber
 
 pExpr :: Parser (Either UnificationError Quantity)
 pExpr = buildExprParser [ [ Infix (string "/" $> lift2 (⊘)) AssocRight ]
