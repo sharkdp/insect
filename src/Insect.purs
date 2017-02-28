@@ -6,6 +6,7 @@ import Prelude hiding (degree)
 
 import Control.Alt ((<|>))
 import Control.Apply (lift2)
+import Control.Lazy (fix)
 
 import Data.Quantity
 import Data.Quantity.Math
@@ -18,21 +19,55 @@ import Data.Units.Imperial
 import Data.Units.Time
 import Data.Units.Bit
 
-import Data.Array (fromFoldable)
-import Data.Either (Either(..))
-import Data.Maybe
-import Data.String
+import Data.Either (Either(..), either)
+import Data.Int (toNumber)
 
-import Global (readFloat, isFinite)
+import Text.Parsing.Parser
+import Text.Parsing.Parser.Combinators
+import Text.Parsing.Parser.Expr
+import Text.Parsing.Parser.String
+import Text.Parsing.Parser.Token hiding (token)
 
-import Partial.Unsafe
+type Expect = Either UnificationError
+type P a = Parser String a
 
-import Text.Parsing.StringParser
-import Text.Parsing.StringParser.Combinators
-import Text.Parsing.StringParser.Expr
-import Text.Parsing.StringParser.String
+languageDef :: LanguageDef
+languageDef = LanguageDef
+  { commentStart: ""
+  , commentEnd: ""
+  , commentLine: "#"
+  , nestedComments: false
+  , identStart: letter
+  , identLetter: alphaNum <|> char '_'
+  , opStart: oneOf ['+', '-', '*', '/', '^', '=']
+  , opLetter: oneOf ['>']
+  , reservedNames: []
+  , reservedOpNames: ["->", "+", "-", "*", "/", "^", "="]
+  , caseSensitive: true
+}
 
-pNumber :: Parser Number
+token :: TokenParser
+token = makeTokenParser languageDef
+
+-- TODO: this does not parse huge decimals correctly, as they are converted
+-- to Int first
+pNumber :: P Number
+pNumber = either toNumber id <$> token.naturalOrFloat
+
+parens :: ∀ a. P a -> P a
+parens = token.parens
+
+reservedOp :: String -> P Unit
+reservedOp = token.reservedOp
+
+reserved :: String -> P Unit
+reserved = token.reserved
+
+white :: P Unit
+white = token.whiteSpace
+
+{--
+pNumber :: P Number
 pNumber = do
   intPart <- signAndDigits
 
@@ -49,18 +84,19 @@ pNumber = do
     else fail "Could not parse Number"
 
   where
-    digits :: Parser String
+    digits :: P String
     digits = do
-      ds <- many1 anyDigit
+      ds <- some $ oneOf ['0', '1', '2']
       pure $ fromCharArray (fromFoldable ds)
 
-    signAndDigits :: Parser String
+    signAndDigits :: P String
     signAndDigits = do
       sign <- singleton <$> option '+' (oneOf ['+', '-'])
       intPart <- digits
       pure $ sign <> intPart
+--}
 
-pSIPrefix :: Parser (DerivedUnit → DerivedUnit)
+pSIPrefix :: P (DerivedUnit → DerivedUnit)
 pSIPrefix =
       (string "a" *> pure atto)
   <|> (string "f" *> pure femto)
@@ -79,7 +115,7 @@ pSIPrefix =
   <|> (string "E" *> pure exa)
   <|> pure id
 
-pNormalUnit :: Parser DerivedUnit
+pNormalUnit :: P DerivedUnit
 pNormalUnit =
       (string "radians" *> pure radian)
   <|> (string "radian"  *> pure radian)
@@ -116,7 +152,7 @@ pNormalUnit =
   <|> (string "s"       *> pure second)
   <?> "Expected unit"
 
-pImperialUnit :: Parser DerivedUnit
+pImperialUnit :: P DerivedUnit
 pImperialUnit =
       (string "miles"  *> pure mile)
   <|> (string "mile"   *> pure mile)
@@ -137,19 +173,19 @@ pImperialUnit =
   <|> (string "pound"  *> pure pound)
   <|> (string "lb"     *> pure pound)
 
-pUnitWithSIPrefix :: Parser DerivedUnit
+pUnitWithSIPrefix :: P DerivedUnit
 pUnitWithSIPrefix = do
   p <- pSIPrefix
   u <- pNormalUnit
   pure $ p u
 
-pUnit :: Parser DerivedUnit
+pUnit :: P DerivedUnit
 pUnit = try pUnitWithSIPrefix
     <|> try pImperialUnit
     <|> try pNormalUnit
     <|> pure unity
 
-pQuantity :: Parser Quantity
+pQuantity :: P Quantity
 pQuantity = quantity <$> pNumber <*> pUnit
 
 
@@ -169,28 +205,38 @@ qPow eBase eExp = do
   expNumber <- exp `asValueIn` unity
   pure $ base `pow` expNumber
 
-pExpr :: Parser (Either UnificationError Quantity)
-pExpr = buildExprParser [ [ Infix (string "/" $> lift2 (⊘)) AssocRight ]
-                        , [ Infix (string "*" $> lift2 (⊗)) AssocRight ]
-                        , [ Infix (string "-" $> qS) AssocRight ]
-                        , [ Infix (string "+" $> qA) AssocRight ]
-                        ] (pure <$> pQuantity)
+pTerm :: P (Expect Quantity) -> P (Expect Quantity)
+pTerm p = parens p <|> (Right <$> pQuantity)
 
-pInput :: Parser (Either UnificationError Quantity)
-pInput = try conversion
-  <|> (pExpr <* eof)
-  where
-    conversion = do
-      expr <- pExpr
-      string " to "
-      target <- pUnit
-      eof
-      pure (expr >>= (flip convertTo) target)
+pExpr :: P (Expect Quantity)
+pExpr = fix \p ->
+  buildExprParser [ [ Infix (reservedOp "/" $> lift2 (⊘)) AssocRight ]
+                  , [ Infix (reservedOp "*" $> lift2 (⊗)) AssocRight ]
+                  , [ Infix (reservedOp "-" $> qS) AssocRight ]
+                  , [ Infix (reservedOp "+" $> qA) AssocRight ]
+                  ] (pTerm p)
+
+pConversion :: P (Expect Quantity)
+pConversion = do
+  expr <- pExpr
+  white
+  reservedOp "->"
+  target <- pUnit
+  eof
+  pure (expr >>= (flip convertTo) target)
+
+
+pInput :: P (Expect Quantity)
+pInput = try pConversion <|> (pExpr <* eof)
 
 repl :: String -> { out :: String, divClass :: String }
 repl inp =
-  case runParser pInput inp of
-    Left parseErr -> { out: show parseErr, divClass: "error" }
+  case runParser inp pInput of
+    Left pErr ->
+      let pos = parseErrorPosition pErr
+      in { out: "Parse error: " <> parseErrorMessage pErr <>
+                 " at position " <> show pos
+          , divClass: "error" }
     Right res ->
       case res of
         Left unificationError -> { out: errorMessage unificationError, divClass: "error" }
