@@ -26,6 +26,7 @@ import Text.Parsing.Parser
 import Text.Parsing.Parser.Combinators
 import Text.Parsing.Parser.Expr
 import Text.Parsing.Parser.String
+import Text.Parsing.Parser.Pos (Position(..))
 import Text.Parsing.Parser.Token hiding (token)
 
 type Expect = Either UnificationError
@@ -234,9 +235,11 @@ repl inp =
   case runParser inp pInput of
     Left pErr ->
       let pos = parseErrorPosition pErr
-      in { out: "Parse error: " <> parseErrorMessage pErr <>
-                 " at position " <> show pos
-          , divClass: "error" }
+      in case pos of
+           (Position rec) ->
+             { out: "Parse error: " <> parseErrorMessage pErr <>
+                    " at position " <> show rec.column
+             , divClass: "error" }
     Right res ->
       case res of
         Left unificationError -> { out: errorMessage unificationError, divClass: "error" }
