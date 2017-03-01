@@ -1,28 +1,41 @@
 html, body {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Exo 2', sans-serif;
     background-color: #eee;
 }
 
 body {
     margin: 30px;
+    font-size: 1.2em;
+}
+
+p.desc {
+    margin-top: 0.6em;
+    margin-bottom: 1.8em;
+}
+
+h1 {
+    font-weight: 400;
+    font-size: 3em;
+    line-height: 100%;
+    margin-bottom: 0;
+    padding: 0;
 }
 
 div.repl {
     word-wrap: break-word;
-    font-size: 18px;
-    font-family: 'Source Code Pro', monospace;
+    font-family: 'Fira Mono', monospace;
     color: #fff;
 }
 
 div.repl div.jquery-console-inner {
     width: 900px;
-    max-width: 95%;
-    height: 380px;
-    background: #333;
-    padding: 0.8em;
+    max-width: 90%;
+    height: 480px;
+    background: #272725;
+    padding: 1em;
     overflow: auto;
-    border-radius: 5px;
-    box-shadow: 0px 5px 10px #333;
+    border-radius: 4px;
+    box-shadow: 0px 3px 8px #555;
 }
 
 div.repl div.jquery-console-prompt-box {
@@ -37,15 +50,16 @@ div.repl div.jquery-console-focus span.jquery-console-cursor {
 
 div.repl div.jquery-console-message-error {
     color: #FF4136;
-    font-weight: bold;
-    padding: 0.1em;
+    padding-top: 0.1em;
+    padding-bottom: 1em;
 }
 
 div.repl div.jquery-console-message-value {
     color: #9cf;
-    padding: 0.1em;
+    padding-top: 0.1em;
+    padding-bottom: 1em;
 }
 
 div.repl span.jquery-console-prompt-label {
-    font-weight: bold
+    font-weight: bold;
 }
