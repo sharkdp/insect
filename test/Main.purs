@@ -17,7 +17,8 @@ import Test.Unit.Console (TESTOUTPUT)
 import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
-import Quantities ((./), unity, meter, inch, hour, minute, kilo, meter, mile)
+import Quantities ((./), unity, milli, nano, meter, inch, hour, minute,
+                   kilo, meter, mile, gram)
 
 import Insect.Language
 import Insect.Parser (parseInsect)
@@ -101,6 +102,17 @@ main = runTest do
         , "2.3meters"
         ]
 
+      allParseAs (Expression (Q 10.0 mile))
+        [ "10miles"
+        , "10mile"
+        ]
+
+      allParseAs (Expression (Q 10.0 inch))
+        [ "10inches"
+        , "10inch"
+        , "10in"
+        ]
+
       shouldFail "2.3yikes"
 
     test "SI prefixes" do
@@ -109,7 +121,24 @@ main = runTest do
         , "  2.3 km "
         ]
 
+      allParseAs (Expression (Q 2.3 (milli meter)))
+        [ "2.3mm"
+        , "  2.3 mm "
+        ]
+
+      allParseAs (Expression (Q 2.3 (nano gram)))
+        [ "2.3ng"
+        , "  2.3 ng "
+        ]
+
+      allParseAs (Expression (Q 2.3 (kilo minute)))
+        [ "2.3kmin"
+        , "  2.3 kmin "
+        ]
+
       shouldFail "2.3k m"
+      shouldFail "2.3m m"
+      shouldFail "2.3n g"
 
     test "Divisions" do
       allParseAs (Expression (Q 2.3 (kilo meter ./ hour)))
