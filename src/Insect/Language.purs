@@ -35,11 +35,13 @@ instance showBinOp ∷ Show BinOp where show = gShow
 data Expression
  = Q Number DerivedUnit
  | BinOp BinOp Expression Expression
+ | Variable Identifier
 
 derive instance eqExpression ∷ Eq Expression
 instance showExpression ∷ Show Expression where
   show (Q n u) = "(Q " <> show n <> " " <> show u <> ")"
   show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
+  show (Variable n) = "(Variable " <> show n <> ")"
 
 -- | A command in the Insect language.
 data Command

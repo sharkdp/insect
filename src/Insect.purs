@@ -10,10 +10,10 @@ import Text.Parsing.Parser.Pos (Position(..))
 import Text.Parsing.Parser (parseErrorPosition, parseErrorMessage)
 
 import Insect.Parser (parseInsect)
-import Insect.Interpreter (runInsect, MessageType(..), Message(..))
+import Insect.Interpreter (runInsect, startEnv, MessageType(..), Message(..))
 
 typeToClass ∷ MessageType → String
-typeToClass Info = "info"
+typeToClass Info  = "info"
 typeToClass Error = "error"
 typeToClass Value = "value"
 
@@ -29,5 +29,5 @@ repl userInput =
                     " at position " <> show rec.column
              , divClass: "error" }
     Right statement →
-      case runInsect statement of
+      case runInsect startEnv statement of
         (Message msgType msg) → { divClass: typeToClass msgType, out: msg }

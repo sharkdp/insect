@@ -211,9 +211,12 @@ derivedUnit =
 quantity ∷ P Expression
 quantity = whiteSpace *> (Q <$> number <*> (derivedUnit <|> pure unity)) <* whiteSpace
 
+variable ∷ P Expression
+variable = Variable <$> token.identifier
+
 -- | Helper for the expression parser below.
 term ∷ P Expression → P Expression
-term p = parens p <|> quantity
+term p = parens p <|> quantity <|> variable
 
 -- | Parse a full expression.
 expression ∷ P Expression
