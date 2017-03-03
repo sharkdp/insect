@@ -1,6 +1,6 @@
 module Test.Main where
 
-import Prelude
+import Prelude hiding (degree)
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE)
@@ -17,7 +17,7 @@ import Test.Unit.Console (TESTOUTPUT)
 import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
-import Quantities ((./), unity, milli, nano, meter, inch, hour, minute,
+import Quantities ((./), (.^), unity, milli, nano, meter, inch, hour, minute,
                    kilo, mile, gram, second, deci, tera, hertz, degree, radian)
 
 import Insect.Language (BinOp(..), Expression(..), Statement(..))
@@ -215,6 +215,32 @@ main = runTest do
         [ "42/7/3"
         , "(42/7)/3"
         ]
+
+    test "Exponentiation" do
+      allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Q 4.0 unity))) $
+        [ "3^4"
+        , "3 ^ 4"
+        , "3**4"
+        , "3 ** 4"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Q (-1.4) unity))) $
+        [ "3^-1.4"
+        , "3**-1.4"
+        , "3 ^ (-1.4)"
+        , "3 ** (-1.4)"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Q 3.0 meter) (Q 2.0 unity))) $
+        [ "(3m)^2"
+        , "(3.0m)^(2.0)"
+        ]
+
+      -- TODO
+      --allParseAs (Expression (Q 3.0 (meter .^ 2.0))) $
+      --  [ "3m^2"
+      --  , "3.0(m)^(2.0)"
+      --  ]
 
   suite "Parser - Conversions" do
     test "Simple" do

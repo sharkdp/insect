@@ -42,7 +42,7 @@ insectLanguage = LanguageDef
   , identStart: letter
   , identLetter: alphaNum <|> char '_'
   , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=']
-  , opLetter: oneOf ['>']
+  , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?"]
   , reservedOpNames: ["->", "+", "-", "*", "/", "^", "="]
   , caseSensitive: true
@@ -218,7 +218,8 @@ term p = parens p <|> quantity
 -- | Parse a full expression.
 expression ∷ P Expression
 expression = fix \p →
-  buildExprParser [ [ Infix (reservedOp "/" $> BinOp Div) AssocLeft ]
+  buildExprParser [ [ Infix ((reservedOp "^" <|> reservedOp "**") $> BinOp Pow) AssocLeft ]
+                  , [ Infix (reservedOp "/" $> BinOp Div) AssocLeft ]
                   , [ Infix ((reservedOp "*" <|> reservedOp "·") $> BinOp Mul) AssocLeft ]
                   , [ Infix (reservedOp "-" $> BinOp Sub) AssocLeft ]
                   , [ Infix (reservedOp "+" $> BinOp Add) AssocLeft ]
