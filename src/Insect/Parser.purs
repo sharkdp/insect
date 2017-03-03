@@ -41,7 +41,7 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: letter
   , identLetter: alphaNum <|> char '_'
-  , opStart: oneOf ['+', '-', '*', '/', '^', '=']
+  , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=']
   , opLetter: oneOf ['>']
   , reservedNames: []
   , reservedOpNames: ["->", "+", "-", "*", "/", "^", "="]
@@ -129,10 +129,16 @@ normalUnit =
   <|> (string "degrees" *> pure degree)
   <|> (string "degree"  *> pure degree)
   <|> (string "deg"     *> pure degree)
+  <|> (string "°"       *> pure degree)
   <|> (string "hertz"   *> pure hertz)
   <|> (string "Hz"      *> pure hertz)
+  <|> (string "newton"  *> pure newton)
   <|> (string "N"       *> pure newton)
+  <|> (string "joules"  *> pure joule)
+  <|> (string "joule"   *> pure joule)
   <|> (string "J"       *> pure joule)
+  <|> (string "watts"   *> pure watt)
+  <|> (string "watt"    *> pure watt)
   <|> (string "W"       *> pure watt)
   <|> (string "bytes"   *> pure byte)
   <|> (string "byte"    *> pure byte)
@@ -140,7 +146,10 @@ normalUnit =
   <|> (string "bit"     *> pure bit)
   <|> (string "bps"     *> pure (bit ./ second))
   <|> (string "b"       *> pure byte)
+  <|> (string "seconds" *> pure second)
+  <|> (string "second"  *> pure second)
   <|> (string "sec"     *> pure second)
+  <|> (string "s"       *> pure second)
   <|> (string "minutes" *> pure minute)
   <|> (string "minute"  *> pure minute)
   <|> (string "min"     *> pure minute)
@@ -160,7 +169,6 @@ normalUnit =
   <|> (string "meters"  *> pure meter)
   <|> (string "meter"   *> pure meter)
   <|> (string "m"       *> pure meter)
-  <|> (string "s"       *> pure second)
   <?> "unit"
 
 -- | Parse a imperial unit like `ft`.
@@ -211,7 +219,7 @@ term p = parens p <|> quantity
 expression ∷ P Expression
 expression = fix \p →
   buildExprParser [ [ Infix (reservedOp "/" $> BinOp Div) AssocLeft ]
-                  , [ Infix (reservedOp "*" $> BinOp Mul) AssocLeft ]
+                  , [ Infix ((reservedOp "*" <|> reservedOp "·") $> BinOp Mul) AssocLeft ]
                   , [ Infix (reservedOp "-" $> BinOp Sub) AssocLeft ]
                   , [ Infix (reservedOp "+" $> BinOp Add) AssocLeft ]
                   ] (term p)
@@ -219,6 +227,7 @@ expression = fix \p →
 -- | Parse a statement in the Insect language.
 statement ∷ P Statement
 statement = do
+  whiteSpace
   expr ← expression
   conv ← optionMaybe (reservedOp "->" *> derivedUnit <* whiteSpace)
   eof

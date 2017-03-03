@@ -18,7 +18,7 @@ import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
 import Quantities ((./), unity, milli, nano, meter, inch, hour, minute,
-                   kilo, mile, gram)
+                   kilo, mile, gram, second, deci, tera, hertz, degree, radian)
 
 import Insect.Language (BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (parseInsect)
@@ -102,6 +102,18 @@ main = runTest do
         , "2.3meters"
         ]
 
+      allParseAs (Expression (Q 5.0 second))
+        [ "5s"
+        , "5second"
+        , "5 seconds"
+        ]
+
+      allParseAs (Expression (Q 5.0 gram))
+        [ "5g"
+        , "5gram"
+        , "5 grams"
+        ]
+
       allParseAs (Expression (Q 10.0 mile))
         [ "10miles"
         , "10mile"
@@ -113,17 +125,34 @@ main = runTest do
         , "10in"
         ]
 
+      allParseAs (Expression (Q 360.0 degree))
+        [ "360degrees"
+        , "360degree"
+        , "360deg"
+        , "360°"
+        , "360.0°"
+        ]
+
+      allParseAs (Expression (Q 1.0 radian))
+        [ "1.0"
+        , "1.0rad"
+        ]
+
       shouldFail "2.3yikes"
 
     test "SI prefixes" do
       allParseAs (Expression (Q 2.3 (kilo meter)))
         [ "2.3km"
         , "  2.3 km "
+        , "  2.3 kmeter "
+        , "  2.3 kmeters "
         ]
 
       allParseAs (Expression (Q 2.3 (milli meter)))
         [ "2.3mm"
         , "  2.3 mm "
+        , "  2.3 mmeter "
+        , "  2.3 mmeters "
         ]
 
       allParseAs (Expression (Q 2.3 (nano gram)))
@@ -134,6 +163,16 @@ main = runTest do
       allParseAs (Expression (Q 2.3 (kilo minute)))
         [ "2.3kmin"
         , "  2.3 kmin "
+        ]
+
+      allParseAs (Expression (Q 2.3 (deci meter)))
+        [ "2.3dm"
+        , "  2.3 dm "
+        ]
+
+      allParseAs (Expression (Q 42.3 (tera hertz)))
+        [ "42.3THz"
+        , "42.3Thertz"
         ]
 
       shouldFail "2.3k m"
@@ -152,11 +191,24 @@ main = runTest do
       allParseAs (Expression (BinOp Add (Q 5.0 meter) (BinOp Mul (Q 3.0 inch) (Q 7.0 unity)))) $
         [ "5m+3in*7"
         , "5m+(3in*7)"
+        , "5m+(3in·7)"
         , "  5 m +   3  in * 7    "
+        ]
+
+      allParseAs (Expression (BinOp Mul (BinOp Add (Q 5.0 meter) (Q 3.0 inch)) (Q 7.0 unity))) $
+        [ "(5m+3in)*7"
+        , "((5m+3in))*7"
+        , "(((((((5m))+((3in)))))))*((7))"
+        , "  (  5 m + ( 3  in )  )  * 7    "
         ]
 
       shouldFail "3+*4"
       shouldFail "3*/4"
+      shouldFail "(3+4"
+      shouldFail "3+4)"
+      shouldFail "3+("
+      shouldFail "()"
+      shouldFail "(3+)4"
 
     test "Multiple division" do
       allParseAs (Expression (BinOp Div (BinOp Div (Q 42.0 unity) (Q 7.0 unity)) (Q 3.0 unity))) $
