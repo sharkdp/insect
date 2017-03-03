@@ -1,4 +1,7 @@
-module Insect.Parser where
+-- | This module defines the parser for the Insect language.
+module Insect.Parser
+  ( parseInsect
+  ) where
 
 import Prelude hiding (degree)
 
@@ -6,13 +9,14 @@ import Control.Alt ((<|>))
 import Control.Lazy (fix)
 
 import Quantities (DerivedUnit, Unit, atto, bind, bit, byte, centi, day, deci,
-    degree, exa, femto, foot, giga, gram, hecto, hertz, hour, id, inch, joule,
-    kilo, mega, meter, micro, mile, milli, minute, nano, newton, ounce, peta,
-    pico, pound, pure, radian, second, tera, unity, watt, week, yard, (./))
+                   degree, exa, femto, foot, giga, gram, hecto, hertz, hour,
+                   id, inch, joule, kilo, mega, meter, micro, mile, milli,
+                   minute, nano, newton, ounce, peta, pico, pound, pure,
+                   radian, second, tera, unity, watt, week, yard, (./))
 
 import Data.Either (Either)
 import Data.Array (some, fromFoldable)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String (fromCharArray, singleton)
 import Global (readFloat, isFinite)
 
@@ -21,14 +25,15 @@ import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>))
 import Text.Parsing.Parser.Expr (Assoc(..), Operator(..), buildExprParser)
 import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
-    alphaNum, letter, makeTokenParser)
+                                  alphaNum, letter, makeTokenParser)
 
 import Insect.Language (BinOp(..), Expression(..), Statement(..))
 
--- Our main parser type with `String` as input
+-- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
 
-insectLanguage :: LanguageDef
+-- | The language definition for the `TokenParser`.
+insectLanguage ∷ LanguageDef
 insectLanguage = LanguageDef
   { commentStart: ""
   , commentEnd: ""
@@ -43,34 +48,35 @@ insectLanguage = LanguageDef
   , caseSensitive: true
 }
 
-token :: TokenParser
+-- | The actual token parser.
+token ∷ TokenParser
 token = makeTokenParser insectLanguage
 
--- TODO: this does not parse huge decimals correctly, as they are converted
--- to Int first
-{-- number :: P Number --}
-{-- number = whiteSpace *> (either toNumber id <$> token.naturalOrFloat) --}
-
-parens :: ∀ a. P a -> P a
+-- | Parse something, inside of parens.
+parens ∷ ∀ a. P a → P a
 parens = token.parens
 
-reservedOp :: String -> P Unit
+-- | Parse one of the reserved operators.
+reservedOp ∷ String → P Unit
 reservedOp = token.reservedOp
 
-reserved :: String -> P Unit
+-- | Parse a reserverd keyword.
+reserved ∷ String → P Unit
 reserved = token.reserved
 
-whiteSpace :: P Unit
+-- | Parse zero or more whitespace characters.
+whiteSpace ∷ P Unit
 whiteSpace = token.whiteSpace
 
-number :: P Number
+-- | Parse a number.
+number ∷ P Number
 number = do
-  intPart <- signAndDigits
+  intPart ← signAndDigits
 
-  mFracPart <- optionMaybe (append <$> string "." <*> digits)
+  mFracPart ← optionMaybe (append <$> string "." <*> digits)
   let fracPart = fromMaybe "" mFracPart
 
-  mExpPart <- optionMaybe (append <$> string "e" <*> signAndDigits)
+  mExpPart ← optionMaybe (append <$> string "e" <*> signAndDigits)
   let expPart = fromMaybe "" mExpPart
 
   whiteSpace
@@ -83,18 +89,19 @@ number = do
     else fail $ "readFloat failed for input '" <> floatStr <> "'"
 
   where
-    digits :: P String
+    digits ∷ P String
     digits = do
-      ds <- some $ oneOf ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] <?> "a digit"
+      ds ← some $ oneOf ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] <?> "a digit"
       pure $ fromCharArray (fromFoldable ds)
 
-    signAndDigits :: P String
+    signAndDigits ∷ P String
     signAndDigits = do
-      sign <- option '+' (oneOf ['+', '-'])
-      intPart <- digits
+      sign ← option '+' (oneOf ['+', '-'])
+      intPart ← digits
       pure $ singleton sign <> intPart
 
-siPrefix :: P (DerivedUnit → DerivedUnit)
+-- | Parse a SI prefix like `µ` or `G`.
+siPrefix ∷ P (DerivedUnit → DerivedUnit)
 siPrefix =
       (string "a" *> pure atto)
   <|> (string "f" *> pure femto)
@@ -113,7 +120,8 @@ siPrefix =
   <|> (string "E" *> pure exa)
   <|> pure id
 
-normalUnit :: P DerivedUnit
+-- | Parse a normal (SI-conform) unit, i.e. non-imperical unit
+normalUnit ∷ P DerivedUnit
 normalUnit =
       (string "radians" *> pure radian)
   <|> (string "radian"  *> pure radian)
@@ -155,7 +163,8 @@ normalUnit =
   <|> (string "s"       *> pure second)
   <?> "unit"
 
-imperialUnit :: P DerivedUnit
+-- | Parse a imperial unit like `ft`.
+imperialUnit ∷ P DerivedUnit
 imperialUnit =
       (string "miles"  *> pure mile)
   <|> (string "mile"   *> pure mile)
@@ -176,48 +185,48 @@ imperialUnit =
   <|> (string "pound"  *> pure pound)
   <|> (string "lb"     *> pure pound)
 
-unitWithSIPrefix :: P DerivedUnit
+-- | Parse a 'normal' unit with a SI prefix, like `km` or `Gb`.
+unitWithSIPrefix ∷ P DerivedUnit
 unitWithSIPrefix = do
-  p <- siPrefix
-  u <- normalUnit
+  p ← siPrefix
+  u ← normalUnit
   pure $ p u
 
-derivedUnit :: P DerivedUnit
+-- | Parse a derived unit, like `km`, `ft`, or `s`.
+derivedUnit ∷ P DerivedUnit
 derivedUnit =
       try unitWithSIPrefix
   <|> imperialUnit
   <|> normalUnit
 
-quantity :: P Expression
+-- | Parse a physical quanity like `2.3e-7 km`.
+quantity ∷ P Expression
 quantity = whiteSpace *> (Q <$> number <*> (derivedUnit <|> pure unity)) <* whiteSpace
 
-term :: P Expression -> P Expression
+-- | Helper for the expression parser below.
+term ∷ P Expression → P Expression
 term p = parens p <|> quantity
 
-expression :: P Expression
-expression = fix \p ->
+-- | Parse a full expression.
+expression ∷ P Expression
+expression = fix \p →
   buildExprParser [ [ Infix (reservedOp "/" $> BinOp Div) AssocLeft ]
                   , [ Infix (reservedOp "*" $> BinOp Mul) AssocLeft ]
                   , [ Infix (reservedOp "-" $> BinOp Sub) AssocLeft ]
                   , [ Infix (reservedOp "+" $> BinOp Add) AssocLeft ]
                   ] (term p)
 
-conversion :: P Statement
-conversion = do
-  expr <- expression
-  whiteSpace
-  reservedOp "->"
-  targetUnit <- derivedUnit
-  whiteSpace
-  pure $ Conversion expr targetUnit
+-- | Parse a statement in the Insect language.
+statement ∷ P Statement
+statement = do
+  expr ← expression
+  conv ← optionMaybe (reservedOp "->" *> derivedUnit <* whiteSpace)
+  eof
 
+  case conv of
+    Just target → pure $ Conversion expr target
+    Nothing     → pure $ Expression expr
 
-statement :: P Statement
-statement =
-  (
-       try conversion
-   <|> (Expression <$> expression)
-  ) <* eof
-
-parseInsect :: String -> Either ParseError Statement
+-- | Run the Insect-parser on a `String` input.
+parseInsect ∷ String → Either ParseError Statement
 parseInsect inp = runParser inp statement

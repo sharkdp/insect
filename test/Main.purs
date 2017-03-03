@@ -18,27 +18,27 @@ import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
 import Quantities ((./), unity, milli, nano, meter, inch, hour, minute,
-                   kilo, meter, mile, gram)
+                   kilo, mile, gram)
 
-import Insect.Language
+import Insect.Language (BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (parseInsect)
 
 shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
 shouldParseAs expected input =
-    case parseInsect input of
-        Left err →
-          case parseErrorPosition err of
-            (Position pos) →
-              failure $ "Parse error for input '" <> input <> "': "
-                                    <> parseErrorMessage err
-                                    <> " at position "
-                                    <> show pos.column
-        Right output →
-            unless (output == expected) $ do
-                failure $ "Unexpected result:\n" <>
-                       "Input:    '" <> input <> "'\n" <>
-                       "Output:   " <> show output <> "\n" <>
-                       "Expected: " <> show expected <> "\n"
+  case parseInsect input of
+    Left err →
+      case parseErrorPosition err of
+        (Position pos) →
+          failure $ "Parse error for input '" <> input <> "': "
+                                <> parseErrorMessage err
+                                <> " at position "
+                                <> show pos.column
+    Right output →
+      unless (output == expected) $ do
+        failure $ "Unexpected result:\n" <>
+                  "Input:    '" <> input <> "'\n" <>
+                  "Output:   " <> show output <> "\n" <>
+                  "Expected: " <> show expected <> "\n"
 
 allParseAs ∷ ∀ eff. Statement → Array String → Aff eff Unit
 allParseAs expected = traverse_ (shouldParseAs expected)

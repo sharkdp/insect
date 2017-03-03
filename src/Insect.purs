@@ -14,7 +14,8 @@ import Quantities (errorMessage, prettyPrint)
 import Insect.Parser (parseInsect)
 import Insect.Interpreter (runInsect)
 
-repl ∷ String → { out :: String, divClass :: String }
+-- | Run Insect, REPL-style.
+repl ∷ String → { out ∷ String, divClass ∷ String }
 repl userInput =
   case parseInsect userInput of
     Left pErr →
