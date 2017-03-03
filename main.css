@@ -48,18 +48,27 @@ div.repl div.jquery-console-focus span.jquery-console-cursor {
     font-weight: bold
 }
 
+div.repl div.jquery-console-message {
+    padding-bottom: 1em;
+    padding-top: 0.1em;
+}
+
 div.repl div.jquery-console-message-error {
     color: #FF4136;
-    padding-top: 0.1em;
-    padding-bottom: 1em;
 }
 
 div.repl div.jquery-console-message-value {
     color: #9cf;
-    padding-top: 0.1em;
-    padding-bottom: 1em;
+}
+
+div.repl div.jquery-console-message-info {
+    color: #51ef58;
 }
 
 div.repl span.jquery-console-prompt-label {
     font-weight: bold;
+}
+
+div.repl div.jquery-console-welcome {
+    color: #999;
 }

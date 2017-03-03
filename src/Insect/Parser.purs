@@ -27,7 +27,7 @@ import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   alphaNum, letter, makeTokenParser)
 
-import Insect.Language (BinOp(..), Expression(..), Statement(..))
+import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
@@ -43,7 +43,7 @@ insectLanguage = LanguageDef
   , identLetter: alphaNum <|> char '_'
   , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=']
   , opLetter: oneOf ['>']
-  , reservedNames: []
+  , reservedNames: ["help", "?"]
   , reservedOpNames: ["->", "+", "-", "*", "/", "^", "="]
   , caseSensitive: true
 }
@@ -224,9 +224,9 @@ expression = fix \p →
                   , [ Infix (reservedOp "+" $> BinOp Add) AssocLeft ]
                   ] (term p)
 
--- | Parse a statement in the Insect language.
-statement ∷ P Statement
-statement = do
+-- | Parse a mathematical expression (or conversion) like `3m` or `3m->ft`.
+expressionOrConversion ∷ P Statement
+expressionOrConversion = do
   whiteSpace
   expr ← expression
   conv ← optionMaybe (reservedOp "->" *> derivedUnit <* whiteSpace)
@@ -235,6 +235,15 @@ statement = do
   case conv of
     Just target → pure $ Conversion expr target
     Nothing     → pure $ Expression expr
+
+-- | Parse an Insect-command
+command ∷ P Command
+command = do
+  (reserved "help" <|> reserved "?") *> pure Help
+
+-- | Parse a statement in the Insect language.
+statement ∷ P Statement
+statement = (Command <$> command) <|> expressionOrConversion
 
 -- | Run the Insect-parser on a `String` input.
 parseInsect ∷ String → Either ParseError Statement
