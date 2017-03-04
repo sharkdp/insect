@@ -71,7 +71,7 @@ whiteSpace = token.whiteSpace
 -- | Parse a number.
 number ∷ P Number
 number = do
-  intPart ← signAndDigits
+  intPart ← digits
 
   mFracPart ← optionMaybe (append <$> string "." <*> digits)
   let fracPart = fromMaybe "" mFracPart
@@ -221,12 +221,20 @@ term p = parens p <|> quantity <|> variable
 -- | Parse a full expression.
 expression ∷ P Expression
 expression = fix \p →
-  buildExprParser [ [ Infix ((reservedOp "^" <|> reservedOp "**") $> BinOp Pow) AssocLeft ]
-                  , [ Infix (reservedOp "/" $> BinOp Div) AssocLeft ]
-                  , [ Infix ((reservedOp "*" <|> reservedOp "·") $> BinOp Mul) AssocLeft ]
-                  , [ Infix (reservedOp "-" $> BinOp Sub) AssocLeft ]
-                  , [ Infix (reservedOp "+" $> BinOp Add) AssocLeft ]
+  buildExprParser [ [ Prefix (subOp $> Negate)             ]
+                  , [ Prefix (addOp $> id)                 ]
+                  , [ Infix (powOp $> BinOp Pow) AssocLeft ]
+                  , [ Infix (divOp $> BinOp Div) AssocLeft ]
+                  , [ Infix (mulOp $> BinOp Mul) AssocLeft ]
+                  , [ Infix (subOp $> BinOp Sub) AssocLeft ]
+                  , [ Infix (addOp $> BinOp Add) AssocLeft ]
                   ] (term p)
+  where
+    powOp = reservedOp "^" <|> reservedOp "**"
+    divOp = reservedOp "/"
+    mulOp = reservedOp "*" <|> reservedOp "·"
+    subOp = reservedOp "-"
+    addOp = reservedOp "+"
 
 -- | Parse a mathematical expression (or conversion) like `3m` or `3m->ft`.
 expressionOrConversion ∷ P Statement

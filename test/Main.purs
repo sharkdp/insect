@@ -77,11 +77,11 @@ main = runTest do
         ]
 
     test "Negative numbers" do
-      shouldParseAs (Expression (Q (-123.45) unity))
+      shouldParseAs (Expression (Negate (Q (123.45) unity)))
         "-123.45"
 
     test "Exponential notation" do
-      shouldParseAs (Expression (Q (-1.3e13) unity))
+      shouldParseAs (Expression (Negate (Q 1.3e13 unity)))
         "-1.3e13"
 
       shouldParseAs (Expression (Q 2.7e-3 unity))
@@ -224,7 +224,7 @@ main = runTest do
         , "3 ** 4"
         ]
 
-      allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Q (-1.4) unity))) $
+      allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Negate (Q 1.4 unity)))) $
         [ "3^-1.4"
         , "3**-1.4"
         , "3 ^ (-1.4)"

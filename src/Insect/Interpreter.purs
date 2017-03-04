@@ -16,8 +16,8 @@ import Data.Tuple (Tuple(..))
 import Data.Bifunctor (lmap)
 
 import Quantities (Quantity, DerivedUnit, UnificationError, asValueIn, pow,
-                   qAdd, qDivide, qMultiply, qSubtract, quantity, unity,
-                   convert, errorMessage, prettyPrint, scalar, pi, e,
+                   qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
+                   unity, convert, errorMessage, prettyPrint, scalar, pi, e,
                    speedOfLight, gravitationalConstant, planckConstant, hbar)
 
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
@@ -51,6 +51,7 @@ convert' d q = lmap UnificationError (convert d q)
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
 eval env (Q n u)         = pure $ quantity n u
+eval env (Negate x)      = qNegate <$> eval env x
 eval env (BinOp Sub x y) = join $ qSubtract' <$> eval env x <*> eval env y
 eval env (BinOp Add x y) = join $ qAdd'      <$> eval env x <*> eval env y
 eval env (BinOp Mul x y) =        qMultiply  <$> eval env x <*> eval env y

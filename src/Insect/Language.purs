@@ -34,12 +34,14 @@ instance showBinOp ∷ Show BinOp where show = gShow
 -- | A mathematical expression.
 data Expression
  = Q Number DerivedUnit
+ | Negate Expression
  | BinOp BinOp Expression Expression
  | Variable Identifier
 
 derive instance eqExpression ∷ Eq Expression
 instance showExpression ∷ Show Expression where
   show (Q n u) = "(Q " <> show n <> " " <> show u <> ")"
+  show (Negate x) = "(Negate " <> show x <> ")"
   show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
   show (Variable n) = "(Variable " <> show n <> ")"
 
