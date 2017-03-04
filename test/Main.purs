@@ -224,10 +224,16 @@ main = runTest do
         , "3 ** 4"
         ]
 
+      allParseAs (Expression (Negate (BinOp Pow (Q 3.0 unity) (Q 4.0 unity)))) $
+        [ "-3^4"
+        , "-3 ^ 4"
+        , "-3**4"
+        , "-3 ** 4"
+        , "-(3^4)"
+        ]
+
       allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Negate (Q 1.4 unity)))) $
-        [ "3^-1.4"
-        , "3**-1.4"
-        , "3 ^ (-1.4)"
+        [ "3 ^ (-1.4)"
         , "3 ** (-1.4)"
         ]
 

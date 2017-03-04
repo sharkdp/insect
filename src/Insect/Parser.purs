@@ -221,14 +221,15 @@ term p = parens p <|> quantity <|> variable
 -- | Parse a full expression.
 expression ∷ P Expression
 expression = fix \p →
-  buildExprParser [ [ Prefix (subOp $> Negate)             ]
-                  , [ Prefix (addOp $> id)                 ]
-                  , [ Infix (powOp $> BinOp Pow) AssocLeft ]
-                  , [ Infix (divOp $> BinOp Div) AssocLeft ]
-                  , [ Infix (mulOp $> BinOp Mul) AssocLeft ]
-                  , [ Infix (subOp $> BinOp Sub) AssocLeft ]
-                  , [ Infix (addOp $> BinOp Add) AssocLeft ]
-                  ] (term p)
+  buildExprParser
+    [ [ Infix (powOp $> BinOp Pow) AssocLeft ]
+    , [ Prefix (subOp $> Negate)             ]
+    , [ Prefix (addOp $> id)                 ]
+    , [ Infix (divOp $> BinOp Div) AssocLeft ]
+    , [ Infix (mulOp $> BinOp Mul) AssocLeft ]
+    , [ Infix (subOp $> BinOp Sub) AssocLeft ]
+    , [ Infix (addOp $> BinOp Add) AssocLeft ]
+    ] (term p)
   where
     powOp = reservedOp "^" <|> reservedOp "**"
     divOp = reservedOp "/"
@@ -242,7 +243,7 @@ expressionOrConversion = do
   whiteSpace
   expr ← expression
   conv ← optionMaybe (reservedOp "->" *> derivedUnit <* whiteSpace)
-  eof
+  eof <?> "end of input"
 
   case conv of
     Just target → pure $ Conversion expr target
