@@ -252,11 +252,19 @@ expressionOrConversion = do
 -- | Parse an Insect-command
 command ∷ P Command
 command = do
-  (reserved "help" <|> reserved "?") *> pure Help
+  (reserved "help" <|> reserved "?") *> pure Help <* eof
+
+-- | Parse a variable assignment like `x = 3m*pi`
+assignment ∷ P Statement
+assignment = do
+  variable <- token.identifier
+  reservedOp "="
+  value <- expression
+  pure $ Assignment variable value
 
 -- | Parse a statement in the Insect language.
 statement ∷ P Statement
-statement = (Command <$> command) <|> expressionOrConversion
+statement = (Command <$> command) <|> try assignment <|> expressionOrConversion
 
 -- | Run the Insect-parser on a `String` input.
 parseInsect ∷ String → Either ParseError Statement

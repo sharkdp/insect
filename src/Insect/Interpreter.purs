@@ -2,7 +2,7 @@
 module Insect.Interpreter
   ( MessageType(..)
   , Message(..)
-  , startEnv
+  , Environment
   , runInsect
   ) where
 
@@ -11,14 +11,12 @@ import Prelude hiding (degree)
 import Data.Maybe (Maybe(..))
 import Data.Either (Either(..))
 import Data.Foldable (intercalate)
-import Data.StrMap (StrMap, lookup, fromFoldable)
-import Data.Tuple (Tuple(..))
+import Data.StrMap (StrMap, lookup, insert)
 import Data.Bifunctor (lmap)
 
 import Quantities (Quantity, DerivedUnit, UnificationError, asValueIn, pow,
                    qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
-                   unity, convert, errorMessage, prettyPrint, scalar, pi, e,
-                   speedOfLight, gravitationalConstant, planckConstant, hbar)
+                   unity, convert, errorMessage, prettyPrint, scalar)
 
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
 
@@ -70,25 +68,19 @@ evalErrorMessage ∷ EvalError → String
 evalErrorMessage (UnificationError ue) = errorMessage ue
 evalErrorMessage (LookupError name) = "Unknown variable '" <> name <> "'"
 
-message ∷ Expect Quantity → Message
-message (Left e) = Message Error (evalErrorMessage e)
-message (Right q) = Message Value (prettyPrint q)
-
-startEnv ∷ Environment
-startEnv = fromFoldable
-  [ Tuple "e"    e
-  , Tuple "pi"   pi
-  , Tuple "c"    speedOfLight
-  , Tuple "h"    planckConstant
-  , Tuple "hbar" hbar
-  ]
+message ∷ Environment → Expect Quantity → { msg ∷ Message, newEnv ∷ Environment }
+message env (Left e) = { msg: Message Error (evalErrorMessage e), newEnv: env }
+message env (Right q) = { msg: Message Value (prettyPrint q), newEnv: env }
 
 -- | Run a single statement of an Insect program.
-runInsect ∷ Environment → Statement → Message
-runInsect env (Expression e) = message (eval env e)
-runInsect env (Conversion e u) = message (eval env e >>= convert' u)
-runInsect _   (Assignment _ _) = Message Error "???"
-runInsect _   (Command Help) = Message Info $ intercalate "\n"
+runInsect ∷ Environment → Statement → { msg ∷ Message, newEnv ∷ Environment }
+runInsect env (Expression e) = message env (eval env e)
+runInsect env (Conversion e u) = message env (eval env e >>= convert' u)
+runInsect env (Assignment n v) =
+  case eval env v of
+    Left evalErr → message env (Left evalErr)
+    Right value → message (insert n value env) (Right value)
+runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
   [ "INSECT is a command-line scientific calculator."
   , ""
   , "It understands simple calculations like 1920 / 16 · 9"
@@ -101,5 +93,5 @@ runInsect _   (Command Help) = Message Info $ intercalate "\n"
   , "> 2min + 30s"
   , "> 60mph -> m/s"
   , "> 6Mbps*1.5h -> Gb"
-  ]
-runInsect _ (Command _) = Message Error "???"
+  ]), newEnv : env }
+runInsect env (Command _) = { msg: Message Error "???", newEnv: env }

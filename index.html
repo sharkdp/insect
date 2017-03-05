@@ -11,6 +11,7 @@
     <script type="text/javascript" src="bower_components/jquery-console/jquery.console.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
+        var globalEnv = PS.Insect.startEnv;
         var repl = $('<div class="repl">');
         $('body').append(repl);
         var controller = repl.console({
@@ -19,7 +20,8 @@
             if (line.trim() === "") {
               return [""];
             }
-            var res = PS.Insect.repl(line);
+            var res = PS.Insect.repl(globalEnv)(line);
+            globalEnv = res.newEnv;
             return [{ msg: res.out,
                       className: "jquery-console-message-" + res.divClass }]
           },
