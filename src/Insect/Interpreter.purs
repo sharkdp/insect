@@ -16,7 +16,8 @@ import Data.Bifunctor (lmap)
 
 import Quantities (Quantity, DerivedUnit, UnificationError, asValueIn, pow,
                    qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
-                   unity, convert, errorMessage, prettyPrint, scalar)
+                   unity, convert, errorMessage, prettyPrint, scalar,
+                   simplifyUnit)
 
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
 
@@ -74,12 +75,12 @@ message env (Right q) = { msg: Message Value (prettyPrint q), newEnv: env }
 
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → { msg ∷ Message, newEnv ∷ Environment }
-runInsect env (Expression e) = message env (eval env e)
+runInsect env (Expression e) = message env (simplifyUnit <$> eval env e)
 runInsect env (Conversion e u) = message env (eval env e >>= convert' u)
 runInsect env (Assignment n v) =
   case eval env v of
     Left evalErr → message env (Left evalErr)
-    Right value → message (insert n value env) (Right value)
+    Right value → message (insert n value env) (Right (simplifyUnit value))
 runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
   [ "INSECT is a command-line scientific calculator."
   , ""
