@@ -43,7 +43,7 @@ insectLanguage = LanguageDef
   , identLetter: alphaNum <|> char '_'
   , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=']
   , opLetter: oneOf ['>', '*']
-  , reservedNames: ["help", "?"]
+  , reservedNames: ["help", "?", "list", "ls", "reset", "clear"]
   , reservedOpNames: ["->", "+", "-", "*", "/", "^", "="]
   , caseSensitive: true
 }
@@ -251,16 +251,21 @@ expressionOrConversion = do
 
 -- | Parse an Insect-command
 command ∷ P Command
-command = do
-  (reserved "help" <|> reserved "?") *> pure Help <* eof
+command =
+  (
+        (reserved "help" <|> reserved "?") *> pure Help
+    <|> (reserved "list" <|> reserved "ls") *> pure List
+    <|> (reserved "reset") *> pure Reset
+    <|> (reserved "clear") *> pure Clear
+  ) <* eof
 
 -- | Parse a variable assignment like `x = 3m*pi`
 assignment ∷ P Statement
 assignment = do
-  variable <- token.identifier
+  var <- token.identifier
   reservedOp "="
   value <- expression
-  pure $ Assignment variable value
+  pure $ Assignment var value
 
 -- | Parse a statement in the Insect language.
 statement ∷ P Statement

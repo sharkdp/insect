@@ -2,7 +2,6 @@
 module Insect.Interpreter
   ( MessageType(..)
   , Message(..)
-  , Environment
   , runInsect
   ) where
 
@@ -11,15 +10,15 @@ import Prelude hiding (degree)
 import Data.Maybe (Maybe(..))
 import Data.Either (Either(..))
 import Data.Foldable (intercalate)
-import Data.StrMap (StrMap, lookup, insert)
+import Data.StrMap (lookup, insert, foldMap)
 import Data.Bifunctor (lmap)
 
 import Quantities (Quantity, DerivedUnit, UnificationError, asValueIn, pow,
                    qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
-                   unity, convert, errorMessage, prettyPrint, scalar,
-                   simplifyUnit)
+                   unity, convert, errorMessage, prettyPrint, simplifyUnit)
 
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
+import Insect.Environment (Environment, initialEnvironment)
 
 -- | The types of errors that may appear during evaluation
 data EvalError
@@ -31,8 +30,6 @@ type Expect = Either EvalError
 data MessageType = Value | Info | Error
 
 data Message = Message MessageType String
-
-type Environment = StrMap Quantity
 
 -- A few helper functions
 qSubtract' ∷ Quantity → Quantity → Expect Quantity
@@ -95,4 +92,16 @@ runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
   , "> 60mph -> m/s"
   , "> 6Mbps*1.5h -> Gb"
   ]), newEnv : env }
+runInsect env (Command List) =
+  { msg: Message Info list
+  , newEnv: env }
+  where
+    list = foldMap toLine env
+    toLine k v = k <> " = " <> prettyPrint v <> "\n"
+runInsect env (Command Reset) =
+  { msg: Message Info "Environment has been reset"
+  , newEnv: initialEnvironment }
+  where
+    list = foldMap toLine env
+    toLine k v = k <> " = " <> prettyPrint v <> "\n"
 runInsect env (Command _) = { msg: Message Error "???", newEnv: env }

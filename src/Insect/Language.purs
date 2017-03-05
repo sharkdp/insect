@@ -49,6 +49,7 @@ instance showExpression ∷ Show Expression where
 data Command
  = Help
  | Reset
+ | List
  | Clear
 
 derive instance eqCommand ∷ Eq Command

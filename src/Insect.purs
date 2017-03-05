@@ -1,38 +1,34 @@
 module Insect
   ( repl
-  , startEnv
+  , initialEnvironment
   ) where
 
 import Prelude
 
 import Data.Either (Either(..))
-import Data.StrMap (fromFoldable)
-import Data.Tuple (Tuple(..))
 
 import Text.Parsing.Parser.Pos (Position(..))
 import Text.Parsing.Parser (parseErrorPosition, parseErrorMessage)
 
-import Quantities (e, pi, speedOfLight, planckConstant, hbar)
-
 import Insect.Parser (parseInsect)
-import Insect.Interpreter (MessageType(..), Message(..), Environment, runInsect)
+import Insect.Interpreter (MessageType(..), Message(..), runInsect)
+import Insect.Environment (Environment)
+import Insect.Environment as E
 
-startEnv ∷ Environment
-startEnv = fromFoldable
-  [ Tuple "e"    e
-  , Tuple "pi"   pi
-  , Tuple "c"    speedOfLight
-  , Tuple "h"    planckConstant
-  , Tuple "hbar" hbar
-  ]
+-- | Re-export the initial environment
+initialEnvironment ∷ Environment
+initialEnvironment = E.initialEnvironment
 
+-- | Convert a message type to the name of a CSS class.
 typeToClass ∷ MessageType → String
 typeToClass Info  = "info"
 typeToClass Error = "error"
 typeToClass Value = "value"
 
 -- | Run Insect, REPL-style.
-repl ∷ Environment → String → { out ∷ String, divClass ∷ String, newEnv ∷ Environment }
+repl ∷ Environment → String → { out ∷ String
+                              , divClass ∷ String
+                              , newEnv ∷ Environment }
 repl env userInput =
   case parseInsect userInput of
     Left pErr →

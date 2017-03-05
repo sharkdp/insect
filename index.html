@@ -11,7 +11,7 @@
     <script type="text/javascript" src="bower_components/jquery-console/jquery.console.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
-        var globalEnv = PS.Insect.startEnv;
+        var globalEnv = PS.Insect.initialEnvironment;
         var repl = $('<div class="repl">');
         $('body').append(repl);
         var controller = repl.console({
