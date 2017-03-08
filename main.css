@@ -1,6 +1,6 @@
 html, body {
     font-family: 'Exo 2', sans-serif;
-    background-color: #eee;
+    background-color: #ECF0F1;
 }
 
 body {
@@ -24,14 +24,13 @@ h1 {
 div.repl {
     word-wrap: break-word;
     font-family: 'Fira Mono', monospace;
-    color: #fff;
 }
 
 div.repl div.jquery-console-inner {
     width: 900px;
     max-width: 90%;
     height: 480px;
-    background: #1a1a1a;
+    background-color: #272822;
     padding: 1em;
     overflow: auto;
     border-radius: 4px;
@@ -39,11 +38,11 @@ div.repl div.jquery-console-inner {
 }
 
 div.repl div.jquery-console-prompt-box {
-    color: #fff;
+    color: #F8F8F2;
 }
 
 div.repl div.jquery-console-focus span.jquery-console-cursor {
-    background: #fefefe;
+    background: #F8F8F2;
     color: #333;
     font-weight: bold
 }
@@ -54,15 +53,15 @@ div.repl div.jquery-console-message {
 }
 
 div.repl div.jquery-console-message-error {
-    color: #FF4136;
+    color: #F92672;
 }
 
 div.repl div.jquery-console-message-value {
-    color: #9cf;
+    color: #66D9EF;
 }
 
 div.repl div.jquery-console-message-info {
-    color: #51ef58;
+    color: #E6DB74;
 }
 
 div.repl span.jquery-console-prompt-label {
@@ -70,9 +69,9 @@ div.repl span.jquery-console-prompt-label {
 }
 
 div.repl div.jquery-console-welcome {
-    color: #999;
+    color: #75715E;
 }
 
 .github-fork-ribbon:before {
-    background-color: #bf0285;
+    background-color: #F92672;
 }
