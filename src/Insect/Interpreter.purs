@@ -79,18 +79,20 @@ runInsect env (Assignment n v) =
     Left evalErr → message env (Left evalErr)
     Right value → message (insert n value env) (Right (simplifyUnit value))
 runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
-  [ "INSECT is a command-line scientific calculator."
+  [ "insect is a command-line scientific calculator."
   , ""
-  , "It understands simple calculations like 1920 / 16 · 9"
-  , "as well as mathematical expressions involving physical"
-  , "quantities."
+  , "It evaluates simple calculations like 1920/16·9 as"
+  , "well as expressions involving physical quantities."
   , ""
   , "You can start by trying one of these examples:"
   , ""
-  , "> 1920/16·9"
-  , "> 2min + 30s"
-  , "> 60mph -> m/s"
-  , "> 6Mbps*1.5h -> Gb"
+  , "--> 1920/16*9"
+  , ""
+  , "--> 2min + 30s"
+  , ""
+  , "--> 60mph -> m/s"
+  , ""
+  , "--> 6Mbps*1.5h -> Gb"
   ]), newEnv : env }
 runInsect env (Command List) =
   { msg: Message Info list
