@@ -31,11 +31,11 @@ div.repl div.jquery-console-inner {
     width: 900px;
     max-width: 90%;
     height: 480px;
-    background: #272725;
+    background: #1a1a1a;
     padding: 1em;
     overflow: auto;
     border-radius: 4px;
-    box-shadow: 0px 3px 8px #555;
+    box-shadow: 0px 3px 8px #1a1a1a;
 }
 
 div.repl div.jquery-console-prompt-box {
@@ -71,4 +71,8 @@ div.repl span.jquery-console-prompt-label {
 
 div.repl div.jquery-console-welcome {
     color: #999;
+}
+
+.github-fork-ribbon:before {
+    background-color: #bf0285;
 }
