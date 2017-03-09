@@ -269,3 +269,31 @@ main = runTest do
       allParseAs (Conversion (Q 36.0 (kilo meter ./ hour)) (mile ./ hour))
         [ "36km/h -> mph"
         ]
+
+  suite "Parser - Identifiers" do
+    test "Valid and invalid names" do
+      shouldParseAs (Expression (Variable "x")) "x"
+      shouldParseAs (Expression (Variable "µ")) "µ"
+      shouldParseAs (Expression (Variable "pi")) "pi"
+      shouldParseAs (Expression (Variable "x_2")) "x_2"
+      shouldParseAs (Expression (Variable "länge")) "länge"
+      shouldParseAs (Expression (Variable "_prefixed")) "_prefixed"
+      shouldParseAs (Expression (Variable "x'")) "x'"
+      shouldParseAs (Expression (Variable "t''")) "t''"
+
+      shouldFail "xs,as"
+      shouldFail "hello$"
+
+  suite "Parser - Assignments" do
+    test "Simple" do
+      allParseAs (Assignment "xyz_123" (Q 1.0 unity)) $
+        [ "xyz_123 = 1"
+        , "xyz_123=1"
+        , "  xyz_123  =  1  "
+        ]
+
+      shouldFail "x²=3"
+      shouldFail "x+y=3"
+      shouldFail "x+2=3"
+      shouldFail "3=5"
+      shouldFail "x="

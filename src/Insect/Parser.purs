@@ -25,7 +25,7 @@ import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>))
 import Text.Parsing.Parser.Expr (Assoc(..), Operator(..), buildExprParser)
 import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
-                                  alphaNum, letter, makeTokenParser)
+                                  digit, letter, makeTokenParser)
 
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
 
@@ -39,8 +39,8 @@ insectLanguage = LanguageDef
   , commentEnd: ""
   , commentLine: "#"
   , nestedComments: false
-  , identStart: letter
-  , identLetter: alphaNum <|> char '_'
+  , identStart: letter <|> char '_'
+  , identLetter: letter <|> digit <|> char '_' <|> char '\''
   , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=']
   , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?", "list", "ls", "reset", "clear"]
@@ -262,6 +262,7 @@ command =
 -- | Parse a variable assignment like `x = 3m*pi`
 assignment ∷ P Statement
 assignment = do
+  whiteSpace
   var <- token.identifier
   reservedOp "="
   value <- expression
