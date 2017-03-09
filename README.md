@@ -17,7 +17,7 @@ Features
 - Parsing and handling of physical units:
   ```
   4/3 * pi * (6000km)^3
-  2min+30s
+  2min + 30s
   ```
 
 - Explicit unit conversions
