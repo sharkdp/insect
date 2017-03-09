@@ -217,11 +217,22 @@ main = runTest do
         ]
 
     test "Exponentiation" do
-      allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Q 4.0 unity))) $
-        [ "3^4"
-        , "3 ^ 4"
-        , "3**4"
-        , "3 ** 4"
+      allParseAs (Expression (BinOp Pow (Q 4.0 unity) (Q 3.0 unity))) $
+        [ "4^3"
+        , "4 ^ 3"
+        , "4**3"
+        , "4 ** 3"
+        , "4³"
+        , "4  ³"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Variable "pi") (Q 2.0 unity))) $
+        [ "pi^2"
+        , "pi ^ 2"
+        , "pi**2"
+        , "pi ** 2"
+        , "pi²"
+        , "(pi)²"
         ]
 
       allParseAs (Expression (Negate (BinOp Pow (Q 3.0 unity) (Q 4.0 unity)))) $

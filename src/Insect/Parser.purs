@@ -41,10 +41,10 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: letter <|> char '_'
   , identLetter: letter <|> digit <|> char '_' <|> char '\''
-  , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=']
+  , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=', '²', '³']
   , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?", "list", "ls", "reset", "clear"]
-  , reservedOpNames: ["->", "+", "-", "*", "/", "^", "="]
+  , reservedOpNames: ["->", "+", "-", "*", "/", "^", "**", "=", "²", "³"]
   , caseSensitive: true
 }
 
@@ -222,20 +222,28 @@ term p = parens p <|> quantity <|> variable
 expression ∷ P Expression
 expression = fix \p →
   buildExprParser
-    [ [ Infix (powOp $> BinOp Pow) AssocLeft ]
-    , [ Prefix (subOp $> Negate)             ]
-    , [ Prefix (addOp $> id)                 ]
-    , [ Infix (divOp $> BinOp Div) AssocLeft ]
-    , [ Infix (mulOp $> BinOp Mul) AssocLeft ]
-    , [ Infix (subOp $> BinOp Sub) AssocLeft ]
-    , [ Infix (addOp $> BinOp Add) AssocLeft ]
+    [ [ Infix   (powOp $> BinOp Pow) AssocLeft ]
+    , [ Postfix (sqrOp $> square)              ]
+    , [ Postfix (cubOp $> cube)                ]
+    , [ Prefix  (subOp $> Negate)              ]
+    , [ Prefix  (addOp $> id)                  ]
+    , [ Infix   (divOp $> BinOp Div) AssocLeft ]
+    , [ Infix   (mulOp $> BinOp Mul) AssocLeft ]
+    , [ Infix   (subOp $> BinOp Sub) AssocLeft ]
+    , [ Infix   (addOp $> BinOp Add) AssocLeft ]
     ] (term p)
   where
     powOp = reservedOp "^" <|> reservedOp "**"
+    sqrOp = reservedOp "²"
+    cubOp = reservedOp "³"
     divOp = reservedOp "/"
     mulOp = reservedOp "*" <|> reservedOp "·"
     subOp = reservedOp "-"
     addOp = reservedOp "+"
+    two = Q 2.0 unity
+    square q = BinOp Pow q two
+    three = Q 3.0 unity
+    cube q = BinOp Pow q three
 
 -- | Parse a mathematical expression (or conversion) like `3m` or `3m->ft`.
 expressionOrConversion ∷ P Statement
