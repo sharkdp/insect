@@ -34,7 +34,7 @@ Features
   r = 6000km
   vol = 4/3*pi*r^3
   density = 5g/1cm^3
-  vol * density
+  vol * density -> kg
   ```
 
 Build
