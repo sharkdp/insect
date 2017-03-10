@@ -71,7 +71,3 @@ div.repl span.jquery-console-prompt-label {
 div.repl div.jquery-console-welcome {
     color: #75715E;
 }
-
-.github-fork-ribbon:before {
-    background-color: #F92672;
-}
