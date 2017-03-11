@@ -308,6 +308,11 @@ main = runTest do
         , "  (  5 m + ( 3  in )  )  * 7    "
         ]
 
+      allParseAs (Expression (BinOp Mul (BinOp Div (Scalar 5.0) (Scalar 3.0)) (Scalar 2.0)))
+        [ "5/3*2"
+        , "(5/3)*2"
+        ]
+
       shouldFail "3+*4"
       shouldFail "3*/4"
       shouldFail "(3+4"
