@@ -4,13 +4,16 @@ html, body {
 }
 
 body {
-    margin: 30px;
     font-size: 1.2em;
+    margin: 0px;
 }
 
-p.desc {
-    margin-top: 0.6em;
-    margin-bottom: 1.8em;
+#content {
+    max-width: 90%;
+    width: 850px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 0 auto;
 }
 
 h1 {
@@ -21,17 +24,20 @@ h1 {
     padding: 0;
 }
 
+p.desc {
+    margin-top: 0.6em;
+    margin-bottom: 1.8em;
+}
+
 div.repl {
     word-wrap: break-word;
     font-family: 'Fira Mono', monospace;
 }
 
 div.repl div.jquery-console-inner {
-    width: 900px;
-    max-width: 90%;
     height: 480px;
     background-color: #272822;
-    padding: 1em;
+    padding: 16px;
     overflow: auto;
     border-radius: 4px;
     box-shadow: 0px 3px 8px #1a1a1a;
