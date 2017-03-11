@@ -1,5 +1,11 @@
 {
   "name": "insect",
+  "homepage": "https://github.com/sharkdp/insect",
+  "authors": [
+    "David Peter <mail@david-peter.de>"
+  ],
+  "description": "Interactive scientific calculator",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
