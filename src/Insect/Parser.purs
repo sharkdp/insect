@@ -8,10 +8,10 @@ import Prelude hiding (degree)
 import Control.Alt ((<|>))
 import Control.Lazy (fix)
 
-import Quantities (DerivedUnit, Unit, atto, bind, bit, byte, centi, day, deci,
+import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci,
                    degree, exa, femto, foot, giga, gram, hecto, hertz, hour,
-                   id, inch, joule, kilo, mega, meter, micro, mile, milli,
-                   minute, nano, newton, ounce, peta, pico, pound, pure,
+                   inch, joule, kilo, mega, meter, micro, mile, milli,
+                   minute, nano, newton, ounce, peta, pico, pound,
                    radian, second, tera, unity, watt, week, yard, (./))
 
 import Data.Either (Either)
