@@ -7,18 +7,18 @@ module Insect.Interpreter
 
 import Prelude hiding (degree)
 
-import Data.Maybe (Maybe(..))
+import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (intercalate)
+import Data.Maybe (Maybe(..))
 import Data.StrMap (lookup, insert, foldMap)
-import Data.Bifunctor (lmap)
 
 import Quantities (Quantity, UnificationError, asValueIn, pow, scalar,
                    qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
                    unity, convert, errorMessage, prettyPrint, fullSimplify,
-                   derivedUnit)
+                   derivedUnit, acos, asin, atan, sin, cos, tan, exp, log, sqrt)
 
-import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
+import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..), Statement(..))
 import Insect.Environment (Environment, initialEnvironment)
 
 -- | The types of errors that may appear during evaluation
@@ -46,11 +46,25 @@ convert' ∷ Quantity → Quantity → Expect Quantity
 convert' target source = lmap UnificationError (convert targetUnit source)
   where targetUnit = derivedUnit target
 
+runFunction ∷ Func → Quantity → Expect Quantity
+runFunction fn q = lmap UnificationError $ (theFn fn) q
+  where
+    theFn Acos = acos
+    theFn Asin = asin
+    theFn Atan = atan
+    theFn Cos  = cos
+    theFn Sin  = sin
+    theFn Tan  = tan
+    theFn Exp  = exp
+    theFn Log  = log
+    theFn Sqrt = sqrt >>> pure
+
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
 eval env (Scalar n)      = pure $ scalar n
 eval env (Unit u)        = pure $ quantity 1.0 u
 eval env (Negate x)      = qNegate <$> eval env x
+eval env (Apply fn x)    = eval env x >>= runFunction fn
 eval env (BinOp Sub x y) = join $ qSubtract' <$> eval env x <*> eval env y
 eval env (BinOp Add x y) = join $ qAdd'      <$> eval env x <*> eval env y
 eval env (BinOp Mul x y) =        qMultiply  <$> eval env x <*> eval env y

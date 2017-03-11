@@ -20,7 +20,7 @@ import Text.Parsing.Parser.Pos (Position(..))
 import Quantities ((./), milli, nano, meter, inch, hour, minute, kilo, mile,
                    gram, second, deci, tera, hertz, degree, radian)
 
-import Insect.Language (BinOp(..), Expression(..), Statement(..))
+import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (parseInsect)
 
 shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
@@ -398,6 +398,25 @@ main = runTest do
     test "Variables which begin like units" do
       shouldParseAs (Expression (Variable "myVariable")) "myVariable"
       shouldParseAs (Expression (Variable "density")) "density"
+
+  suite "Parser - Functions" do
+    test "Simple" do
+      allParseAs (Expression (Apply Sin (q 30.0 degree)))
+        [ "sin(30°)"
+        , "  sin( 30° )  "
+        , "  sin( +30° )  "
+        ]
+
+      allParseAs (Expression (Apply Sqrt (Scalar 2.0)))
+        [ "sqrt(2)"
+        , "  sqrt( 2.0 )  "
+        , "  sqrt( +2.0 )  "
+        ]
+
+      allParseAs (Expression (Apply Exp (Negate $ Scalar 10.0)))
+        [ "exp(-10)"
+        , "  exp( -10 )  "
+        ]
 
   suite "Parser - Assignments" do
     test "Simple" do

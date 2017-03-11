@@ -2,6 +2,7 @@
 module Insect.Language
   ( Identifier
   , Exponent
+  , Func(..)
   , BinOp(..)
   , Expression(..)
   , Command(..)
@@ -18,6 +19,22 @@ type Identifier = String
 
 -- | Type synonym for exponents in units.
 type Exponent = Number
+
+-- | Available mathematical functions.
+data Func
+  = Acos
+  | Asin
+  | Atan
+  | Cos
+  | Sin
+  | Tan
+  | Exp
+  | Log
+  | Sqrt
+
+derive instance eqFunc ∷ Eq Func
+derive instance genericFunc ∷ Generic Func
+instance showFunc ∷ Show Func where show = gShow
 
 -- | A binary operation.
 data BinOp
@@ -36,17 +53,19 @@ instance showBinOp ∷ Show BinOp where show = gShow
 data Expression
  = Scalar Number
  | Unit DerivedUnit
- | Negate Expression
- | BinOp BinOp Expression Expression
  | Variable Identifier
+ | Negate Expression
+ | Apply Func Expression
+ | BinOp BinOp Expression Expression
 
 derive instance eqExpression ∷ Eq Expression
 instance showExpression ∷ Show Expression where
   show (Scalar n)     = "(Scalar " <> show n <> ")"
   show (Unit u)       = "(Unit " <> show u <> ")"
-  show (Negate x)     = "(Negate " <> show x <> ")"
-  show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
   show (Variable n)   = "(Variable " <> show n <> ")"
+  show (Negate x)     = "(Negate " <> show x <> ")"
+  show (Apply fn x)   = "(Apply " <> show fn <> " " <> show x <> ")"
+  show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
 
 -- | A command in the Insect language.
 data Command

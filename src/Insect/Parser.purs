@@ -30,7 +30,7 @@ import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
 
-import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
+import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..), Statement(..))
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
@@ -215,14 +215,17 @@ derivedUnit = (
 variable ∷ P Expression
 variable = Variable <$> token.identifier
 
--- | Helper for the expression parser below.
-term ∷ P Expression → P Expression
-term p = whiteSpace *> (
-      parens p
-  <|> (Scalar <$> number)
-  <|> try (Unit <$> derivedUnit)
-  <|> variable
-  )
+funcName ∷ P Func
+funcName =
+      (string "acos" *> pure Acos)
+  <|> (string "asin" *> pure Asin)
+  <|> (string "atan" *> pure Atan)
+  <|> (string "cos"  *> pure Cos)
+  <|> (string "sin"  *> pure Sin)
+  <|> (string "tan"  *> pure Tan)
+  <|> (string "exp"  *> pure Exp)
+  <|> (string "log"  *> pure Log)
+  <|> (string "sqrt" *> pure Sqrt)
 
 -- | A version of `sepBy1` that returns a `NonEmpty List`.
 sepBy1 ∷ ∀ m s a sep. Monad m ⇒ ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
@@ -246,7 +249,13 @@ expression =
   fix \p →
     let
       atomic ∷ P Expression
-      atomic = term p
+      atomic = whiteSpace *> (
+              parens p
+          <|> (Scalar <$> number)
+          <|> try (Unit <$> derivedUnit)
+          <|> try (Apply <$> funcName <*> (parens p <* whiteSpace))
+          <|> variable
+          )
 
       suffixPow ∷ P Expression
       suffixPow = do
