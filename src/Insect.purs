@@ -24,6 +24,7 @@ msgTypeToString ∷ MessageType → String
 msgTypeToString Info  = "info"
 msgTypeToString Error = "error"
 msgTypeToString Value = "value"
+msgTypeToString Other = "other"
 
 -- | Run Insect, REPL-style.
 repl ∷ Environment → String → { msg ∷ String

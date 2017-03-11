@@ -28,7 +28,7 @@ data EvalError
 
 type Expect = Either EvalError
 
-data MessageType = Value | Info | Error
+data MessageType = Value | Info | Error | Other
 
 data Message = Message MessageType String
 
@@ -91,32 +91,30 @@ runInsect env (Assignment n v) =
   case eval env v of
     Left evalErr → message env (Left evalErr)
     Right value → message (insert n value env) (Right (fullSimplify value))
-runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
-  [ "insect is a command-line scientific calculator."
+runInsect env (Command Help) = { msg: Message Other (intercalate "\n"
+  [ ""
+  , "[[b;;]insect] is a command-line scientific calculator."
   , ""
-  , "It evaluates simple calculations like 1920/16·9 as"
-  , "well as expressions involving physical quantities."
+  , "It evaluates mathematical expressions that can involve"
+  , "physical quantities. You can start by trying one of"
+  , "these examples:"
   , ""
-  , "You can start by trying one of these examples:"
+  , "    > [[;#66D9EF;]1920/16*9]           > [[;#66D9EF;]2min + 30s]"
   , ""
-  , "  > 1920/16*9"
+  , "    > [[;#66D9EF;]60mph -> m/s]        > [[;#66D9EF;]6Mbps*1.5h -> Gb]"
   , ""
-  , "  > 2min + 30s"
+  , "    > [[;#66D9EF;]r = 30cm]            > [[;#66D9EF;]list]"
+  , "    > [[;#66D9EF;]pi r²]               > [[;#66D9EF;]40000km/c -> ms]"
   , ""
-  , "  > 60mph -> m/s"
-  , ""
-  , "  > 6Mbps*1.5h -> Gb"
+  , "More information: https://github.com/sharkdp/insect"
   ]), newEnv : env }
 runInsect env (Command List) =
-  { msg: Message Info list
+  { msg: Message Other list
   , newEnv: env }
   where
-    list = foldMap toLine env
-    toLine k v = k <> " = " <> prettyPrint v <> "\n"
+    list = "List of variables:\n" <> foldMap toLine env
+    toLine k v = "\n  * " <> k <> " = [[;#66D9EF;]" <> prettyPrint v <> "]"
 runInsect env (Command Reset) =
   { msg: Message Info "Environment has been reset"
   , newEnv: initialEnvironment }
-  where
-    list = foldMap toLine env
-    toLine k v = k <> " = " <> prettyPrint v <> "\n"
 runInsect env (Command _) = { msg: Message Error "???", newEnv: env }
