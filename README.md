@@ -11,19 +11,19 @@ Features
   ```
   1920/16*9
   2^32
-  pi*(1.4+2)^2
+  pi*(1.4+2)²
   ```
 
 - Parsing and handling of physical units:
   ```
-  4/3 * pi * (6000km)^3
+  4/3 pi (6000km)³
   2min + 30s
   ```
 
 - Explicit unit conversions
   ```
   60mph -> m/s
-  500km/2days -> km/h
+  500km/day -> km/h
   1mrad -> °
   52weeks -> days
   5in -> cm
@@ -32,8 +32,8 @@ Features
 - Variable assigments:
   ```
   r = 6000km
-  vol = 4/3*pi*r^3
-  density = 5g/1cm^3
+  vol = 4/3 pi r³
+  density = 5g/cm³
   vol * density -> kg
   ```
 
