@@ -395,6 +395,10 @@ main = runTest do
       shouldFail "xs,as"
       shouldFail "hello$"
 
+    test "Variables which begin like units" do
+      shouldParseAs (Expression (Variable "myVariable")) "myVariable"
+      shouldParseAs (Expression (Variable "density")) "density"
+
   suite "Parser - Assignments" do
     test "Simple" do
       allParseAs (Assignment "xyz_123" (Scalar 1.0)) $

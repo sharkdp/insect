@@ -24,7 +24,8 @@ import Data.String (fromCharArray, singleton)
 import Global (readFloat, isFinite)
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
-import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>), optional)
+import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>),
+                                        optional, notFollowedBy)
 import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
@@ -34,6 +35,10 @@ import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
 
+-- | Possibler characters for identifiers
+identLetter ∷ P Char
+identLetter = letter <|> digit <|> char '_' <|> char '\''
+
 -- | The language definition for the `TokenParser`.
 insectLanguage ∷ LanguageDef
 insectLanguage = LanguageDef
@@ -42,7 +47,7 @@ insectLanguage = LanguageDef
   , commentLine: "#"
   , nestedComments: false
   , identStart: letter <|> char '_'
-  , identLetter: letter <|> digit <|> char '_' <|> char '\''
+  , identLetter: identLetter
   , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=', '²', '³']
   , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?", "list", "ls", "reset", "clear"]
@@ -205,7 +210,7 @@ derivedUnit = (
       try unitWithSIPrefix
   <|> imperialUnit
   <|> normalUnit
-  ) <* whiteSpace
+  ) <* notFollowedBy identLetter <* whiteSpace
 
 variable ∷ P Expression
 variable = Variable <$> token.identifier
@@ -215,7 +220,7 @@ term ∷ P Expression → P Expression
 term p = whiteSpace *> (
       parens p
   <|> (Scalar <$> number)
-  <|> (Unit <$> derivedUnit)
+  <|> try (Unit <$> derivedUnit)
   <|> variable
   )
 
