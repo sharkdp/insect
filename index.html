@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var globalEnv = PS.Insect.initialEnvironment;
       function interpret(line) {
-        if (line.trim() === "") {
+        if (line.trim() === "" || line.trim().startsWith("#")) {
           return;
         }
         var res = PS.Insect.repl(globalEnv)(line);
