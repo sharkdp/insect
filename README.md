@@ -11,7 +11,7 @@ Features
   ```
   1920/16*9
   2^32
-  pi*(1.4+2)²
+  pi(1.4+2)²
   ```
 
 - Parsing and handling of physical units:
