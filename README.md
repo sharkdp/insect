@@ -3,7 +3,7 @@ insect
 
 A fast, repl-style scientific calculator for the web.
 
-![insect](media/insect-32x32.png)
+[![insect](media/insect-32x32.png)](https://shark.fish/insect/)
 
 [**Try it out**](https://shark.fish/insect/)
 
