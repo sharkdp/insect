@@ -5,6 +5,8 @@ A fast, repl-style scientific calculator for the web.
 
 ![insect](media/insect-32x32.png)
 
+[**Try it out**](https://shark.fish/insect/)
+
 Features
 --------
 - Evaluation of mathematical expressions:
