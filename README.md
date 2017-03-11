@@ -44,6 +44,11 @@ Features
   density = 5g/cm³
   vol * density -> kg
   ```
+  ```
+  grav = 9.81m/s²
+  L = 20cm
+  2pi*sqrt(L/grav) -> ms
+  ```
 
 - Commands:
   ```
