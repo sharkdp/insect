@@ -19,15 +19,15 @@ import Insect.Environment as E
 initialEnvironment ∷ Environment
 initialEnvironment = E.initialEnvironment
 
--- | Convert a message type to the name of a CSS class.
-typeToClass ∷ MessageType → String
-typeToClass Info  = "info"
-typeToClass Error = "error"
-typeToClass Value = "value"
+-- | Convert a message type to a string.
+msgTypeToString ∷ MessageType → String
+msgTypeToString Info  = "info"
+msgTypeToString Error = "error"
+msgTypeToString Value = "value"
 
 -- | Run Insect, REPL-style.
-repl ∷ Environment → String → { out ∷ String
-                              , divClass ∷ String
+repl ∷ Environment → String → { msg ∷ String
+                              , msgType ∷ String
                               , newEnv ∷ Environment }
 repl env userInput =
   case parseInsect userInput of
@@ -35,13 +35,13 @@ repl env userInput =
       let pos = parseErrorPosition pErr
       in case pos of
            (Position rec) →
-             { out: "Parse error: " <> parseErrorMessage pErr <>
+             { msg: "Parse error: " <> parseErrorMessage pErr <>
                     " at position " <> show rec.column
-             , divClass: "error"
+             , msgType: "error"
              , newEnv: env }
     Right statement → do
       let ans = runInsect env statement
       case ans.msg of
-        (Message msgType msg) → { divClass: typeToClass msgType
-                                , out: msg
+        (Message msgType msg) → { msgType: msgTypeToString msgType
+                                , msg: msg
                                 , newEnv: ans.newEnv }

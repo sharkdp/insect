@@ -1,5 +1,5 @@
 {
-  "name": "calc",
+  "name": "insect",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -11,8 +11,8 @@
     "purescript-quantities": "^2.1.0",
     "purescript-parsing": "^3.2.1",
     "purescript-globals": "^2.0.0",
-    "jquery-console": "https://github.com/sharkdp/jquery-console.git#master",
-    "purescript-maps": "^2.1.2"
+    "purescript-maps": "^2.1.2",
+    "jquery.terminal": "=1.0.10"
   },
   "devDependencies": {
     "purescript-psci-support": "^2.0.0",
