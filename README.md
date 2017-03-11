@@ -37,6 +37,13 @@ Features
   vol * density -> kg
   ```
 
+- Commands:
+  ```
+  help, ?
+  list, ls
+  reset
+  ```
+
 Build
 -----
 ```sh
