@@ -17,8 +17,8 @@ import Test.Unit.Console (TESTOUTPUT)
 import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
-import Quantities ((./), (.^), unity, milli, nano, meter, inch, hour, minute,
-                   kilo, mile, gram, second, deci, tera, hertz, degree, radian)
+import Quantities ((./), milli, nano, meter, inch, hour, minute, kilo, mile,
+                   gram, second, deci, tera, hertz, degree, radian)
 
 import Insect.Language (BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (parseInsect)
@@ -51,9 +51,12 @@ shouldFail input = do
 
 main ∷ Eff (console ∷ CONSOLE, testOutput ∷ TESTOUTPUT, avar ∷ AVAR) Unit
 main = runTest do
+  -- Helper to construct quantities
+  let q s u = BinOp Mul (Scalar s) (Unit u)
+
   suite "Parser - Numbers" do
     test "Simple numbers" do
-      allParseAs (Expression (Q 1.0 unity))
+      allParseAs (Expression (Scalar 1.0))
         [ "1"
         , "1.0"
         , "  1  "
@@ -62,7 +65,7 @@ main = runTest do
         , "+1"
         ]
 
-      allParseAs (Expression (Q 3.5 unity))
+      allParseAs (Expression (Scalar 3.5))
         [ "3.5"
         , "  3.5  "
         , "3.50"
@@ -70,62 +73,85 @@ main = runTest do
         ]
 
     test "Large numbers" do
-      allParseAs (Expression (Q (1234567890000000.0) unity))
+      allParseAs (Expression (Scalar 1234567890000000.0))
         [ "1234567890000000"
         , "1234567890000000.0"
         , "+1234567890000000.0"
         ]
 
     test "Negative numbers" do
-      shouldParseAs (Expression (Negate (Q (123.45) unity)))
+      shouldParseAs (Expression (Negate (Scalar 123.45)))
         "-123.45"
 
     test "Exponential notation" do
-      shouldParseAs (Expression (Negate (Q 1.3e13 unity)))
+      shouldParseAs (Expression (Negate (Scalar 1.3e13)))
         "-1.3e13"
 
-      shouldParseAs (Expression (Q 2.7e-3 unity))
+      shouldParseAs (Expression (Scalar 2.7e-3))
         "2.7e-3"
-
-      shouldFail "2.7 e3"
 
       shouldFail "2.7e 3"
 
+  suite "Parser - Units" do
+    test "Simple" do
+      allParseAs (Expression (Unit meter))
+        [ "m"
+        , "      m "
+        , "meter"
+        , "meters"
+        ]
+
+      allParseAs (Expression (Unit inch))
+        [ "in"
+        , "      in "
+        , "inch"
+        , "inches"
+        ]
+
+      allParseAs (Expression (Unit degree))
+        [ "°"
+        , "      ° "
+        , "deg"
+        , "degree"
+        , "degrees"
+        ]
 
   suite "Parser - Quantities" do
     test "Simple" do
-      allParseAs (Expression (Q 2.3 meter))
-        [ "2.3m"
+      allParseAs (Expression (q 2.3 meter))
+        [ "2.3*m"
+        , " 2.3 * m "
+        , "2.3m"
         , "  2.3 m "
         , "2.3meter"
         , "2.3 meter"
         , "2.3meters"
         ]
 
-      allParseAs (Expression (Q 5.0 second))
+      allParseAs (Expression (q 5.0 second))
         [ "5s"
         , "5second"
         , "5 seconds"
         ]
 
-      allParseAs (Expression (Q 5.0 gram))
+      allParseAs (Expression (q 5.0 gram))
         [ "5g"
         , "5gram"
         , "5 grams"
         ]
 
-      allParseAs (Expression (Q 10.0 mile))
+      allParseAs (Expression (q 10.0 mile))
         [ "10miles"
         , "10mile"
         ]
 
-      allParseAs (Expression (Q 10.0 inch))
+      allParseAs (Expression (q 10.0 inch))
         [ "10inches"
         , "10inch"
         , "10in"
         ]
 
-      allParseAs (Expression (Q 360.0 degree))
+      allParseAs (Expression (q 360.0 degree))
         [ "360degrees"
         , "360degree"
         , "360deg"
@@ -133,69 +159,146 @@ main = runTest do
         , "360.0°"
         ]
 
-      allParseAs (Expression (Q 1.0 radian))
-        [ "1.0"
-        , "1.0rad"
+      allParseAs (Expression (q 1.0 radian))
+        [ "1.0rad"
+        , "1.0 radian"
+        , "1.0 radians"
         ]
 
-      shouldFail "2.3yikes"
-
     test "SI prefixes" do
-      allParseAs (Expression (Q 2.3 (kilo meter)))
+      allParseAs (Expression (q 2.3 (kilo meter)))
         [ "2.3km"
         , "  2.3 km "
         , "  2.3 kmeter "
         , "  2.3 kmeters "
         ]
 
-      allParseAs (Expression (Q 2.3 (milli meter)))
+      allParseAs (Expression (q 2.3 (milli meter)))
         [ "2.3mm"
         , "  2.3 mm "
         , "  2.3 mmeter "
         , "  2.3 mmeters "
         ]
 
-      allParseAs (Expression (Q 2.3 (nano gram)))
+      allParseAs (Expression (q 2.3 (nano gram)))
         [ "2.3ng"
         , "  2.3 ng "
         ]
 
-      allParseAs (Expression (Q 2.3 (kilo minute)))
+      allParseAs (Expression (q 2.3 (kilo minute)))
         [ "2.3kmin"
         , "  2.3 kmin "
         ]
 
-      allParseAs (Expression (Q 2.3 (deci meter)))
+      allParseAs (Expression (q 2.3 (deci meter)))
         [ "2.3dm"
         , "  2.3 dm "
         ]
 
-      allParseAs (Expression (Q 42.3 (tera hertz)))
+      allParseAs (Expression (q 42.3 (tera hertz)))
         [ "42.3THz"
         , "42.3Thertz"
         ]
 
-      shouldFail "2.3k m"
-      shouldFail "2.3m m"
-      shouldFail "2.3n g"
-
     test "Divisions" do
-      allParseAs (Expression (Q 2.3 (kilo meter ./ hour)))
+      allParseAs (Expression (BinOp Mul (Scalar 2.3) (BinOp Div (Unit (kilo meter)) (Unit hour))))
         [ "2.3km/h"
         , "2.30km/h"
         ]
 
-
   suite "Parser - Operators" do
+    test "Exponentiation" do
+      allParseAs (Expression (BinOp Pow (Scalar 5.0) (Scalar 3.0))) $
+        [ "5^3"
+        , " 5 ^ 3 "
+        , " ( 5 ) ^ ( 3 ) "
+        , " ( ( 5 ) ^ ( 3 ) ) "
+        , " ( 5 ^ 3 ) "
+        , "5^(+3)"
+        , "+5^3"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Scalar 4.0) (Scalar 3.0))) $
+        [ "4^3"
+        , "4 ^ 3"
+        , "4**3"
+        , "4 ** 3"
+        , "4³"
+        , "4  ³"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Variable "pi") (Scalar 2.0))) $
+        [ "pi^2"
+        , "pi ^ 2"
+        , "pi**2"
+        , "pi ** 2"
+        , "pi²"
+        , "(pi)²"
+        ]
+
+      allParseAs (Expression (Negate (BinOp Pow (Scalar 3.0) (Scalar 4.0)))) $
+        [ "-3^4"
+        , "-3 ^ 4"
+        , "-3**4"
+        , "-3 ** 4"
+        , "-(3^4)"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Scalar 3.0) (Negate (Scalar 1.4)))) $
+        [ "3 ^ (-1.4)"
+        , "3 ** (-1.4)"
+        ]
+
+    test "Multiplication" do
+      allParseAs (Expression (BinOp Mul (Scalar 5.0) (Scalar 3.0))) $
+        [ "5*3"
+        , " 5 * 3 "
+        , " ( 5 ) * ( 3 ) "
+        , " ( 5 ) ( 3 ) "
+        , " ( ( 5 ) * ( 3 ) ) "
+        , " ( 5 * 3 ) "
+        , "5(3)"
+        , "(5)3"
+        , "5(+3)"
+        , "+5*3"
+        ]
+
+      allParseAs (Expression (BinOp Mul (Scalar 5.0) (Negate $ Scalar 3.0))) $
+        [ "5*(-3)"
+        , " 5 * (-3) "
+        , " ( 5 ) * ( -3 ) "
+        , " ( ( 5 ) * (-( 3 )) ) "
+        , " ( 5 * (-3) ) "
+        , "+5*(-3)"
+        ]
+
+    test "Division" do
+      allParseAs (Expression (BinOp Div (Scalar 5.0) (Scalar 3.0))) $
+        [ "5/3"
+        , " 5 / 3 "
+        , " ( 5 ) / ( 3 ) "
+        , " ( ( 5 ) / ( 3 ) ) "
+        , " ( 5 / 3 ) "
+        ]
+
+    test "Addition" do
+      allParseAs (Expression (BinOp Add (Scalar 5.0) (Scalar 3.0))) $
+        [ "5+3"
+        , " 5 + 3 "
+        , " ( 5 ) + ( 3 ) "
+        , " ( ( 5 ) + ( 3 ) ) "
+        , " ( 5 + 3 ) "
+        ]
+
     test "Precedence" do
-      allParseAs (Expression (BinOp Add (Q 5.0 meter) (BinOp Mul (Q 3.0 inch) (Q 7.0 unity)))) $
+      allParseAs (Expression (BinOp Add (q 5.0 meter) (BinOp Mul (q 3.0 inch) (Scalar 7.0)))) $
         [ "5m+3in*7"
         , "5m+(3in*7)"
         , "5m+(3in·7)"
         , "  5 m +   3  in * 7    "
         ]
 
-      allParseAs (Expression (BinOp Mul (BinOp Add (Q 5.0 meter) (Q 3.0 inch)) (Q 7.0 unity))) $
+      allParseAs (Expression (BinOp Mul (BinOp Add (q 5.0 meter) (q 3.0 inch)) (Scalar 7.0))) $
         [ "(5m+3in)*7"
         , "((5m+3in))*7"
         , "(((((((5m))+((3in)))))))*((7))"
@@ -211,74 +314,63 @@ main = runTest do
       shouldFail "(3+)4"
 
     test "Multiple division" do
-      allParseAs (Expression (BinOp Div (BinOp Div (Q 42.0 unity) (Q 7.0 unity)) (Q 3.0 unity))) $
+      allParseAs (Expression (BinOp Div (BinOp Div (Scalar 42.0) (Scalar 7.0)) (Scalar 3.0))) $
         [ "42/7/3"
         , "(42/7)/3"
         ]
 
-    test "Exponentiation" do
-      allParseAs (Expression (BinOp Pow (Q 4.0 unity) (Q 3.0 unity))) $
-        [ "4^3"
-        , "4 ^ 3"
-        , "4**3"
-        , "4 ** 3"
-        , "4³"
-        , "4  ³"
-        ]
-
-      allParseAs (Expression (BinOp Pow (Variable "pi") (Q 2.0 unity))) $
-        [ "pi^2"
-        , "pi ^ 2"
-        , "pi**2"
-        , "pi ** 2"
-        , "pi²"
-        , "(pi)²"
-        ]
-
-      allParseAs (Expression (Negate (BinOp Pow (Q 3.0 unity) (Q 4.0 unity)))) $
-        [ "-3^4"
-        , "-3 ^ 4"
-        , "-3**4"
-        , "-3 ** 4"
-        , "-(3^4)"
-        ]
-
-      allParseAs (Expression (BinOp Pow (Q 3.0 unity) (Negate (Q 1.4 unity)))) $
-        [ "3 ^ (-1.4)"
-        , "3 ** (-1.4)"
-        ]
-
-      allParseAs (Expression (BinOp Pow (Q 3.0 meter) (Q 2.0 unity))) $
+    test "Involving units" do
+      allParseAs (Expression (BinOp Pow (q 3.0 meter) (Scalar 2.0))) $
         [ "(3m)^2"
         , "(3.0m)^(2.0)"
         ]
 
-      -- TODO
-      --allParseAs (Expression (Q 3.0 (meter .^ 2.0))) $
-      --  [ "3m^2"
-      --  , "3.0(m)^(2.0)"
-      --  ]
+      allParseAs (Expression (BinOp Mul (Scalar 3.0) (BinOp Pow (Unit meter) (Scalar 2.0)))) $
+        [ "3m^2"
+        , "3.0(m)^(2.0)"
+        , "3m²"
+        , "3 m²"
+        , "3·m²"
+        , "3·m^(2.0)"
+        ]
+
+      allParseAs (Expression (BinOp Mul (Scalar 3.0) (BinOp Div (Unit meter) (Unit second)))) $
+        [ "3m/s"
+        , "3·m/s"
+        , "3 meter / second"
+        , "3 meter / sec"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Unit meter) (Negate $ Scalar 1.0))) $
+        [ "m^(-1)"
+        , "m^(-1.0)"
+        , "meter^(-1.0)"
+        ]
 
   suite "Parser - Conversions" do
     test "Simple" do
-      allParseAs (Expression (BinOp ConvertTo (Q (2.3) meter) (Q 1.0 inch)))
+      allParseAs (Expression (BinOp ConvertTo (q (2.3) meter) (Unit inch)))
         [ "2.3m -> in"
         , "  2.3 meters->inches "
         , "  2.3 m  ->  in "
         ]
 
-      allParseAs (Expression (BinOp ConvertTo (Q 120.0 minute) (Q 1.0 hour)))
+      allParseAs (Expression (BinOp ConvertTo (q 120.0 minute) (Unit hour)))
         [ "120min -> h"
         , "120minutes -> hours"
         ]
 
       shouldFail "2.3m->"
-      shouldFail "2.3m->k"
-      shouldFail "2.3m->yikes"
 
     test "Complex units" do
-      allParseAs (Expression (BinOp ConvertTo (Q 36.0 (kilo meter ./ hour)) (Q 1.0 (mile ./ hour))))
+      allParseAs (Expression (BinOp ConvertTo (BinOp Mul (Scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (Unit (mile ./ hour))))
         [ "36km/h -> mph"
+        , "36·km/h -> mph"
+        ]
+
+      allParseAs (Expression (BinOp ConvertTo (BinOp Mul (Scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (BinOp Div (Unit meter) (Unit second))))
+        [ "36km/h -> m/s"
+        , "36·km/h -> m/s"
         ]
 
   suite "Parser - Identifiers" do
@@ -297,7 +389,7 @@ main = runTest do
 
   suite "Parser - Assignments" do
     test "Simple" do
-      allParseAs (Assignment "xyz_123" (Q 1.0 unity)) $
+      allParseAs (Assignment "xyz_123" (Scalar 1.0)) $
         [ "xyz_123 = 1"
         , "xyz_123=1"
         , "  xyz_123  =  1  "

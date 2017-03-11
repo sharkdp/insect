@@ -8,21 +8,22 @@ import Prelude hiding (degree)
 import Control.Alt ((<|>))
 import Control.Lazy (fix)
 
-import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci,
-                   degree, exa, femto, foot, giga, gram, hecto, hertz, hour,
-                   inch, joule, kilo, mega, meter, micro, mile, milli,
-                   minute, nano, newton, ounce, peta, pico, pound,
-                   radian, second, tera, unity, watt, week, yard, (./))
+import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
+                   femto, foot, giga, gram, hecto, hertz, hour, inch, joule,
+                   kilo, mega, meter, micro, mile, milli, minute, nano,
+                   newton, ounce, peta, pico, pound, radian, second, tera,
+                   watt, week, yard, (./))
 
 import Data.Either (Either)
 import Data.Array (some, fromFoldable)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (Maybe(..), fromMaybe)
 import Data.String (fromCharArray, singleton)
+import Data.List (List, many)
+import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Global (readFloat, isFinite)
 
-import Text.Parsing.Parser (Parser, ParseError, runParser, fail)
-import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>))
-import Text.Parsing.Parser.Expr (Assoc(..), Operator(..), buildExprParser)
+import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
+import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>), optional)
 import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
@@ -161,8 +162,6 @@ normalUnit =
   <|> (string "d"       *> pure day)
   <|> (string "weeks"   *> pure week)
   <|> (string "week"    *> pure week)
-  <|> (string "m/h"     *> pure (meter ./ hour)) -- TODO: handle this differently
-  <|> (string "m/s"     *> pure (meter ./ second)) -- TODO: handle this differently
   <|> (string "grams"   *> pure gram)
   <|> (string "gram"    *> pure gram)
   <|> (string "g"       *> pure gram)
@@ -176,7 +175,6 @@ imperialUnit ∷ P DerivedUnit
 imperialUnit =
       (string "miles"  *> pure mile)
   <|> (string "mile"   *> pure mile)
-  -- <|> (string "mi"     *> pure mile)    TODO: this is incompatible with 'min'
   <|> (string "mph"    *> pure (mile ./ hour))
   <|> (string "inches" *> pure inch)
   <|> (string "inch"   *> pure inch)
@@ -202,38 +200,76 @@ unitWithSIPrefix = do
 
 -- | Parse a derived unit, like `km`, `ft`, or `s`.
 derivedUnit ∷ P DerivedUnit
-derivedUnit =
+derivedUnit = (
       try unitWithSIPrefix
   <|> imperialUnit
   <|> normalUnit
-
--- | Parse a physical quanity like `2.3e-7 km`.
-quantity ∷ P Expression
-quantity = whiteSpace *> (Q <$> number <*> (derivedUnit <|> pure unity)) <* whiteSpace
+  ) <* whiteSpace
 
 variable ∷ P Expression
 variable = Variable <$> token.identifier
 
 -- | Helper for the expression parser below.
 term ∷ P Expression → P Expression
-term p = parens p <|> quantity <|> variable
+term p = whiteSpace *> (
+      parens p
+  <|> (Scalar <$> number)
+  <|> (Unit <$> derivedUnit)
+  <|> variable
+  )
+
+-- | A version of `sepBy1` that returns a `NonEmpty List`.
+sepBy1 ∷ ∀ m s a sep. Monad m ⇒ ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
+sepBy1 p sep = do
+  a ← p
+  as ← many $ do
+    sep
+    p
+  pure (a :| as)
 
 -- | Parse a full expression.
 expression ∷ P Expression
-expression = fix \p →
-  buildExprParser
-    [ [ Infix   (powOp  $> BinOp Pow)       AssocLeft ]
-    , [ Postfix (sqrOp  $> square)                    ]
-    , [ Postfix (cubOp  $> cube)                      ]
-    , [ Prefix  (subOp  $> Negate)                    ]
-    , [ Prefix  (addOp  $> id)                        ]
-    , [ Infix   (divOp  $> BinOp Div)       AssocLeft ]
-    , [ Infix   (mulOp  $> BinOp Mul)       AssocLeft ]
-    , [ Infix   (subOp  $> BinOp Sub)       AssocLeft ]
-    , [ Infix   (addOp  $> BinOp Add)       AssocLeft ]
-    , [ Infix   (convOp $> BinOp ConvertTo) AssocLeft ]
-    ] (term p)
+expression =
+  fix \p →
+    let
+      atomic ∷ P Expression
+      atomic = term p
+
+      suffixPow ∷ P Expression
+      suffixPow = do
+        a ← atomic
+        mFn ← optionMaybe ((sqrOp *> pure square) <|> (cubOp *> pure cube))
+        case mFn of
+          Just fn → pure $ fn a
+          Nothing → pure a
+
+      sepByPow ∷ P Expression
+      sepByPow = foldl1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
+
+      sepByDiv ∷ P Expression
+      sepByDiv = foldl1 (BinOp Div) <$> sepByPow `sepBy1` divOp
+
+      sepByMul ∷ P Expression
+      sepByMul = foldl1 (BinOp Mul) <$> sepByDiv `sepBy1` (optional mulOp)
+
+      prefixed ∷ P Expression
+      prefixed = do
+        prefixFn ← ((subOp *> pure Negate) <|> (addOp *> pure id) <|> pure id)
+        prefixFn <$> sepByMul
+
+      sepBySub ∷ P Expression
+      sepBySub = foldl1 (BinOp Sub) <$> prefixed `sepBy1` subOp
+
+      sepByAdd ∷ P Expression
+      sepByAdd = foldl1 (BinOp Add) <$> sepBySub `sepBy1` addOp
+
+      sepByConv ∷ P Expression
+      sepByConv = foldl1 (BinOp ConvertTo) <$> sepByAdd `sepBy1` convOp
+
+    in sepByConv
+
   where
+
     powOp = reservedOp "^" <|> reservedOp "**"
     sqrOp = reservedOp "²"
     cubOp = reservedOp "³"
@@ -243,9 +279,9 @@ expression = fix \p →
     addOp = reservedOp "+"
     convOp = reservedOp "->"
 
-    two = Q 2.0 unity
+    two = Scalar 2.0
     square q = BinOp Pow q two
-    three = Q 3.0 unity
+    three = Scalar 3.0
     cube q = BinOp Pow q three
 
 -- | Parse a mathematical expression (or conversion) like `3m`.
@@ -271,9 +307,9 @@ command =
 assignment ∷ P Statement
 assignment = do
   whiteSpace
-  var <- token.identifier
+  var ← token.identifier
   reservedOp "="
-  value <- expression
+  value ← expression
   pure $ Assignment var value
 
 -- | Parse a statement in the Insect language.

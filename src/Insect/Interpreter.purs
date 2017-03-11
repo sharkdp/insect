@@ -13,7 +13,7 @@ import Data.Foldable (intercalate)
 import Data.StrMap (lookup, insert, foldMap)
 import Data.Bifunctor (lmap)
 
-import Quantities (Quantity, UnificationError, asValueIn, pow,
+import Quantities (Quantity, UnificationError, asValueIn, pow, scalar,
                    qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
                    unity, convert, errorMessage, prettyPrint, fullSimplify,
                    derivedUnit)
@@ -48,7 +48,8 @@ convert' target source = lmap UnificationError (convert targetUnit source)
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
-eval env (Q n u)         = pure $ quantity n u
+eval env (Scalar n)      = pure $ scalar n
+eval env (Unit u)        = pure $ quantity 1.0 u
 eval env (Negate x)      = qNegate <$> eval env x
 eval env (BinOp Sub x y) = join $ qSubtract' <$> eval env x <*> eval env y
 eval env (BinOp Add x y) = join $ qAdd'      <$> eval env x <*> eval env y
