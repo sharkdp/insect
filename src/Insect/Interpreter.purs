@@ -67,8 +67,14 @@ evalErrorMessage (UnificationError ue) = errorMessage ue
 evalErrorMessage (LookupError name) = "Unknown variable '" <> name <> "'"
 
 message ∷ Environment → Expect Quantity → { msg ∷ Message, newEnv ∷ Environment }
-message env (Left e) = { msg: Message Error (evalErrorMessage e), newEnv: env }
-message env (Right q) = { msg: Message Value (prettyPrint q), newEnv: env }
+message env (Left e) =
+  { msg: Message Error (evalErrorMessage e)
+  , newEnv: env
+  }
+message env (Right q) =
+  { msg: Message Value (prettyPrint q)
+  , newEnv: insert "ans" q env
+  }
 
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → { msg ∷ Message, newEnv ∷ Environment }
