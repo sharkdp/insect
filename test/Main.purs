@@ -201,7 +201,7 @@ main = runTest do
         ]
 
     test "Divisions" do
-      allParseAs (Expression (BinOp Mul (Scalar 2.3) (BinOp Div (Unit (kilo meter)) (Unit hour))))
+      allParseAs (Expression (BinOp Div (q 2.3 (kilo meter)) (Unit hour)))
         [ "2.3km/h"
         , "2.30km/h"
         ]
@@ -308,6 +308,16 @@ main = runTest do
         , "  (  5 m + ( 3  in )  )  * 7    "
         ]
 
+      allParseAs (Expression (BinOp Div (q 5.0 meter) (q 3.0 second)))
+        [ "5m/3s"
+        , "(5m)/(3s)"
+        ]
+
+      allParseAs (Expression (BinOp Div (q 5.0 meter) (BinOp Mul (Scalar 3.0) (BinOp Pow (Unit second) (Scalar 2.0)))))
+        [ "5m/3s^2"
+        , "5m/3s²"
+        ]
+
       shouldFail "3+*4"
       shouldFail "3*/4"
       shouldFail "(3+4"
@@ -337,7 +347,7 @@ main = runTest do
         , "3·m^(2.0)"
         ]
 
-      allParseAs (Expression (BinOp Mul (Scalar 3.0) (BinOp Div (Unit meter) (Unit second)))) $
+      allParseAs (Expression (BinOp Div (q 3.0 meter) (Unit second))) $
         [ "3m/s"
         , "3·m/s"
         , "3 meter / second"
@@ -366,12 +376,12 @@ main = runTest do
       shouldFail "2.3m->"
 
     test "Complex units" do
-      allParseAs (Expression (BinOp ConvertTo (BinOp Mul (Scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (Unit (mile ./ hour))))
+      allParseAs (Expression (BinOp ConvertTo (BinOp Div (q 36.0 (kilo meter)) (Unit hour)) (Unit (mile ./ hour))))
         [ "36km/h -> mph"
         , "36·km/h -> mph"
         ]
 
-      allParseAs (Expression (BinOp ConvertTo (BinOp Mul (Scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (BinOp Div (Unit meter) (Unit second))))
+      allParseAs (Expression (BinOp ConvertTo (BinOp Div (q 36.0 (kilo meter)) (Unit hour)) (BinOp Div (Unit meter) (Unit second))))
         [ "36km/h -> m/s"
         , "36·km/h -> m/s"
         ]
