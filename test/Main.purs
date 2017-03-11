@@ -218,6 +218,9 @@ main = runTest do
         , "+5^3"
         ]
 
+      shouldParseAs (Expression (BinOp Pow (Scalar 2.0) (BinOp Pow (Scalar 3.0) (BinOp Pow (Scalar 4.0) (Scalar 5.0))))) $
+        "2^3^4^5"
+
       allParseAs (Expression (BinOp Pow (Scalar 4.0) (Scalar 3.0))) $
         [ "4^3"
         , "4 ^ 3"

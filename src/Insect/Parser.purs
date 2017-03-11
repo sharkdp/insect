@@ -14,12 +14,13 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
                    newton, ounce, peta, pico, pound, radian, second, tera,
                    watt, week, yard, (./))
 
-import Data.Either (Either)
 import Data.Array (some, fromFoldable)
+import Data.Either (Either)
+import Data.Foldable (foldr)
+import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
-import Data.String (fromCharArray, singleton)
-import Data.List (List, many)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
+import Data.String (fromCharArray, singleton)
 import Global (readFloat, isFinite)
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
@@ -227,6 +228,13 @@ sepBy1 p sep = do
     p
   pure (a :| as)
 
+-- | Fold a non-empty structure, collecting results using a binary operation.
+foldr1 ∷ ∀ a. (a → a → a) → NonEmpty List a → a
+foldr1 f (a :| xs) =
+  case init xs, last xs of
+    Just bs, Just b → f a (foldr f b bs)
+    _, _ → a
+
 -- | Parse a full expression.
 expression ∷ P Expression
 expression =
@@ -244,7 +252,7 @@ expression =
           Nothing → pure a
 
       sepByPow ∷ P Expression
-      sepByPow = foldl1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
+      sepByPow = foldr1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
 
       sepByDiv ∷ P Expression
       sepByDiv = foldl1 (BinOp Div) <$> sepByPow `sepBy1` divOp

@@ -61,9 +61,9 @@ eval env (BinOp Pow x y) = do
   expNumber ← asScalar exp
   pure $ base `pow` expNumber
 eval env (BinOp ConvertTo s t) = do
-  source <- eval env s
-  target <- eval env t
-  res <- convert' target source
+  source ← eval env s
+  target ← eval env t
+  res ← convert' target source
   pure res
 eval env (Variable name) =
   case lookup name env of
