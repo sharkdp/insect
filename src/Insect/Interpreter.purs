@@ -92,13 +92,13 @@ runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
   , ""
   , "You can start by trying one of these examples:"
   , ""
-  , "--> 1920/16*9"
+  , "  > 1920/16*9"
   , ""
-  , "--> 2min + 30s"
+  , "  > 2min + 30s"
   , ""
-  , "--> 60mph -> m/s"
+  , "  > 60mph -> m/s"
   , ""
-  , "--> 6Mbps*1.5h -> Gb"
+  , "  > 6Mbps*1.5h -> Gb"
   ]), newEnv : env }
 runInsect env (Command List) =
   { msg: Message Info list
