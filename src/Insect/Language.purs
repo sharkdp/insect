@@ -26,6 +26,7 @@ data BinOp
  | Mul
  | Div
  | Pow
+ | ConvertTo
 
 derive instance eqBinOp ∷ Eq BinOp
 derive instance genericBinOp ∷ Generic BinOp
@@ -59,13 +60,11 @@ instance showCommand ∷ Show Command where show = gShow
 -- | A statement in the Insect language.
 data Statement
  = Expression Expression
- | Conversion Expression DerivedUnit
  | Assignment Identifier Expression
  | Command Command
 
 derive instance eqStatement ∷ Eq Statement
 instance showStatement ∷ Show Statement where
   show (Expression e) = "(Expression " <> show e <> ")"
-  show (Conversion e u) = "(Conversion " <> show e <> " " <> show u <> ")"
   show (Assignment i e) = "(Assignment " <> show i <> " " <> show e <> ")"
   show (Command c) = "(Command " <> show c <> ")"

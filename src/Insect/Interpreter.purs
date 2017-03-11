@@ -13,9 +13,10 @@ import Data.Foldable (intercalate)
 import Data.StrMap (lookup, insert, foldMap)
 import Data.Bifunctor (lmap)
 
-import Quantities (Quantity, DerivedUnit, UnificationError, asValueIn, pow,
+import Quantities (Quantity, UnificationError, asValueIn, pow,
                    qNegate, qAdd, qDivide, qMultiply, qSubtract, quantity,
-                   unity, convert, errorMessage, prettyPrint, fullSimplify)
+                   unity, convert, errorMessage, prettyPrint, fullSimplify,
+                   derivedUnit)
 
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..))
 import Insect.Environment (Environment, initialEnvironment)
@@ -41,8 +42,9 @@ qAdd' q1 q2 = lmap UnificationError (qAdd q1 q2)
 asScalar ∷ Quantity → Expect Number
 asScalar q = lmap UnificationError (q `asValueIn` unity)
 
-convert' ∷ DerivedUnit → Quantity → Expect Quantity
-convert' d q = lmap UnificationError (convert d q)
+convert' ∷ Quantity → Quantity → Expect Quantity
+convert' target source = lmap UnificationError (convert targetUnit source)
+  where targetUnit = derivedUnit target
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
@@ -57,6 +59,11 @@ eval env (BinOp Pow x y) = do
   exp ← eval env y
   expNumber ← asScalar exp
   pure $ base `pow` expNumber
+eval env (BinOp ConvertTo s t) = do
+  source <- eval env s
+  target <- eval env t
+  res <- convert' target source
+  pure res
 eval env (Variable name) =
   case lookup name env of
     Just q → pure q
@@ -79,7 +86,6 @@ message env (Right q) =
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → { msg ∷ Message, newEnv ∷ Environment }
 runInsect env (Expression e) = message env (fullSimplify <$> eval env e)
-runInsect env (Conversion e u) = message env (eval env e >>= convert' u)
 runInsect env (Assignment n v) =
   case eval env v of
     Left evalErr → message env (Left evalErr)

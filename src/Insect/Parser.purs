@@ -16,7 +16,7 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci,
 
 import Data.Either (Either)
 import Data.Array (some, fromFoldable)
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Maybe (fromMaybe)
 import Data.String (fromCharArray, singleton)
 import Global (readFloat, isFinite)
 
@@ -222,15 +222,16 @@ term p = parens p <|> quantity <|> variable
 expression ∷ P Expression
 expression = fix \p →
   buildExprParser
-    [ [ Infix   (powOp $> BinOp Pow) AssocLeft ]
-    , [ Postfix (sqrOp $> square)              ]
-    , [ Postfix (cubOp $> cube)                ]
-    , [ Prefix  (subOp $> Negate)              ]
-    , [ Prefix  (addOp $> id)                  ]
-    , [ Infix   (divOp $> BinOp Div) AssocLeft ]
-    , [ Infix   (mulOp $> BinOp Mul) AssocLeft ]
-    , [ Infix   (subOp $> BinOp Sub) AssocLeft ]
-    , [ Infix   (addOp $> BinOp Add) AssocLeft ]
+    [ [ Infix   (powOp  $> BinOp Pow)       AssocLeft ]
+    , [ Postfix (sqrOp  $> square)                    ]
+    , [ Postfix (cubOp  $> cube)                      ]
+    , [ Prefix  (subOp  $> Negate)                    ]
+    , [ Prefix  (addOp  $> id)                        ]
+    , [ Infix   (divOp  $> BinOp Div)       AssocLeft ]
+    , [ Infix   (mulOp  $> BinOp Mul)       AssocLeft ]
+    , [ Infix   (subOp  $> BinOp Sub)       AssocLeft ]
+    , [ Infix   (addOp  $> BinOp Add)       AssocLeft ]
+    , [ Infix   (convOp $> BinOp ConvertTo) AssocLeft ]
     ] (term p)
   where
     powOp = reservedOp "^" <|> reservedOp "**"
@@ -240,22 +241,21 @@ expression = fix \p →
     mulOp = reservedOp "*" <|> reservedOp "·"
     subOp = reservedOp "-"
     addOp = reservedOp "+"
+    convOp = reservedOp "->"
+
     two = Q 2.0 unity
     square q = BinOp Pow q two
     three = Q 3.0 unity
     cube q = BinOp Pow q three
 
--- | Parse a mathematical expression (or conversion) like `3m` or `3m->ft`.
-expressionOrConversion ∷ P Statement
-expressionOrConversion = do
+-- | Parse a mathematical expression (or conversion) like `3m`.
+fullExpression ∷ P Expression
+fullExpression = do
   whiteSpace
   expr ← expression
-  conv ← optionMaybe (reservedOp "->" *> derivedUnit <* whiteSpace)
   eof <?> "end of input"
 
-  case conv of
-    Just target → pure $ Conversion expr target
-    Nothing     → pure $ Expression expr
+  pure $ expr
 
 -- | Parse an Insect-command
 command ∷ P Command
@@ -278,7 +278,10 @@ assignment = do
 
 -- | Parse a statement in the Insect language.
 statement ∷ P Statement
-statement = (Command <$> command) <|> try assignment <|> expressionOrConversion
+statement =
+      (Command <$> command)
+  <|> try assignment
+  <|> (Expression <$> fullExpression)
 
 -- | Run the Insect-parser on a `String` input.
 parseInsect ∷ String → Either ParseError Statement

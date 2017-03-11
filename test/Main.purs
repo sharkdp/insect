@@ -261,13 +261,13 @@ main = runTest do
 
   suite "Parser - Conversions" do
     test "Simple" do
-      allParseAs (Conversion (Q (2.3) meter) inch)
+      allParseAs (Expression (BinOp ConvertTo (Q (2.3) meter) (Q 1.0 inch)))
         [ "2.3m -> in"
         , "  2.3 meters->inches "
         , "  2.3 m  ->  in "
         ]
 
-      allParseAs (Conversion (Q 120.0 minute) hour)
+      allParseAs (Expression (BinOp ConvertTo (Q 120.0 minute) (Q 1.0 hour)))
         [ "120min -> h"
         , "120minutes -> hours"
         ]
@@ -277,7 +277,7 @@ main = runTest do
       shouldFail "2.3m->yikes"
 
     test "Complex units" do
-      allParseAs (Conversion (Q 36.0 (kilo meter ./ hour)) (mile ./ hour))
+      allParseAs (Expression (BinOp ConvertTo (Q 36.0 (kilo meter ./ hour)) (Q 1.0 (mile ./ hour))))
         [ "36km/h -> mph"
         ]
 
