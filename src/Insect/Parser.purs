@@ -30,16 +30,17 @@ import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
 
-import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..), Statement(..))
+import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
+                        Statement(..))
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
 
--- | Possibler characters for identifiers
+-- | Possibler characters for identifiers (not for the first character).
 identLetter ∷ P Char
 identLetter = letter <|> digit <|> char '_' <|> char '\''
 
--- | The language definition for the `TokenParser`.
+-- | The language definition.
 insectLanguage ∷ LanguageDef
 insectLanguage = LanguageDef
   { commentStart: ""
@@ -127,7 +128,7 @@ siPrefix =
   <|> (string "E" *> pure exa)
   <|> pure id
 
--- | Parse a normal (SI-conform) unit, i.e. non-imperical unit
+-- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
 normalUnit ∷ P DerivedUnit
 normalUnit =
       (string "radians" *> pure radian)
@@ -176,7 +177,7 @@ normalUnit =
   <|> (string "m"       *> pure meter)
   <?> "unit"
 
--- | Parse a imperial unit like `ft`.
+-- | Parse an imperial unit like `ft` of `mile`.
 imperialUnit ∷ P DerivedUnit
 imperialUnit =
       (string "miles"  *> pure mile)
@@ -197,7 +198,7 @@ imperialUnit =
   <|> (string "pound"  *> pure pound)
   <|> (string "lb"     *> pure pound)
 
--- | Parse a 'normal' unit with a SI prefix, like `km` or `Gb`.
+-- | Parse a 'normal' unit with SI prefix, like `km` or `Gb`.
 unitWithSIPrefix ∷ P DerivedUnit
 unitWithSIPrefix = do
   p ← siPrefix
@@ -206,15 +207,18 @@ unitWithSIPrefix = do
 
 -- | Parse a derived unit, like `km`, `ft`, or `s`.
 derivedUnit ∷ P DerivedUnit
-derivedUnit = (
-      try unitWithSIPrefix
-  <|> imperialUnit
-  <|> normalUnit
+derivedUnit =
+  (
+        try unitWithSIPrefix
+    <|> imperialUnit
+    <|> normalUnit
   ) <* notFollowedBy identLetter <* whiteSpace
 
+-- | Parse the name of a variable, like `my_variable'`.
 variable ∷ P Expression
 variable = Variable <$> token.identifier
 
+-- | Parse the name of a mathematical function.
 funcName ∷ P Func
 funcName =
       (string "acos" *> pure Acos)
@@ -243,7 +247,7 @@ foldr1 f (a :| xs) =
     Just bs, Just b → f a (foldr f b bs)
     _, _ → a
 
--- | Parse a full expression.
+-- | Parse a full mathematical expression.
 expression ∷ P Expression
 expression =
   fix \p →
@@ -286,7 +290,7 @@ expression =
       sepByAdd = foldl1 (BinOp Add) <$> sepBySub `sepBy1` addOp
 
       sepByConv ∷ P Expression
-      sepByConv = foldl1 (BinOp ConvertTo) <$> sepByAdd `sepBy1` convOp
+      sepByConv = foldl1 (BinOp ConvertTo) <$> sepByAdd `sepBy1` arrOp
 
     in sepByConv
 
@@ -299,14 +303,12 @@ expression =
     mulOp = reservedOp "*" <|> reservedOp "·"
     subOp = reservedOp "-"
     addOp = reservedOp "+"
-    convOp = reservedOp "->"
+    arrOp = reservedOp "->"
 
-    two = Scalar 2.0
-    square q = BinOp Pow q two
-    three = Scalar 3.0
-    cube q = BinOp Pow q three
+    square q = BinOp Pow q (Scalar 2.0)
+    cube q = BinOp Pow q (Scalar 3.0)
 
--- | Parse a mathematical expression (or conversion) like `3m`.
+-- | Parse a mathematical expression (or conversion) like `3m+2in -> cm`.
 fullExpression ∷ P Expression
 fullExpression = do
   whiteSpace
@@ -315,7 +317,7 @@ fullExpression = do
 
   pure $ expr
 
--- | Parse an Insect-command
+-- | Parse an Insect command.
 command ∷ P Command
 command =
   (

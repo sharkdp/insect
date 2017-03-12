@@ -62,5 +62,6 @@ Features
 Build
 -----
 ```sh
+bower install
 pulp -w build --skip-entry-point -m Insect -O -t insect.js
 ```

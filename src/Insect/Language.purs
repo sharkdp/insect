@@ -1,7 +1,6 @@
--- | This module defines the AST for the Insect language.
+-- | This module defines the AST for Insect.
 module Insect.Language
   ( Identifier
-  , Exponent
   , Func(..)
   , BinOp(..)
   , Expression(..)
@@ -11,16 +10,13 @@ module Insect.Language
 
 import Prelude hiding (Unit)
 
-import Data.Units (DerivedUnit)
 import Data.Generic (class Generic, gShow)
+import Data.Units (DerivedUnit)
 
--- | Type synonym for identifiers in the Insect language.
+-- | Type synonym for identifiers (variable names).
 type Identifier = String
 
--- | Type synonym for exponents in units.
-type Exponent = Number
-
--- | Available mathematical functions.
+-- | All available mathematical functions.
 data Func
   = Acos
   | Asin
@@ -36,7 +32,7 @@ derive instance eqFunc ∷ Eq Func
 derive instance genericFunc ∷ Generic Func
 instance showFunc ∷ Show Func where show = gShow
 
--- | A binary operation.
+-- | Binary operators.
 data BinOp
  = Add
  | Sub
@@ -67,7 +63,7 @@ instance showExpression ∷ Show Expression where
   show (Apply fn x)   = "(Apply " <> show fn <> " " <> show x <> ")"
   show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
 
--- | A command in the Insect language.
+-- | A command in Insect.
 data Command
  = Help
  | Reset
@@ -78,7 +74,7 @@ derive instance eqCommand ∷ Eq Command
 derive instance genericCommand ∷ Generic Command
 instance showCommand ∷ Show Command where show = gShow
 
--- | A statement in the Insect language.
+-- | A statement in Insect.
 data Statement
  = Expression Expression
  | Assignment Identifier Expression
@@ -86,6 +82,6 @@ data Statement
 
 derive instance eqStatement ∷ Eq Statement
 instance showStatement ∷ Show Statement where
-  show (Expression e) = "(Expression " <> show e <> ")"
+  show (Expression e)   = "(Expression " <> show e <> ")"
   show (Assignment i e) = "(Assignment " <> show i <> " " <> show e <> ")"
-  show (Command c) = "(Command " <> show c <> ")"
+  show (Command c)      = "(Command " <> show c <> ")"
