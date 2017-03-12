@@ -18,7 +18,7 @@ Features
 
 - Parsing and handling of physical units:
   ```
-  4/3 pi (6000km)³
+  4/3 * pi (6000km)³
   2min + 30s
   ```
 
@@ -42,7 +42,7 @@ Features
 - Variable assigments:
   ```
   r = 6000km
-  vol = 4/3 pi r³
+  vol = 4/3 * pi * r³
   density = 5g/cm³
   vol * density -> kg
   ```

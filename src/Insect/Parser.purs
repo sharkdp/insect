@@ -272,11 +272,14 @@ expression =
       sepByPow ∷ P Expression
       sepByPow = foldr1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
 
+      sepByMulImplicit ∷ P Expression
+      sepByMulImplicit = foldl1 (BinOp Mul) <$> sepByPow `sepBy1` pure unit
+
       sepByDiv ∷ P Expression
-      sepByDiv = foldl1 (BinOp Div) <$> sepByPow `sepBy1` divOp
+      sepByDiv = foldl1 (BinOp Div) <$> sepByMulImplicit `sepBy1` divOp
 
       sepByMul ∷ P Expression
-      sepByMul = foldl1 (BinOp Mul) <$> sepByDiv `sepBy1` (optional mulOp)
+      sepByMul = foldl1 (BinOp Mul) <$> sepByDiv `sepBy1` mulOp
 
       prefixed ∷ P Expression
       prefixed = do

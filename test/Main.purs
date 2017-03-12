@@ -225,7 +225,7 @@ main = runTest do
         ]
 
     test "Divisions" do
-      allParseAs (Expression (BinOp Mul (Scalar 2.3) (BinOp Div (Unit (kilo meter)) (Unit hour))))
+      allParseAs (Expression (BinOp Div (q 2.3 (kilo meter)) (Unit hour)))
         [ "2.3km/h"
         , "2.30km/h"
         ]
@@ -389,11 +389,16 @@ main = runTest do
         , "3·m^(2.0)"
         ]
 
-      allParseAs (Expression (BinOp Mul (Scalar 3.0) (BinOp Div (Unit meter) (Unit second)))) $
+      allParseAs (Expression (BinOp Div (q 3.0 meter) (Unit second))) $
         [ "3m/s"
-        , "3·m/s"
         , "3 meter / second"
-        , "3 meter / sec"
+        , "(3m)/s"
+        ]
+
+      allParseAs (Expression (BinOp Mul (Scalar 3.0) (BinOp Div (Unit meter) (Unit second)))) $
+        [ "3·m/s"
+        , "3*meter / second"
+        , "3*meter / sec"
         ]
 
       allParseAs (Expression (BinOp Pow (Unit meter) (Negate $ Scalar 1.0))) $
@@ -419,13 +424,13 @@ main = runTest do
 
     test "Complex units" do
       allParseAs (Expression (BinOp ConvertTo (BinOp Mul (Scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (Unit (mile ./ hour))))
-        [ "36km/h -> mph"
-        , "36·km/h -> mph"
+        [ "36·km/h -> mph"
+        , " 36 · km / hour->mph"
         ]
 
-      allParseAs (Expression (BinOp ConvertTo (BinOp Mul (Scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (BinOp Div (Unit meter) (Unit second))))
-        [ "36km/h -> m/s"
-        , "36·km/h -> m/s"
+      allParseAs (Expression (BinOp ConvertTo (BinOp Div (q 36.0 (kilo meter)) (Unit hour)) (Unit (mile ./ hour))))
+        [ "36km/h -> mph"
+        , " 36km / hour->mph "
         ]
 
   suite "Parser - Identifiers" do
@@ -499,7 +504,7 @@ main = runTest do
       expectOutput' "1080.0" "1920/16*9"
       expectOutput' "4294967296.0" "2^32"
       expectOutput' "36.316811075498" "pi(1.4+2)²"
-      expectOutput' "904778684233.8604km³" "4/3 pi (6000km)³"
+      expectOutput' "904778684233.8604km³" "4/3 * pi (6000km)³"
       expectOutput' "2.5min" "2min + 30s"
       expectOutput' "150.0s" "2min + 30s -> sec"
       expectOutput' "26.8224m/s" "60mph -> m/s"
@@ -510,11 +515,14 @@ main = runTest do
       expectOutput' "0.7071067811865476" "cos(pi/4)"
       expectOutput' "0.49999999999999994" "sin(30°)"
       expectOutput' "8.530765609948133°" "atan(30cm/(2m)) -> °"
+      expectOutput' "0.75" "3m/4m"
+      expectOutput' "4.0" "4/2*2"
+      expectOutput' "0.5s" "1/2 Hz -> s"
 
     test "Earth mass" do
       let env1 = initialEnvironment
           env2 = (repl env1 "r = 6000km").newEnv
-          env3 = (repl env2 "vol = 4/3 pi r³").newEnv
+          env3 = (repl env2 "vol = 4/3 * pi * r³").newEnv
           env4 = (repl env3 "density = 5g/cm³").newEnv
 
       expectOutput env4 "4.5238934211693013e+24kg" "vol * density -> kg"
