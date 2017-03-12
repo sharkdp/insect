@@ -87,6 +87,12 @@ main = runTest do
         , "+3.50"
         ]
 
+      shouldFail "123.."
+      shouldFail "0.."
+      shouldFail ".0."
+      shouldFail "."
+      shouldFail ".2"
+
     test "Large numbers" do
       allParseAs (Expression (Scalar 1234567890000000.0))
         [ "1234567890000000"
@@ -106,6 +112,9 @@ main = runTest do
         "2.7e-3"
 
       shouldFail "2.7e 3"
+      shouldFail "123e+"
+      shouldFail "1223e++2"
+      shouldFail "1223e+-2"
 
   suite "Parser - Units" do
     test "Simple" do
@@ -267,6 +276,11 @@ main = runTest do
         , "3 ** (-1.4)"
         ]
 
+      shouldFail "³"
+      shouldFail "³2"
+      shouldFail "2^"
+      shouldFail "^2"
+
     test "Multiplication" do
       allParseAs (Expression (BinOp Mul (Scalar 5.0) (Scalar 3.0))) $
         [ "5*3"
@@ -290,6 +304,8 @@ main = runTest do
         , "+5*(-3)"
         ]
 
+      shouldFail "5*"
+
     test "Division" do
       allParseAs (Expression (BinOp Div (Scalar 5.0) (Scalar 3.0))) $
         [ "5/3"
@@ -299,6 +315,8 @@ main = runTest do
         , " ( 5 / 3 ) "
         ]
 
+      shouldFail "5/"
+
     test "Addition" do
       allParseAs (Expression (BinOp Add (Scalar 5.0) (Scalar 3.0))) $
         [ "5+3"
@@ -307,6 +325,20 @@ main = runTest do
         , " ( ( 5 ) + ( 3 ) ) "
         , " ( 5 + 3 ) "
         ]
+
+      shouldFail "3 + "
+      shouldFail "3 + @"
+
+    test "Subtraction" do
+      allParseAs (Expression (BinOp Sub (Scalar 5.0) (Scalar 3.0))) $
+        [ "5-3"
+        , " 5 - 3 "
+        , " ( 5 ) - ( 3 ) "
+        , " ( ( 5 ) - ( 3 ) ) "
+        , " ( 5 - 3 ) "
+        ]
+
+      shouldFail "3 - "
 
     test "Precedence" do
       allParseAs (Expression (BinOp Add (q 5.0 meter) (BinOp Mul (q 3.0 inch) (Scalar 7.0)))) $
