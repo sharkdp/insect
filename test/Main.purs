@@ -514,7 +514,7 @@ main = runTest do
       expectOutput' "12.7cm" "5in -> cm"
       expectOutput' "0.7071067811865476" "cos(pi/4)"
       expectOutput' "0.49999999999999994" "sin(30°)"
-      expectOutput' "8.530765609948133°" "atan(30cm/(2m)) -> °"
+      expectOutput' "8.530765609948133°" "atan(30cm / 2m) -> °"
       expectOutput' "0.75" "3m/4m"
       expectOutput' "4.0" "4/2*2"
       expectOutput' "0.5s" "1/2 Hz -> s"

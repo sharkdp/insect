@@ -35,7 +35,7 @@ Features
   ```
   cos(pi/4)
   sin(30°)
-  atan(30cm/(2m)) -> °
+  atan(30cm / 2m) -> °
   ```
   Currently supported: `sqrt`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `exp`, `log`.
 
