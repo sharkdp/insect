@@ -7,6 +7,7 @@ import Control.Monad.Eff.Console (CONSOLE)
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff.AVar (AVAR)
 
+import Data.StrMap (insert)
 import Data.Either(Either(..))
 import Data.Foldable (traverse_)
 
@@ -17,11 +18,13 @@ import Test.Unit.Console (TESTOUTPUT)
 import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
-import Quantities ((./), milli, nano, meter, inch, hour, minute, kilo, mile,
-                   gram, second, deci, tera, hertz, degree, radian)
+import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
+                   mile, gram, second, deci, tera, hertz, degree, radian)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (parseInsect)
+import Insect.Environment (Environment, initialEnvironment)
+import Insect (repl)
 
 shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
 shouldParseAs expected input =
@@ -48,6 +51,18 @@ shouldFail input = do
   case parseInsect input of
    Left _ → pure unit
    Right output → failure $ "input is expected to throw a parse error: '" <> input <> "'"
+
+expectOutput ∷ ∀ eff. Environment → String → String → Aff eff Unit
+expectOutput env expected inp =
+  let res = repl env inp
+      out = res.msg
+  in
+    unless (out == expected) do
+      failure $ "Unexpected result:\n" <>
+                "Input:    '" <> inp <> "'\n" <>
+                "Output:   '" <> out <> "'\n" <>
+                "Expected: '" <> expected <> "'\n"
+
 
 main ∷ Eff (console ∷ CONSOLE, testOutput ∷ TESTOUTPUT, avar ∷ AVAR) Unit
 main = runTest do
@@ -431,3 +446,50 @@ main = runTest do
       shouldFail "x+2=3"
       shouldFail "3=5"
       shouldFail "x="
+
+  let expectOutput' = expectOutput initialEnvironment
+
+  suite "Integration" do
+    test "Simple" do
+      expectOutput' "3.0m" "3m"
+      expectOutput' "3.0m" " 3.0 meter  "
+
+    test "Implicit multiplication" do
+      let myEnv = insert "x" (5.0 .* meter) initialEnvironment
+      expectOutput myEnv "5.0m" "x"
+      expectOutput myEnv "10.0m" "2x"
+      expectOutput myEnv "10.0m" "2 x"
+      expectOutput myEnv "25.0m²" "x x"
+      expectOutput myEnv "25.0m²" "x²"
+      expectOutput myEnv "Unknown variable 'x2'" "x2"
+
+    test "Simple" do
+      expectOutput' "1080.0" "1920/16*9"
+      expectOutput' "4294967296.0" "2^32"
+      expectOutput' "36.316811075498" "pi(1.4+2)²"
+      expectOutput' "904778684233.8604km³" "4/3 pi (6000km)³"
+      expectOutput' "2.5min" "2min + 30s"
+      expectOutput' "150.0s" "2min + 30s -> sec"
+      expectOutput' "26.8224m/s" "60mph -> m/s"
+      expectOutput' "10.0km/h" "240km/day -> km/h"
+      expectOutput' "0.057295779513082325°" "1mrad -> °"
+      expectOutput' "364.0d" "52weeks -> days"
+      expectOutput' "12.7cm" "5in -> cm"
+      expectOutput' "0.7071067811865476" "cos(pi/4)"
+      expectOutput' "0.49999999999999994" "sin(30°)"
+      expectOutput' "8.530765609948133°" "atan(30cm/(2m)) -> °"
+
+    test "Earth mass" do
+      let env1 = initialEnvironment
+          env2 = (repl env1 "r = 6000km").newEnv
+          env3 = (repl env2 "vol = 4/3 pi r³").newEnv
+          env4 = (repl env3 "density = 5g/cm³").newEnv
+
+      expectOutput env4 "4.5238934211693013e+24kg" "vol * density -> kg"
+
+    test "Pendulum" do
+      let env1 = initialEnvironment
+          env2 = (repl env1 "grav = 9.81m/s²").newEnv
+          env3 = (repl env2 "L = 20cm").newEnv
+
+      expectOutput env3 "897.1402930932747ms" "2pi*sqrt(L/grav) -> ms"
