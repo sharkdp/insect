@@ -109,18 +109,18 @@ runInsect env (Assignment n v) =
     Right value → message (insert n value env) (Right (fullSimplify value))
 runInsect env (Command Help) = { msg: Message Other (intercalate "\n"
   [ ""
-  , "[[b;;]insect] is a command-line scientific calculator."
+  , "*insect* is a command-line scientific calculator."
   , ""
   , "It evaluates mathematical expressions that can involve"
   , "physical quantities. You can start by trying one of"
   , "these examples:"
   , ""
-  , "    > [[;#66D9EF;]1920/16*9]           > [[;#66D9EF;]2min + 30s]"
+  , "    > `1920/16*9`           > `2min + 30s`"
   , ""
-  , "    > [[;#66D9EF;]60mph -> m/s]        > [[;#66D9EF;]6Mbps*1.5h -> Gb]"
+  , "    > `60mph -> m/s`        > `6Mbps*1.5h -> Gb`"
   , ""
-  , "    > [[;#66D9EF;]r = 30cm]            > [[;#66D9EF;]list]"
-  , "    > [[;#66D9EF;]pi r²]               > [[;#66D9EF;]40000km/c -> ms]"
+  , "    > `r = 30cm`            > `list`"
+  , "    > `pi r²`               > `40000km/c -> ms`"
   , ""
   , "More information: https://github.com/sharkdp/insect"
   ]), newEnv : env }
@@ -129,7 +129,7 @@ runInsect env (Command List) =
   , newEnv: env }
   where
     list = "List of variables:\n" <> foldMap toLine env
-    toLine k v = "\n  * " <> k <> " = [[;#66D9EF;]" <> prettyPrint v <> "]"
+    toLine k v = "\n  * " <> k <> " = `" <> prettyPrint v <> "`"
 runInsect env (Command Reset) =
   { msg: Message Info "Environment has been reset"
   , newEnv: initialEnvironment }

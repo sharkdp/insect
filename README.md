@@ -59,6 +59,14 @@ Features
   reset
   ```
 
+Install
+-------
+If you do not want to use the web interface, you can also install the command
+line version:
+```sh
+npm install -g insect
+```
+
 Build
 -----
 ```sh

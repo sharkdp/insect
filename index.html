@@ -16,12 +16,22 @@
     <script type="text/javascript">
       var globalEnv = PS.Insect.initialEnvironment;
       function interpret(line) {
-        if (line.trim() === "" || line.trim().startsWith("#")) {
+        // Skip empty lines or line comments
+        var lineTrimmed = line.trim();
+        if (lineTrimmed === "" || lineTrimmed[0] === "#") {
           return;
         }
+
+        // Run insect
         var res = PS.Insect.repl(globalEnv)(line);
         globalEnv = res.newEnv;
+
+        // Format the output
         var msg = res.msg;
+
+        msg = msg.replace(/`([^`\n]+)`/g, colored("66D9EF", "$1"));
+        msg = msg.replace(/\*([^\*\n]+)\*/g, bold("$1"));
+
         if (res.msgType === "value") {
           msg = colored("66D9EF", msg);
         } else if (res.msgType == "error") {
@@ -29,6 +39,7 @@
         } else if (res.msgType == "info") {
           msg = colored("E6DB74", msg);
         }
+
         return msg;
       }
       function bold(str) {

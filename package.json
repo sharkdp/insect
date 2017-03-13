@@ -1,0 +1,25 @@
+{
+  "name": "insect",
+  "version": "1.0.0",
+  "description": "REPL-style scientific calculator",
+  "author": "David Peter <mail@david-peter.de>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharkdp/insect.git"
+  },
+  "homepage": "https://github.com/sharkdp/insect",
+  "bin": {
+    "insect": "./index.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "pulp build -m Insect -O",
+    "test": "pulp test"
+  },
+  "bugs": {
+    "url": "https://github.com/sharkdp/insect/issues"
+  }
+}
