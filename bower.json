@@ -18,7 +18,8 @@
     "purescript-parsing": "^3.2.1",
     "purescript-globals": "^2.0.0",
     "purescript-maps": "^2.1.2",
-    "jquery.terminal": "^1.0.12"
+    "jquery.terminal": "^1.0.14",
+    "keyboardevent-key-polyfill": "^1.0.2"
   },
   "devDependencies": {
     "purescript-psci-support": "^2.0.0",

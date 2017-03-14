@@ -10,10 +10,12 @@
     <link rel="icon" type="image/png" href="media/insect-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="media/insect-16x16.png" sizes="16x16">
     <script src="insect.js" type="text/javascript"></script>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/jquery.terminal/js/jquery.terminal-1.0.12.min.js"></script>
-    <script src="bower_components/jquery.terminal/js/jquery.mousewheel-min.js"></script>
+    <script src="bower_components/keyboardevent-key-polyfill/index.js" type="text/javascript"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="bower_components/jquery.terminal/js/jquery.terminal-1.0.14.min.js" type="text/javascript"></script>
+    <script src="bower_components/jquery.terminal/js/jquery.mousewheel-min.js" type="text/javascript"></script>
     <script type="text/javascript">
+      keyboardeventKeyPolyfill.polyfill();
       var globalEnv = PS.Insect.initialEnvironment;
       function interpret(line) {
         // Skip empty lines or line comments
