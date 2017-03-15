@@ -14,13 +14,15 @@ Features
   ```
   1920/16*9
   2^32
-  pi(1.4+2)²
+  sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
   ```
+  Supported functions: `sqrt`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `exp`, `log`.
 
 - Parsing and handling of physical units:
   ```
   2min + 30s
   40kg * 9.8m/s² * 150cm
+  sin(30°)
   ```
 
 - Explicit unit conversions
@@ -30,15 +32,8 @@ Features
   1mrad -> °
   52weeks -> days
   5in + 2ft -> cm
-  ```
-
-- Mathematical functions:
-  ```
-  cos(pi/4)
-  sin(30°)
   atan(30cm / 2m) -> °
   ```
-  Currently supported: `sqrt`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `exp`, `log`.
 
 - Variable assigments:
   ```
