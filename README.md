@@ -33,6 +33,7 @@ Features
   52weeks -> days
   5in + 2ft -> cm
   atan(30cm / 2m) -> °
+  6Mbit/s * 1.5h -> Gb
   ```
 
 - Variable assigments:
