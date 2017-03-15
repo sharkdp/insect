@@ -6,7 +6,7 @@ A fast, repl-style scientific calculator for the web and for the terminal.
 [![insect](media/insect-32x32.png)](https://shark.fish/insect/)
 
 * [**Web version**](https://shark.fish/insect/)
-* [Terminal version](#install).
+* [Terminal version](#install)
 
 Features
 --------
