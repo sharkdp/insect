@@ -509,21 +509,19 @@ main = runTest do
     test "Simple" do
       expectOutput' "1080.0" "1920/16*9"
       expectOutput' "4294967296.0" "2^32"
-      expectOutput' "36.316811075498" "pi(1.4+2)²"
+      expectOutput' "0.51295711321708" "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
 
       expectOutput' "2.5min" "2min + 30s"
       expectOutput' "150.0s" "2min + 30s -> sec"
-      expectOutput' "904778684233.8604km³" "4/3 * pi (6000km)³"
+      expectOutput' "904778684233.8604km³" "4/3 * pi * (6000km)³"
       expectOutput' "58800.0kg·m·cm/s²" "40kg * 9.8m/s² * 150cm"
+      expectOutput' "0.49999999999999994" "sin(30°)"
 
       expectOutput' "26.8224m/s" "60mph -> m/s"
       expectOutput' "10.0km/h" "240km/day -> km/h"
       expectOutput' "0.057295779513082325°" "1mrad -> °"
       expectOutput' "364.0d" "52weeks -> days"
       expectOutput' "73.66cm" "5in + 2ft -> cm"
-
-      expectOutput' "0.7071067811865476" "cos(pi/4)"
-      expectOutput' "0.49999999999999994" "sin(30°)"
       expectOutput' "8.530765609948133°" "atan(30cm / 2m) -> °"
 
       expectOutput' "0.75" "3m/4m"
