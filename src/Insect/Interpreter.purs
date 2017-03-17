@@ -14,9 +14,9 @@ import Data.Maybe (Maybe(..))
 import Data.StrMap (lookup, insert, foldMap)
 
 import Quantities (Quantity, UnificationError, pow, scalar, qNegate, qAdd,
-                   qDivide, qMultiply, qSubtract, quantity, toScalar, sqrt,
+                   qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
                    convertTo, errorMessage, prettyPrint, fullSimplify,
-                   derivedUnit, acos, asin, atan, sin, cos, tan, exp, log)
+                   derivedUnit, acos, asin, atan, sin, cos, tan, exp, ln)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..), Statement(..))
 import Insect.Environment (Environment, initialEnvironment)
@@ -47,7 +47,7 @@ applyFunction fn q = lmap UnificationError $ (run fn) q
     run Sin  = sin
     run Tan  = tan
     run Exp  = exp
-    run Log  = log
+    run Ln   = ln
     run Sqrt = sqrt >>> pure
 
 -- | Evaluate a mathematical expression involving physical quantities.
@@ -70,7 +70,7 @@ eval env (BinOp op x y)  = do
     run Add       a b = qAdd' a b
     run Mul       a b = pure (qMultiply a b)
     run Div       a b = pure (qDivide a b)
-    run Pow       a b = pow a <$> toScalar' b
+    run Pow       a b = pow a <$> toScalar'' b
     run ConvertTo a b = convertTo' a b
 
     wrap ∷ ∀ a. Either UnificationError a → Either EvalError a
@@ -78,7 +78,7 @@ eval env (BinOp op x y)  = do
 
     qSubtract' q1 q2 = wrap (qSubtract q1 q2)
     qAdd' q1 q2 = wrap (qAdd q1 q2)
-    toScalar' q = wrap (toScalar q)
+    toScalar'' q = wrap (toScalar' q)
     convertTo' source target = wrap (convertTo source (derivedUnit target))
 
 -- | Get the error message for an evaluation error.
@@ -113,7 +113,7 @@ runInsect env (Command Help) = { msg: Message Other (intercalate "\n"
   , "involve physical quantities. You can start by trying"
   , "one of these examples:"
   , ""
-  , "   > `1920/16*9`           > `cos(30°)`"
+  , "   > `1920/16*9`           > `sin(30°)`"
   , ""
   , "   > `2min + 30s`          > `6Mbit/s * 1.5h -> Gb`"
   , ""

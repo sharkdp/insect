@@ -494,38 +494,38 @@ main = runTest do
 
   suite "Integration" do
     test "Simple" do
-      expectOutput' "3.0m" "3m"
-      expectOutput' "3.0m" " 3.0 meter  "
+      expectOutput' "3m" "3m"
+      expectOutput' "3m" " 3.0 meter  "
 
     test "Implicit multiplication" do
       let myEnv = insert "x" (5.0 .* meter) initialEnvironment
-      expectOutput myEnv "5.0m" "x"
-      expectOutput myEnv "10.0m" "2x"
-      expectOutput myEnv "10.0m" "2 x"
-      expectOutput myEnv "25.0m²" "x x"
-      expectOutput myEnv "25.0m²" "x²"
+      expectOutput myEnv "5m" "x"
+      expectOutput myEnv "10m" "2x"
+      expectOutput myEnv "10m" "2 x"
+      expectOutput myEnv "25m²" "x x"
+      expectOutput myEnv "25m²" "x²"
       expectOutput myEnv "Unknown variable 'x2'" "x2"
 
     test "Simple" do
-      expectOutput' "1080.0" "1920/16*9"
-      expectOutput' "4294967296.0" "2^32"
-      expectOutput' "0.51295711321708" "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
+      expectOutput' "1080" "1920/16*9"
+      expectOutput' "4294967296" "2^32"
+      expectOutput' "0.512957" "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
 
       expectOutput' "2.5min" "2min + 30s"
-      expectOutput' "150.0s" "2min + 30s -> sec"
-      expectOutput' "904778684233.8604km³" "4/3 * pi * (6000km)³"
-      expectOutput' "58800.0kg·m·cm/s²" "40kg * 9.8m/s² * 150cm"
-      expectOutput' "0.49999999999999994" "sin(30°)"
+      expectOutput' "150s" "2min + 30s -> sec"
+      expectOutput' "904779000000km³" "4/3 * pi * (6000km)³"
+      expectOutput' "58800kg·m·cm/s²" "40kg * 9.8m/s² * 150cm"
+      expectOutput' "0.5" "sin(30°)"
 
       expectOutput' "26.8224m/s" "60mph -> m/s"
-      expectOutput' "10.0km/h" "240km/day -> km/h"
-      expectOutput' "0.057295779513082325°" "1mrad -> °"
-      expectOutput' "364.0d" "52weeks -> days"
+      expectOutput' "10km/h" "240km/day -> km/h"
+      expectOutput' "0.0572958°" "1mrad -> °"
+      expectOutput' "364d" "52weeks -> days"
       expectOutput' "73.66cm" "5in + 2ft -> cm"
-      expectOutput' "8.530765609948133°" "atan(30cm / 2m) -> °"
+      expectOutput' "8.53077°" "atan(30cm / 2m) -> °"
 
       expectOutput' "0.75" "3m/4m"
-      expectOutput' "4.0" "4/2*2"
+      expectOutput' "4" "4/2*2"
       expectOutput' "0.5s" "1/2 Hz -> s"
 
     test "Earth mass" do
@@ -534,11 +534,11 @@ main = runTest do
           env3 = (repl env2 "vol = 4/3 * pi * r³").newEnv
           env4 = (repl env3 "density = 5g/cm³").newEnv
 
-      expectOutput env4 "4.5238934211693013e+24kg" "vol * density -> kg"
+      expectOutput env4 "4.52389e+24kg" "vol * density -> kg"
 
     test "Pendulum" do
       let env1 = initialEnvironment
           env2 = (repl env1 "grav = 9.81m/s²").newEnv
           env3 = (repl env2 "L = 20cm").newEnv
 
-      expectOutput env3 "897.1402930932747ms" "2pi*sqrt(L/grav) -> ms"
+      expectOutput env3 "897.14ms" "2pi*sqrt(L/grav) -> ms"

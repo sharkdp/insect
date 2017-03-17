@@ -68,5 +68,6 @@ Build
 -----
 ```sh
 bower install
-pulp -w build --skip-entry-point -m Insect -O -t insect.js
+npm install
+pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js
 ```

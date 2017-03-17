@@ -25,7 +25,7 @@ import Global (readFloat, isFinite)
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
 import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>),
-                                        optional, notFollowedBy)
+                                        notFollowedBy)
 import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
@@ -228,7 +228,8 @@ funcName =
   <|> (string "sin"  *> pure Sin)
   <|> (string "tan"  *> pure Tan)
   <|> (string "exp"  *> pure Exp)
-  <|> (string "log"  *> pure Log)
+  <|> (string "log"  *> pure Ln)
+  <|> (string "ln"   *> pure Ln)
   <|> (string "sqrt" *> pure Sqrt)
 
 -- | A version of `sepBy1` that returns a `NonEmpty List`.

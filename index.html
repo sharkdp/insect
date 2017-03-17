@@ -16,7 +16,7 @@
     <script src="bower_components/jquery.terminal/js/jquery.mousewheel-min.js" type="text/javascript"></script>
     <script type="text/javascript">
       keyboardeventKeyPolyfill.polyfill();
-      var globalEnv = PS.Insect.initialEnvironment;
+      var globalEnv = Insect.initialEnvironment;
       function interpret(line) {
         // Skip empty lines or line comments
         var lineTrimmed = line.trim();
@@ -25,7 +25,7 @@
         }
 
         // Run insect
-        var res = PS.Insect.repl(globalEnv)(line);
+        var res = Insect.repl(globalEnv)(line);
         globalEnv = res.newEnv;
 
         // Format the output

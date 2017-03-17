@@ -25,7 +25,7 @@ data Func
   | Sin
   | Tan
   | Exp
-  | Log
+  | Ln
   | Sqrt
 
 derive instance eqFunc ∷ Eq Func
