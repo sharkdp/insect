@@ -16,7 +16,9 @@ import Data.StrMap (lookup, insert, foldMap)
 import Quantities (Quantity, UnificationError, pow, scalar, qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
                    convertTo, errorMessage, prettyPrint, fullSimplify,
-                   derivedUnit, acos, asin, atan, sin, cos, tan, exp, ln)
+                   derivedUnit, acos, asin, atan, sin, cos, tan, exp, ln,
+                   sinh, cosh, tanh, asinh, acosh, atanh, ceil, floor, log10,
+                   round)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..), Statement(..))
 import Insect.Environment (Environment, initialEnvironment)
@@ -40,15 +42,25 @@ data Message = Message MessageType String
 applyFunction ∷ Func → Quantity → Expect Quantity
 applyFunction fn q = lmap UnificationError $ (run fn) q
   where
-    run Acos = acos
-    run Asin = asin
-    run Atan = atan
-    run Cos  = cos
-    run Sin  = sin
-    run Tan  = tan
-    run Exp  = exp
-    run Ln   = ln
-    run Sqrt = sqrt >>> pure
+    run Acos  = acos
+    run Acosh = acosh
+    run Asin  = asin
+    run Asinh = asinh
+    run Atan  = atan
+    run Atanh = atanh
+    run Ceil  = ceil
+    run Cos   = cos
+    run Cosh  = cosh
+    run Exp   = exp
+    run Floor = floor
+    run Ln    = ln
+    run Log10 = log10
+    run Round = round
+    run Sin   = sin
+    run Sinh  = sinh
+    run Sqrt  = sqrt >>> pure
+    run Tan   = tan
+    run Tanh  = tanh
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity

@@ -16,7 +16,9 @@ Features
   2^32
   sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
   ```
-  Supported functions: `sqrt`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `exp`, `log`.
+  Supported functions: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`,
+  `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`, `round`, `sin`,
+  `sinh`, `sqrt`, `tan`, `tanh`.
 
 - Parsing and handling of physical units:
   ```

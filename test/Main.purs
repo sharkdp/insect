@@ -506,6 +506,33 @@ main = runTest do
       expectOutput myEnv "25m²" "x²"
       expectOutput myEnv "Unknown variable 'x2'" "x2"
 
+    test "Function inverses" do
+      expectOutput' "0.1234" "sin(asin(0.1234))"
+      expectOutput' "0.1234" "cos(acos(0.1234))"
+      expectOutput' "0.1234" "tan(atan(0.1234))"
+      expectOutput' "0.1234" "sinh(asinh(0.1234))"
+      expectOutput' "1.1234" "cosh(acosh(1.1234))"
+      expectOutput' "0.1234" "tanh(atanh(0.1234))"
+      expectOutput' "0.1234" "log(exp(0.1234))"
+
+      expectOutput' "0.1234" "asin(sin(0.1234))"
+      expectOutput' "0.1234" "acos(cos(0.1234))"
+      expectOutput' "0.1234" "atan(tan(0.1234))"
+      expectOutput' "0.1234" "asinh(sinh(0.1234))"
+      expectOutput' "1.1234" "acosh(cosh(1.1234))"
+      expectOutput' "0.1234" "atanh(tanh(0.1234))"
+      expectOutput' "0.1234" "exp(log(0.1234))"
+
+    test "Other functions" do
+      expectOutput' "2" "sqrt(4)"
+      expectOutput' "5" "log10(100000)"
+      expectOutput' "15" "log(e^15)"
+      expectOutput' "15" "ln(e^15)"
+      expectOutput' "4" "ceil(3.1)"
+      expectOutput' "3" "floor(3.9)"
+      expectOutput' "4" "round(3.9)"
+      expectOutput' "3" "round(3.1)"
+
     test "Simple" do
       expectOutput' "1080" "1920/16*9"
       expectOutput' "4294967296" "2^32"

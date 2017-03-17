@@ -19,14 +19,24 @@ type Identifier = String
 -- | All available mathematical functions.
 data Func
   = Acos
+  | Acosh
   | Asin
+  | Asinh
   | Atan
+  | Atanh
+  | Ceil
   | Cos
-  | Sin
-  | Tan
+  | Cosh
   | Exp
+  | Floor
   | Ln
+  | Log10
+  | Round
+  | Sin
+  | Sinh
   | Sqrt
+  | Tan
+  | Tanh
 
 derive instance eqFunc ∷ Eq Func
 derive instance genericFunc ∷ Generic Func
