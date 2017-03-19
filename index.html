@@ -34,7 +34,7 @@
         msg = msg.replace(/`([^`\n]+)`/g, colored("66D9EF", "$1"));
         msg = msg.replace(/\*([^\*\n]+)\*/g, bold("$1"));
 
-        if (res.msgType === "value") {
+        if (res.msgType === "value" || res.msgType === "value-set") {
           msg = colored("66D9EF", msg);
         } else if (res.msgType == "error") {
           msg = colored("F92672", msg);

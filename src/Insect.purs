@@ -21,10 +21,11 @@ initialEnvironment = E.initialEnvironment
 
 -- | Convert a message type to a string.
 msgTypeToString ∷ MessageType → String
-msgTypeToString Info  = "info"
-msgTypeToString Error = "error"
-msgTypeToString Value = "value"
-msgTypeToString Other = "other"
+msgTypeToString Info     = "info"
+msgTypeToString Error    = "error"
+msgTypeToString Value    = "value"
+msgTypeToString ValueSet = "value-set"
+msgTypeToString Other    = "other"
 
 -- | Run Insect, REPL-style.
 repl ∷ Environment → String → { msg ∷ String

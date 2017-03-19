@@ -33,7 +33,7 @@ data EvalError
 type Expect = Either EvalError
 
 -- | Output types for highlighting.
-data MessageType = Value | Info | Error | Other
+data MessageType = Value | ValueSet | Info | Error | Other
 
 -- | The output type of the interpreter.
 data Message = Message MessageType String
@@ -102,23 +102,23 @@ evalErrorMessage (LookupError name) = "Unknown variable '" <> name <> "'"
 type Response = { msg ∷ Message, newEnv ∷ Environment }
 
 -- | Helper to construct an interpreter response
-message ∷ Environment → Expect Quantity → Response
-message env (Left e) =
+message ∷ MessageType → Environment → Expect Quantity → Response
+message _ env (Left e) =
   { msg: Message Error (evalErrorMessage e)
   , newEnv: env
   }
-message env (Right q) =
-  { msg: Message Value (prettyPrint q)
+message mt env (Right q) =
+  { msg: Message mt (prettyPrint q)
   , newEnv: insert "ans" q env
   }
 
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → Response
-runInsect env (Expression e) = message env (fullSimplify <$> eval env e)
+runInsect env (Expression e) = message Value env (fullSimplify <$> eval env e)
 runInsect env (Assignment n v) =
   case eval env v of
-    Left evalErr → message env (Left evalErr)
-    Right value → message (insert n value env) (Right (fullSimplify value))
+    Left evalErr → message Error env (Left evalErr)
+    Right value → message ValueSet (insert n value env) (Right (fullSimplify value))
 runInsect env (Command Help) = { msg: Message Other (intercalate "\n"
   [ ""
   , "*insect* evaluates mathematical expressions that can"

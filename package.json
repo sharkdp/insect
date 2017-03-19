@@ -1,6 +1,6 @@
 {
   "name": "insect",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "REPL-style scientific calculator",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "url": "https://github.com/sharkdp/insect/issues"
   },
   "dependencies": {
-    "decimal.js": "^7.1.1"
+    "decimal.js": "^7.1.1",
+    "line-reader": "^0.4.0"
   }
 }
