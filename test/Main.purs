@@ -234,6 +234,7 @@ main = runTest do
       allParseAs (Expression (BinOp Div (q 2.3 (kilo meter)) (Unit hour)))
         [ "2.3km/h"
         , "2.30km/h"
+        , "2.30km÷h"
         ]
 
   suite "Parser - Operators" do
@@ -351,6 +352,7 @@ main = runTest do
         [ "5m+3in*7"
         , "5m+(3in*7)"
         , "5m+(3in·7)"
+        , "5m+3in×7"
         , "  5 m +   3  in * 7    "
         ]
 
@@ -392,6 +394,7 @@ main = runTest do
         , "3m²"
         , "3 m²"
         , "3·m²"
+        , "3×m²"
         , "3·m^(2.0)"
         ]
 

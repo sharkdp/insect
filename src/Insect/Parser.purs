@@ -49,10 +49,10 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: letter <|> char '_'
   , identLetter: identLetter
-  , opStart: oneOf ['+', '-', '*', '·', '/', '^', '=', '²', '³']
+  , opStart: oneOf ['+', '-', '*', '·', '×', '/', '÷', '^', '=', '²', '³']
   , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?", "list", "ls", "reset", "clear"]
-  , reservedOpNames: ["->", "+", "-", "*", "/", "^", "**", "=", "²", "³"]
+  , reservedOpNames: ["->", "+", "-", "*", "×", "/", "÷", "^", "**", "=", "²"]
   , caseSensitive: true
 }
 
@@ -314,8 +314,8 @@ expression =
     powOp = reservedOp "^" <|> reservedOp "**"
     sqrOp = reservedOp "²"
     cubOp = reservedOp "³"
-    divOp = reservedOp "/"
-    mulOp = reservedOp "*" <|> reservedOp "·"
+    divOp = reservedOp "/" <|> reservedOp "÷"
+    mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "×"
     subOp = reservedOp "-"
     addOp = reservedOp "+"
     arrOp = reservedOp "->"
