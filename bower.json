@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "purescript-prelude": "^2.4.0",
-    "purescript-quantities": "^3.1.0",
+    "purescript-quantities": "^3.2.0",
     "purescript-parsing": "^3.2.1",
     "purescript-globals": "^2.0.0",
     "purescript-maps": "^2.1.2",
