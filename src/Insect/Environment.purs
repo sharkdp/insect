@@ -18,7 +18,9 @@ initialEnvironment ∷ Environment
 initialEnvironment = fromFoldable
   [ Tuple "e"    e
   , Tuple "pi"   pi
+  , Tuple "π"    pi
   , Tuple "c"    speedOfLight
   , Tuple "h"    planckConstant
   , Tuple "hbar" hbar
+  , Tuple "ℏ"    hbar
   ]

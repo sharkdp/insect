@@ -572,3 +572,6 @@ main = runTest do
           env3 = (repl env2 "L = 20cm").newEnv
 
       expectOutput env3 "897.14ms" "2pi*sqrt(L/grav) -> ms"
+
+    test "Unicode" do
+      expectOutput' "6.62607e-34J·s" "2π×ℏ"
