@@ -52,6 +52,8 @@ Features
   ```
   Predefined constants: speed of light (`c`), Plancks constant (`hbar`), ...
 
+  You can use `ans` (answer) to refer the the result of the last calculation.
+
 - Commands:
   ```
   help, ?
