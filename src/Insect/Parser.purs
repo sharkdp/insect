@@ -115,7 +115,8 @@ siPrefix =
   <|> (string "f" *> pure femto)
   <|> (string "p" *> pure pico)
   <|> (string "n" *> pure nano)
-  <|> (string "µ" *> pure micro)
+  <|> (string "µ" *> pure micro) -- Micro sign U+00B5
+  <|> (string "μ" *> pure micro) -- Greek small letter mu U+039C
   <|> (string "m" *> pure milli)
   <|> (string "c" *> pure centi)
   <|> (string "d" *> pure deci)
