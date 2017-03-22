@@ -1,16 +1,20 @@
 module Insect
   ( repl
   , initialEnvironment
+  , supportedUnits
   ) where
 
 import Prelude
 
 import Data.Either (Either(..))
 
+import Data.Array (sort)
+
 import Text.Parsing.Parser.Pos (Position(..))
 import Text.Parsing.Parser (parseErrorPosition, parseErrorMessage)
 
-import Insect.Parser (parseInsect)
+import Insect.Parser (Dictionary(..), (==>),
+                      normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Interpreter (MessageType(..), Message(..), runInsect)
 import Insect.Environment (Environment)
 import Insect.Environment as E
@@ -18,6 +22,13 @@ import Insect.Environment as E
 -- | Re-export the initial environment
 initialEnvironment ∷ Environment
 initialEnvironment = E.initialEnvironment
+
+-- | List of all supported units
+supportedUnits ∷ Array String
+supportedUnits = sort $ toArray normalUnitDict <> toArray imperialUnitDict
+  where
+    toArray (Dictionary dict) = dict >>= toStrs
+    toStrs (_ ==> strs) = strs
 
 -- | Convert a message type to a string.
 msgTypeToString ∷ MessageType → String
