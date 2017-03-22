@@ -25,6 +25,7 @@ msgTypeToString Info     = "info"
 msgTypeToString Error    = "error"
 msgTypeToString Value    = "value"
 msgTypeToString ValueSet = "value-set"
+msgTypeToString Cmd      = "command"
 
 -- | Run Insect, REPL-style.
 repl ∷ Environment → String → { msg ∷ String

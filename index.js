@@ -33,7 +33,9 @@ if (process.argv.length >= 4) {
     usage();
   } else {
     var res = runInsect(arg);
-    console.log(res.msg);
+    if (res.msgType === "value") {
+      console.log(res.msg);
+    }
     process.exit(0);
   }
 }
@@ -60,18 +62,29 @@ if (interactive) {
     var res = runInsect(line);
 
     if (res) {
-      // Format output
-      var msg = res.msg;
-      if (res.msgType === "value" || res.msgType === "value-set") {
-        msg = "\n  " + colored("36", msg);
-      } else if (res.msgType == "error") {
-        msg = "\n  " + colored("31", msg);
-      } else if (res.msgType == "info") {
-        msg = msg.replace(/`([^`\n]+)`/g, '\x1b[36m$1\x1b[0m');
-        msg = msg.replace(/\*([^\*\n]+)\*/g, '\x1b[01m$1\x1b[0m');
+      if (res.msgType == "command") {
+        if (res.msg == "quit") {
+          process.exit(0);
+        } else if (res.msg == "clear") {
+          process.stdout.write('\033[2J\033[0f');
+        } else {
+          console.error("Unknown command '" + res.msg + "'");
+        }
       }
+      else {
+        // Format output
+        var msg = res.msg;
+        if (res.msgType === "value" || res.msgType === "value-set") {
+          msg = "\n  " + colored("36", msg);
+        } else if (res.msgType == "error") {
+          msg = "\n  " + colored("31", msg);
+        } else if (res.msgType == "info") {
+          msg = msg.replace(/`([^`\n]+)`/g, '\x1b[36m$1\x1b[0m');
+          msg = msg.replace(/\*([^\*\n]+)\*/g, '\x1b[01m$1\x1b[0m');
+        }
 
-      console.log(msg + "\n");
+        console.log(msg + "\n");
+      }
     }
 
     rl.prompt();
@@ -85,12 +98,15 @@ if (interactive) {
   lineReader.eachLine(process.stdin, function(line) {
     var res = runInsect(line);
     if (res) {
-      // Only output values and halt on errors. Ignore other message types.
+      // Only output values and halt on errors. Ignore 'info' and 'value-set'
+      // message types.
       if (res.msgType === "value") {
         console.log(res.msg);
       } else if (res.msgType == "error") {
         console.error("Error: " + res.msg);
         process.exit(1);
+      } else if (res.msgType == "command" && res.msg == "quit") {
+        process.exit(0);
       }
     }
   });

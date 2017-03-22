@@ -28,6 +28,23 @@
         var res = Insect.repl(globalEnv)(line);
         globalEnv = res.newEnv;
 
+        // Handle shell commands
+        if (res.msgType == "command") {
+          if (res.msg == "clear") {
+            // Clear screen:
+            this.clear();
+            return "";
+          } else if (res.msg == "quit") {
+            // Treat as reset:
+            this.clear();
+            globalEnv = Insect.initialEnvironment;
+            return "";
+          } else {
+            return "Unknown command '" + res.msg + "'";
+          }
+
+        }
+
         // Format the output
         var msg = res.msg;
 

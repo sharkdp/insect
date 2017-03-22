@@ -51,7 +51,8 @@ insectLanguage = LanguageDef
   , identLetter: identLetter
   , opStart: oneOf ['+', '-', '*', '·', '×', '/', '÷', '^', '=', '²', '³']
   , opLetter: oneOf ['>', '*']
-  , reservedNames: ["help", "?", "list", "ls", "reset", "clear"]
+  , reservedNames: ["help", "?", "list", "ls", "reset", "clear", "cls", "quit",
+                    "exit"]
   , reservedOpNames: ["->", "+", "-", "*", "×", "/", "÷", "^", "**", "=", "²"]
   , caseSensitive: true
 }
@@ -339,7 +340,8 @@ command =
         (reserved "help" <|> reserved "?") *> pure Help
     <|> (reserved "list" <|> reserved "ls") *> pure List
     <|> (reserved "reset") *> pure Reset
-    <|> (reserved "clear") *> pure Clear
+    <|> (reserved "clear" <|> reserved "cls") *> pure Clear
+    <|> (reserved "quit" <|> reserved "exit") *> pure Quit
   ) <* eof
 
 -- | Parse a variable assignment like `x = 3m*pi`

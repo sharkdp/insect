@@ -33,7 +33,7 @@ data EvalError
 type Expect = Either EvalError
 
 -- | Output types for highlighting.
-data MessageType = Value | ValueSet | Info | Error
+data MessageType = Value | ValueSet | Info | Error | Cmd
 
 -- | The output type of the interpreter.
 data Message = Message MessageType String
@@ -143,4 +143,5 @@ runInsect env (Command List) =
 runInsect env (Command Reset) =
   { msg: Message Info "Environment has been reset"
   , newEnv: initialEnvironment }
-runInsect env (Command _) = { msg: Message Error "???", newEnv: env }
+runInsect env (Command Quit) = { msg: Message Cmd "quit", newEnv: env}
+runInsect env (Command Clear) = { msg: Message Cmd "clear", newEnv: env }

@@ -79,6 +79,7 @@ data Command
  | Reset
  | List
  | Clear
+ | Quit
 
 derive instance eqCommand ∷ Eq Command
 derive instance genericCommand ∷ Generic Command
