@@ -24,13 +24,14 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
                    mole, kelvin, candela)
 
 import Data.Array (some, fromFoldable)
-import Data.Either (Either)
+import Data.Either (Either(..))
 import Data.Foldable (foldr)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Data.String (fromCharArray, singleton)
+import Data.Tuple (Tuple(..))
 import Global (readFloat, isFinite)
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
@@ -368,19 +369,33 @@ command =
   ) <* eof
 
 -- | Parse a variable assignment like `x = 3m*pi`
-assignment ∷ P Statement
+assignment ∷ P (Tuple String Expression)
 assignment = do
   whiteSpace
   var ← token.identifier
   reservedOp "="
   value ← expression
-  pure $ Assignment var value
+  pure $ Tuple var value
+
+-- | Try to parse the identifier as a unit, and fail if it succeeds.
+checkIdentifier ∷ Tuple String Expression → P Statement
+checkIdentifier (Tuple var value) =
+  case runParser var (derivedUnit <* eof) of
+    Right _ →
+      fail $ "The identifier '" <> var <> "' is reserved for a physical unit"
+    Left _ →
+      case runParser var (funcName <* eof) of
+        Right _ →
+          fail $ "The identifier '" <> var <> "' is reserved for a " <>
+                 "mathematical function"
+        Left _ →
+          pure $ Assignment var value
 
 -- | Parse a statement in the Insect language.
 statement ∷ P Statement
 statement =
       (Command <$> command)
-  <|> try assignment
+  <|> (try assignment >>= checkIdentifier)
   <|> (Expression <$> fullExpression)
 
 -- | Run the Insect-parser on a `String` input.

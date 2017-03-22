@@ -22,7 +22,7 @@ import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
-import Insect.Parser (Dictionary(..), DictEntry(..), (==>), siPrefixDict,
+import Insect.Parser (Dictionary(..), DictEntry, (==>), siPrefixDict,
                       normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Environment (Environment, initialEnvironment)
 import Insect (repl)
@@ -513,6 +513,12 @@ main = runTest do
       shouldFail "x+2=3"
       shouldFail "3=5"
       shouldFail "x="
+
+    test "Reserved names" do
+      shouldFail "m=2" -- 'm' is reserved unit
+      shouldFail "meter=2" -- 'meter' is a reserved unit
+      shouldFail "list=4" -- 'list' is a reserved keyword
+      shouldFail "sin=3" -- 'sin is a reserved keyword
 
   let expectOutput' = expectOutput initialEnvironment
 
