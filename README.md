@@ -26,8 +26,9 @@ Features
   40kg * 9.8m/s² * 150cm
   sin(30°)
   ```
+  Supported units: `A`, `B`, `Bq`, `Byte`, `Bytes`, `C`, `F`, `Gy`, `H`, `Hz`, `J`, `K`, `L`, `N`, `Pa`, `S`, `Sv`, `T`, `V`, `W`, `Wb`, `ampere`, `becquerel`, `bit`, `bits`, `bps`, `byte`, `bytes`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `eV`, `electronvolt`, `farad`, `feet`, `foot`, `ft`, `g`, `gram`, `grams`, `gray`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `in`, `inch`, `inches`, `joule`, `joules`, `kat`, `katal`, `kelvin`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `mph`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `volt`, `w`, `watt`, `watts`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `°`, `Ω`.
 
-- Explicit unit conversions
+- Explicit unit conversions with `->`
   ```
   60mph -> m/s
   500km/day -> km/h
@@ -59,6 +60,8 @@ Features
   help, ?
   list, ls
   reset
+  clear, cls
+  quit, exit
   ```
 
 Install
