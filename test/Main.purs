@@ -553,6 +553,7 @@ main = runTest do
       expectOutput' "364d" "52weeks -> days"
       expectOutput' "73.66cm" "5in + 2ft -> cm"
       expectOutput' "8.53077°" "atan(30cm / 2m) -> °"
+      expectOutput' "4.05GB" "6Mbit/s * 1.5h -> GB"
 
       expectOutput' "0.75" "3m/4m"
       expectOutput' "4" "4/2*2"
