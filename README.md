@@ -47,8 +47,8 @@ Features
   ```
   ```
   grav = 9.81m/s²
-  L = 20cm
-  2pi*sqrt(L/grav) -> ms
+  len = 20cm
+  2pi*sqrt(len/grav) -> ms
   ```
   Predefined constants: speed of light (`c`), Plancks constant (`hbar`), ...
 

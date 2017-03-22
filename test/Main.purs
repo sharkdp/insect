@@ -9,7 +9,7 @@ import Control.Monad.Aff.AVar (AVAR)
 
 import Data.StrMap (insert)
 import Data.Either(Either(..))
-import Data.Foldable (traverse_)
+import Data.Foldable (traverse_, for_, intercalate) 
 
 import Test.Unit (suite, test, failure)
 import Test.Unit.Main (runTest)
@@ -22,7 +22,8 @@ import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
-import Insect.Parser (parseInsect)
+import Insect.Parser (Dictionary(..), DictEntry(..), (==>), siPrefixDict,
+                      normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Environment (Environment, initialEnvironment)
 import Insect (repl)
 
@@ -139,6 +140,26 @@ main = runTest do
         , "degree"
         , "degrees"
         ]
+
+    let
+      unp ∷ ∀ a. Dictionary a → Array (DictEntry a)
+      unp (Dictionary dict) = dict
+
+    test "All imperial units" do
+      for_ (unp imperialUnitDict) $ \(unit ==> unitStrs) → do
+        allParseAs (Expression (Unit  unit))
+                   unitStrs
+
+    for_ (unp siPrefixDict) $ \(siPrefix ==> prefixStrs) → do
+      test ("Testing all units with prefix: " <> intercalate ", " prefixStrs) do
+        for_ (unp normalUnitDict) $ \(unit ==> unitStrs) → do
+          let allCombinations = do
+                p <- prefixStrs
+                u <- unitStrs
+                pure (p <> u)
+          allParseAs (Expression (Unit (siPrefix unit)))
+                     allCombinations
+
 
   suite "Parser - Quantities" do
     test "Simple" do
@@ -570,9 +591,9 @@ main = runTest do
     test "Pendulum" do
       let env1 = initialEnvironment
           env2 = (repl env1 "grav = 9.81m/s²").newEnv
-          env3 = (repl env2 "L = 20cm").newEnv
+          env3 = (repl env2 "len = 20cm").newEnv
 
-      expectOutput env3 "897.14ms" "2pi*sqrt(L/grav) -> ms"
+      expectOutput env3 "897.14ms" "2pi*sqrt(len/grav) -> ms"
 
     test "Unicode" do
       expectOutput' "6.62607e-34J·s" "2π×ℏ"

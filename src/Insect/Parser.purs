@@ -1,6 +1,12 @@
 -- | This module defines the parser for the Insect language.
 module Insect.Parser
-  ( parseInsect
+  ( DictEntry(..)
+  , (==>)
+  , Dictionary(..)
+  , siPrefixDict
+  , normalUnitDict
+  , imperialUnitDict
+  , parseInsect
   ) where
 
 import Prelude hiding (degree)
@@ -12,11 +18,15 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
                    femto, foot, giga, gram, hecto, hertz, hour, inch, joule,
                    kilo, mega, meter, micro, mile, milli, minute, nano,
                    newton, ounce, peta, pico, pound, radian, second, tera,
-                   watt, week, yard, (./))
+                   watt, week, yard, (./), pascal, coulomb, volt, farad, ohm,
+                   siemens, weber, tesla, henry, lumen, lux, becquerel, gray,
+                   sievert, katal, hectare, liter, tonne, electronvolt, ampere,
+                   mole, kelvin, candela)
 
 import Data.Array (some, fromFoldable)
 import Data.Either (Either)
 import Data.Foldable (foldr)
+import Data.Foldable as F
 import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
@@ -109,98 +119,109 @@ number = do
       intPart ← digits
       pure $ singleton sign <> intPart
 
+-- | A helper type for entries in the dictionary.
+data DictEntry a = DictEntry a (Array String)
+
+infix 4 DictEntry as ==>
+
+-- | A dictionary of units and their abbreviations.
+data Dictionary a = Dictionary (Array (DictEntry a))
+
+-- | Build a parser from a Dictionary
+buildDictParser ∷ ∀ a. Dictionary a → P a
+buildDictParser (Dictionary dict) = F.oneOf $ entryParser <$> dict
+  where
+    entryParser (x ==> abbrevs) = F.oneOf $ abbrevParser x <$> abbrevs
+    abbrevParser x abbrev = string abbrev *> pure x
+
+siPrefixDict ∷ Dictionary (DerivedUnit → DerivedUnit)
+siPrefixDict = Dictionary
+  [ atto ==> ["a"]
+  , femto ==> ["f"]
+  , pico ==> ["p"]
+  , nano ==> ["n"]
+  , micro ==> [ "µ" -- Micro sign U+00B5
+              , "μ" -- Greek small letter mu U+039C
+              ]
+  , milli ==> ["m"]
+  , centi ==> ["c"]
+  , deci ==> ["d"]
+  , hecto ==> ["h"]
+  , kilo ==> ["k"]
+  , mega ==> ["M"]
+  , giga ==> ["G"]
+  , tera ==> ["T"]
+  , peta ==> ["P"]
+  , exa ==> ["E"]
+  ]
+
 -- | Parse a SI prefix like `µ` or `G`.
 siPrefix ∷ P (DerivedUnit → DerivedUnit)
-siPrefix =
-      (string "a" *> pure atto)
-  <|> (string "f" *> pure femto)
-  <|> (string "p" *> pure pico)
-  <|> (string "n" *> pure nano)
-  <|> (string "µ" *> pure micro) -- Micro sign U+00B5
-  <|> (string "μ" *> pure micro) -- Greek small letter mu U+039C
-  <|> (string "m" *> pure milli)
-  <|> (string "c" *> pure centi)
-  <|> (string "d" *> pure deci)
-  <|> (string "h" *> pure hecto)
-  <|> (string "k" *> pure kilo)
-  <|> (string "M" *> pure mega)
-  <|> (string "G" *> pure giga)
-  <|> (string "T" *> pure tera)
-  <|> (string "P" *> pure peta)
-  <|> (string "E" *> pure exa)
-  <|> pure id
+siPrefix = buildDictParser siPrefixDict <|> pure id
+
+-- | Normal (SI-conform, non-imperial) units
+normalUnitDict ∷ Dictionary DerivedUnit
+normalUnitDict = Dictionary
+  [ radian ==> ["radians", "radian", "rad"]
+  , degree ==> ["degrees", "degree", "deg", "°"]
+  , hertz ==> ["hertz", "Hz"]
+  , newton ==> ["newton", "N"]
+  , joule ==> ["joules", "joule", "J"]
+  , pascal ==> ["pascal", "Pa"]
+  , volt ==> ["volt", "V"]
+  , farad ==> ["farad", "F"]
+  , ohm ==> ["ohm", "Ω"]
+  , sievert ==> ["sievert", "Sv"]
+  , weber ==> ["weber", "Wb"]
+  , tesla ==> ["tesla", "T"]
+  , henry ==> ["henry", "H"]
+  , coulomb ==> ["coulomb", "C"]
+  , siemens ==> ["siemens", "S"]
+  , lumen ==> ["lumen", "lm"]
+  , lux ==> ["lux", "lx"]
+  , becquerel ==> ["becquerel", "Bq"]
+  , gray ==> ["gray", "Gy"]
+  , katal ==> ["katal", "kat"]
+  , hectare ==> ["hectare", "ha"]
+  , liter ==> ["liters", "liter", "L"]
+  , tonne ==> ["tonnes", "tonne", "tons", "ton"]
+  , electronvolt ==> ["electronvolt", "eV"]
+  , ampere ==> ["ampere", "A"]
+  , mole ==> ["mole", "mol"]
+  , kelvin ==> ["kelvin", "K"]
+  , candela ==> ["candela", "cd"]
+  , watt ==> ["watts", "watt", "W"]
+  , byte ==> ["Bytes", "bytes", "Byte", "byte", "B"]
+  , bit ==> ["bits", "bit"]
+  , bit ./ second ==> ["bps"]
+  , second ==> ["seconds", "second", "sec", "s"]
+  , minute ==> ["minutes", "minute", "min"]
+  , hour ==> ["hours", "hour", "h"]
+  , day ==> ["days", "day", "d"]
+  , week ==> ["weeks", "week", "w"]
+  , gram ==> ["grams", "gram", "g"]
+  , meter ==> ["meters", "meter", "m"]
+  ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
 normalUnit ∷ P DerivedUnit
-normalUnit =
-      (string "radians" *> pure radian)
-  <|> (string "radian"  *> pure radian)
-  <|> (string "rad"     *> pure radian)
-  <|> (string "degrees" *> pure degree)
-  <|> (string "degree"  *> pure degree)
-  <|> (string "deg"     *> pure degree)
-  <|> (string "°"       *> pure degree)
-  <|> (string "hertz"   *> pure hertz)
-  <|> (string "Hz"      *> pure hertz)
-  <|> (string "newton"  *> pure newton)
-  <|> (string "N"       *> pure newton)
-  <|> (string "joules"  *> pure joule)
-  <|> (string "joule"   *> pure joule)
-  <|> (string "J"       *> pure joule)
-  <|> (string "watts"   *> pure watt)
-  <|> (string "watt"    *> pure watt)
-  <|> (string "W"       *> pure watt)
-  <|> (string "Bytes"   *> pure byte)
-  <|> (string "bytes"   *> pure byte)
-  <|> (string "Byte"    *> pure byte)
-  <|> (string "byte"    *> pure byte)
-  <|> (string "bits"    *> pure bit)
-  <|> (string "bit"     *> pure bit)
-  <|> (string "bps"     *> pure (bit ./ second))
-  <|> (string "B"       *> pure byte)
-  <|> (string "seconds" *> pure second)
-  <|> (string "second"  *> pure second)
-  <|> (string "sec"     *> pure second)
-  <|> (string "s"       *> pure second)
-  <|> (string "minutes" *> pure minute)
-  <|> (string "minute"  *> pure minute)
-  <|> (string "min"     *> pure minute)
-  <|> (string "hours"   *> pure hour)
-  <|> (string "hour"    *> pure hour)
-  <|> (string "h"       *> pure hour)
-  <|> (string "days"    *> pure day)
-  <|> (string "day"     *> pure day)
-  <|> (string "d"       *> pure day)
-  <|> (string "weeks"   *> pure week)
-  <|> (string "week"    *> pure week)
-  <|> (string "grams"   *> pure gram)
-  <|> (string "gram"    *> pure gram)
-  <|> (string "g"       *> pure gram)
-  <|> (string "meters"  *> pure meter)
-  <|> (string "meter"   *> pure meter)
-  <|> (string "m"       *> pure meter)
-  <?> "unit"
+normalUnit = buildDictParser normalUnitDict <?> "normal unit"
+
+-- | Imperial units
+imperialUnitDict ∷ Dictionary DerivedUnit
+imperialUnitDict = Dictionary
+  [ mile ==> ["miles", "mile"]
+  , mile ./ hour ==> ["mph"]
+  , inch ==> ["inches", "inch", "in"]
+  , yard ==> ["yards", "yard", "yd"]
+  , foot ==> ["feet", "foot", "ft"]
+  , ounce ==> ["ounces", "ounce", "oz"]
+  , pound ==> ["pounds", "pound", "lb"]
+  ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
 imperialUnit ∷ P DerivedUnit
-imperialUnit =
-      (string "miles"  *> pure mile)
-  <|> (string "mile"   *> pure mile)
-  <|> (string "mph"    *> pure (mile ./ hour))
-  <|> (string "inches" *> pure inch)
-  <|> (string "inch"   *> pure inch)
-  <|> (string "in"     *> pure inch)
-  <|> (string "yards"  *> pure yard)
-  <|> (string "yard"   *> pure yard)
-  <|> (string "yd"     *> pure yard)
-  <|> (string "feet"   *> pure foot)
-  <|> (string "foot"   *> pure foot)
-  <|> (string "ft"     *> pure foot)
-  <|> (string "ounces" *> pure ounce)
-  <|> (string "ounce"  *> pure ounce)
-  <|> (string "oz"     *> pure ounce)
-  <|> (string "pound"  *> pure pound)
-  <|> (string "lb"     *> pure pound)
+imperialUnit = buildDictParser imperialUnitDict <?> "imperial unit"
 
 -- | Parse a 'normal' unit with SI prefix, like `km` or `Gb`.
 unitWithSIPrefix ∷ P DerivedUnit
