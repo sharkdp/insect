@@ -33,7 +33,7 @@ data EvalError
 type Expect = Either EvalError
 
 -- | Output types for highlighting.
-data MessageType = Value | ValueSet | Info | Error | Other
+data MessageType = Value | ValueSet | Info | Error
 
 -- | The output type of the interpreter.
 data Message = Message MessageType String
@@ -119,7 +119,7 @@ runInsect env (Assignment n v) =
   case eval env v of
     Left evalErr → message Error env (Left evalErr)
     Right value → message ValueSet (insert n value env) (Right (fullSimplify value))
-runInsect env (Command Help) = { msg: Message Other (intercalate "\n"
+runInsect env (Command Help) = { msg: Message Info (intercalate "\n"
   [ ""
   , "*insect* evaluates mathematical expressions that can"
   , "involve physical quantities. You can start by trying"
@@ -135,7 +135,7 @@ runInsect env (Command Help) = { msg: Message Other (intercalate "\n"
   , "More information: https://github.com/sharkdp/insect"
   ]), newEnv : env }
 runInsect env (Command List) =
-  { msg: Message Other list
+  { msg: Message Info list
   , newEnv: env }
   where
     list = "List of variables:\n" <> foldMap toLine env

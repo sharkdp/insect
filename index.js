@@ -67,8 +67,6 @@ if (interactive) {
       } else if (res.msgType == "error") {
         msg = "\n  " + colored("31", msg);
       } else if (res.msgType == "info") {
-        msg = colored("33", msg);
-      } else if (res.msgType == "other") {
         msg = msg.replace(/`([^`\n]+)`/g, '\x1b[36m$1\x1b[0m');
         msg = msg.replace(/\*([^\*\n]+)\*/g, '\x1b[01m$1\x1b[0m');
       }
