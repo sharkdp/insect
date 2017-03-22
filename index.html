@@ -50,9 +50,19 @@
       function colored(col, str) {
         return "[[;#" + col + ";]" + str + "]";
       }
+
+      var visitedBefore = localStorage.getItem("visitedBefore") === "yes";
+      var greeting = "";
+      if (!visitedBefore) {
+        greeting = colored("75715E", "Welcome to insect. Type '?' if this is your first visit.");
+        localStorage.setItem("visitedBefore", "yes");
+      } else {
+        greeting = colored("75715E", "Welcome to insect. Enter '?' for help.");
+      }
+
       $(document).ready(function() {
         $('#terminal').terminal(interpret, {
-          greetings: colored("75715E", "Welcome to insect. Type '?' if this is your first visit."),
+          greetings: greeting,
           name: "terminal",
           height: 550,
           prompt: bold("> "),
