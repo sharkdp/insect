@@ -28,7 +28,7 @@ Features
   ```
   Supported units: `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `°`, `Ω`.
 
-- Explicit unit conversions with `->`
+- Explicit unit conversions with `->`:
   ```
   60mph -> m/s
   500km/day -> km/h
@@ -53,7 +53,7 @@ Features
   ```
   Predefined constants: speed of light (`c`), Plancks constant (`hbar`), ...
 
-  You can use `ans` (answer) to refer the the result of the last calculation.
+  **Note:** You can use `ans` (answer) to refer the the result of the last calculation.
 
 - Commands:
   ```
