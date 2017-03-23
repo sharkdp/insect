@@ -112,10 +112,8 @@ main = runTest do
       shouldParseAs (Expression (Scalar 2.7e-3))
         "2.7e-3"
 
-      shouldFail "2.7e 3"
       shouldFail "123e+"
-      shouldFail "1223e++2"
-      shouldFail "1223e+-2"
+      shouldFail "123e-"
 
   suite "Parser - Units" do
     test "Simple" do
@@ -480,6 +478,19 @@ main = runTest do
     test "Variables which begin like units" do
       shouldParseAs (Expression (Variable "myVariable")) "myVariable"
       shouldParseAs (Expression (Variable "density")) "density"
+
+    test "Variables which begin with 'e'" do
+      allParseAs (Expression (BinOp Mul (Scalar 2.0) (Variable "ex")))
+        [ "2ex"
+        , "2.0ex"
+        , "2 ex"
+        ]
+
+      allParseAs (Expression (BinOp Mul (Scalar 2.0) (Variable "e")))
+        [ "2e"
+        , "2.0e"
+        , "2 e"
+        ]
 
   suite "Parser - Functions" do
     test "Simple" do

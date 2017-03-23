@@ -47,7 +47,11 @@ import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
 
--- | Possibler characters for identifiers (not for the first character).
+-- | Possible characters for the first character of an identifier.
+identStart ∷ P Char
+identStart = letter <|> char '_'
+
+-- | Possible characters for identifiers (not for the first character).
 identLetter ∷ P Char
 identLetter = letter <|> digit <|> char '_' <|> char '\''
 
@@ -58,7 +62,7 @@ insectLanguage = LanguageDef
   , commentEnd: ""
   , commentLine: "#"
   , nestedComments: false
-  , identStart: letter <|> char '_'
+  , identStart: identStart
   , identLetter: identLetter
   , opStart: oneOf ['+', '-', '*', '·', '×', '/', '÷', '^', '=']
   , opLetter: oneOf ['>', '*']
@@ -96,7 +100,11 @@ number = do
   mFracPart ← optionMaybe (append <$> string "." <*> digits)
   let fracPart = fromMaybe "" mFracPart
 
-  mExpPart ← optionMaybe (append <$> string "e" <*> signAndDigits)
+  mExpPart ← optionMaybe $ try do
+    string "e"
+    notFollowedBy identStart
+    sad ← signAndDigits
+    pure ("e" <> sad)
   let expPart = fromMaybe "" mExpPart
 
   whiteSpace
