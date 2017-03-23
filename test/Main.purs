@@ -19,7 +19,8 @@ import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
 
 import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
-                   mile, gram, second, deci, tera, hertz, degree, radian)
+                   mile, gram, second, deci, tera, hertz, degree, radian,
+                   day, tonne)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), siPrefixDict,
@@ -148,6 +149,11 @@ main = runTest do
         allParseAs (Expression (Unit  unit))
                    unitStrs
 
+    test "All normal units" do
+      for_ (unp normalUnitDict) $ \(unit ==> unitStrs) → do
+        allParseAs (Expression (Unit  unit))
+                   unitStrs
+
     for_ (unp siPrefixDict) $ \(siPrefix ==> prefixStrs) → do
       test ("Testing all units with prefix: " <> intercalate ", " prefixStrs) do
         for_ (unp normalUnitDict) $ \(unit ==> unitStrs) → do
@@ -157,6 +163,17 @@ main = runTest do
                 pure (p <> u)
           allParseAs (Expression (Unit (siPrefix unit)))
                      allCombinations
+
+    test "Special cases" do
+      allParseAs (Expression (Unit day))
+        [ "d"
+        , " d "
+        ]
+
+      allParseAs (Expression (Unit tonne))
+        [ "t"
+        , " t "
+        ]
 
 
   suite "Parser - Quantities" do
@@ -480,6 +497,8 @@ main = runTest do
     test "Variables which begin like units" do
       shouldParseAs (Expression (Variable "myVariable")) "myVariable"
       shouldParseAs (Expression (Variable "density")) "density"
+      shouldParseAs (Expression (Variable "µg2")) "µg2"
+      shouldParseAs (Expression (Variable "in2")) "in2"
 
     test "Variables which begin with 'e'" do
       allParseAs (Expression (BinOp Mul (Scalar 2.0) (Variable "ex")))

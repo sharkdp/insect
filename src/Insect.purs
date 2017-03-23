@@ -26,6 +26,7 @@ initialEnvironment = E.initialEnvironment
 -- | List of all supported units
 supportedUnits ∷ Array String
 supportedUnits = sort $ toArray normalUnitDict <> toArray imperialUnitDict
+                        <> ["d", "t"] -- see Parser special cases
   where
     toArray (Dictionary dict) = dict >>= toStrs
     toStrs (_ ==> strs) = strs

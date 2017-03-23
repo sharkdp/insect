@@ -207,7 +207,7 @@ normalUnitDict = Dictionary
   , second ==> ["seconds", "second", "sec", "s"]
   , minute ==> ["minutes", "minute", "min"]
   , hour ==> ["hours", "hour", "h"]
-  , day ==> ["days", "day", "d"]
+  , day ==> ["days", "day"]
   , week ==> ["weeks", "week", "w"]
   , gram ==> ["grams", "gram", "g"]
   , meter ==> ["meters", "meter", "m"]
@@ -240,14 +240,26 @@ unitWithSIPrefix = do
   u ← normalUnit
   pure $ p u
 
+specialCases ∷ P DerivedUnit
+specialCases =
+  -- The abbreviation 'd' for 'day' needs to be treated separately. Otherwise,
+  -- 'cd' will be parsed as 'centi day' instead of 'candela'.
+      string "d" *> pure day
+  -- Similarly, the abbreviation 't' for 'tonne' needs special treatment.
+  -- Otherwise, 'ft' will be parsed as 'femto tonne' instead of 'feet'.
+  <|> string "t" *> pure tonne
+
 -- | Parse a derived unit, like `km`, `ft`, or `s`.
 derivedUnit ∷ P DerivedUnit
 derivedUnit =
   (
-        try unitWithSIPrefix
-    <|> imperialUnit
-    <|> normalUnit
-  ) <* notFollowedBy identLetter <* whiteSpace
+        try (augment unitWithSIPrefix)
+    <|> augment imperialUnit
+    <|> augment normalUnit
+    <|> augment specialCases
+  ) <* whiteSpace
+  where
+    augment p = p <* notFollowedBy identLetter
 
 -- | Parse the name of a variable, like `my_variable'`.
 variable ∷ P Expression
