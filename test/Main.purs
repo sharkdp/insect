@@ -527,6 +527,12 @@ main = runTest do
       expectOutput' "3m" "3m"
       expectOutput' "3m" " 3.0 meter  "
 
+    test "Square and cube operators" do
+      expectOutput' "18" "3²*2"
+      expectOutput' "18" "3² 2"
+      expectOutput' "18" "3²·2"
+      expectOutput' "54" "3³*2"
+
     test "Implicit multiplication" do
       let myEnv = insert "x" (5.0 .* meter) initialEnvironment
       expectOutput myEnv "5m" "x"

@@ -60,11 +60,11 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: letter <|> char '_'
   , identLetter: identLetter
-  , opStart: oneOf ['+', '-', '*', '·', '×', '/', '÷', '^', '=', '²', '³']
+  , opStart: oneOf ['+', '-', '*', '·', '×', '/', '÷', '^', '=']
   , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?", "list", "ls", "reset", "clear", "cls", "quit",
-                    "exit"]
-  , reservedOpNames: ["->", "+", "-", "*", "×", "/", "÷", "^", "**", "=", "²"]
+                    "exit", "²", "³"]
+  , reservedOpNames: ["->", "+", "-", "*", "·", "×", "/", "÷", "^", "**", "="]
   , caseSensitive: true
 }
 
@@ -337,8 +337,10 @@ expression =
   where
 
     powOp = reservedOp "^" <|> reservedOp "**"
-    sqrOp = reservedOp "²"
-    cubOp = reservedOp "³"
+    -- these two need to be parsed as keywords in order to allow for other
+    -- operators to follow (e.g. 3²*2)
+    sqrOp = reserved "²"
+    cubOp = reserved "³"
     divOp = reservedOp "/" <|> reservedOp "÷"
     mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "×"
     subOp = reservedOp "-"
