@@ -64,11 +64,12 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: identStart
   , identLetter: identLetter
-  , opStart: oneOf ['+', '-', '*', '·', '×', '/', '÷', '^', '=']
+  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '=']
   , opLetter: oneOf ['>', '*']
   , reservedNames: ["help", "?", "list", "ls", "reset", "clear", "cls", "quit",
                     "exit", "²", "³"]
-  , reservedOpNames: ["->", "+", "-", "*", "·", "×", "/", "÷", "^", "**", "="]
+  , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "**",
+                      "="]
   , caseSensitive: true
 }
 
@@ -350,7 +351,8 @@ expression =
     sqrOp = reserved "²"
     cubOp = reserved "³"
     divOp = reservedOp "/" <|> reservedOp "÷"
-    mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "×"
+    mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "⋅"
+                           <|> reservedOp "×"
     subOp = reservedOp "-"
     addOp = reservedOp "+"
     arrOp = reservedOp "->"
