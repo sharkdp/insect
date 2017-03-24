@@ -17,7 +17,7 @@
     "purescript-quantities": "^3.5.3",
     "purescript-parsing": "^3.2.1",
     "purescript-maps": "^2.1.2",
-    "jquery.terminal": "^1.0.14",
+    "jquery.terminal": "=1.0.15",
     "keyboardevent-key-polyfill": "^1.0.2"
   },
   "devDependencies": {
