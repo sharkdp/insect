@@ -88,11 +88,14 @@
           historyFilter: function(line) {
             return line.trim() !== "";
           },
-          completion: ["help", "list", "ls", "reset", "clear", "quit", "exit",
-                       "acos", "acosh", "asin", "asinh", "atan", "atanh",
-                       "ceil", "cos", "cosh", "exp", "floor", "ln", "log",
-                       "log10", "round", "sin", "sinh", "sqrt", "tan",
-                       "tanh"].concat(Insect.supportedUnits)
+          completion: function(inp, cb) {
+            var variables = Object.keys(globalEnv);
+            cb(["help", "list", "ls", "reset", "clear", "quit", "exit",
+                "acos", "acosh", "asin", "asinh", "atan", "atanh",
+                "ceil", "cos", "cosh", "exp", "floor", "ln", "log",
+                "log10", "round", "sin", "sinh", "sqrt", "tan",
+                "tanh"].concat(Insect.supportedUnits).concat(variables));
+          }
         });
       });
     </script>

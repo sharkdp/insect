@@ -7,7 +7,7 @@ import Control.Monad.Eff.Console (CONSOLE)
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff.AVar (AVAR)
 
-import Data.StrMap (insert)
+import Data.StrMap (insert, keys)
 import Data.Either(Either(..))
 import Data.Foldable (traverse_, for_, intercalate) 
 
@@ -512,6 +512,10 @@ main = runTest do
         , "2.0e"
         , "2 e"
         ]
+
+    test "Initial environment" do
+      for_ (keys initialEnvironment) \ident →
+        shouldParseAs (Expression (Variable ident)) ident
 
   suite "Parser - Functions" do
     test "Simple" do

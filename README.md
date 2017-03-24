@@ -51,7 +51,12 @@ Features
   len = 20cm
   2pi*sqrt(len/grav) -> ms
   ```
-  Predefined constants: speed of light (`c`), Plancks constant (`hbar`), ...
+  Predefined constants (type `list` to see them all): speed of light (`c`),
+  Plancks constant (`hbar`), electron mass (`electronMass`), elementary charge
+  (`elementaryCharge`), magnetic constant (`µ0`), electric constant (`eps0`),
+  bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
+  (`k_B`), gravitational acceleration (`g0`), ...
+
 
   **Note:** You can use `ans` (answer) to refer the the result of the last calculation.
 
