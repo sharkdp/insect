@@ -10,6 +10,7 @@ module Insect.Language
 
 import Prelude hiding (Unit)
 
+import Data.Decimal (Decimal)
 import Data.Generic (class Generic, gShow)
 import Data.Units (DerivedUnit)
 
@@ -57,7 +58,7 @@ instance showBinOp ∷ Show BinOp where show = gShow
 
 -- | A mathematical expression.
 data Expression
- = Scalar Number
+ = Scalar Decimal
  | Unit DerivedUnit
  | Variable Identifier
  | Negate Expression

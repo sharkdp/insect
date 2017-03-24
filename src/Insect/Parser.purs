@@ -25,6 +25,7 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
 
 import Data.Array (some, fromFoldable)
 import Data.Either (Either(..))
+import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
 import Data.Foldable (foldr)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
@@ -32,7 +33,6 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Data.String (fromCharArray, singleton)
 import Data.Tuple (Tuple(..))
-import Global (readFloat, isFinite)
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
 import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>),
@@ -94,7 +94,7 @@ whiteSpace ∷ P Unit
 whiteSpace = token.whiteSpace
 
 -- | Parse a number.
-number ∷ P Number
+number ∷ P Decimal
 number = do
   intPart ← digits
 
@@ -111,11 +111,13 @@ number = do
   whiteSpace
 
   let floatStr = intPart <> fracPart <> expPart
-  let num = readFloat floatStr
 
-  if isFinite num
-    then pure num
-    else fail $ "readFloat failed for input '" <> floatStr <> "'"
+  case fromString floatStr of
+    Just num →
+      if isFinite num
+      then pure num
+      else fail "This number is too large"
+    Nothing → fail $ "Parsing of number failed for input '" <> floatStr <> "'"
 
   where
     digits ∷ P String
@@ -371,8 +373,8 @@ expression =
     addOp = reservedOp "+"
     arrOp = reservedOp "->"
 
-    square q = BinOp Pow q (Scalar 2.0)
-    cube q = BinOp Pow q (Scalar 3.0)
+    square q = BinOp Pow q (Scalar $ fromNumber 2.0)
+    cube q = BinOp Pow q (Scalar $ fromNumber 3.0)
 
 -- | Parse a mathematical expression (or conversion) like `3m+2in -> cm`.
 fullExpression ∷ P Expression
