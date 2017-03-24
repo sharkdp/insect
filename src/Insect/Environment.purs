@@ -18,33 +18,33 @@ type Environment = StrMap Quantity
 -- | constants.
 initialEnvironment ∷ Environment
 initialEnvironment = fromFoldable
-  [ Tuple "e"                  e
-  , Tuple "pi"                 pi
-  , Tuple "π"                  pi
-  , Tuple "G"                  gravitationalConstant
-  , Tuple "electronMass"       electronMass
+  [ Tuple "alpha"              α
+  , Tuple "avogadroConstant"   avogadroConstant
+  , Tuple "bohrMagneton"       µB
+  , Tuple "boltzmannConstant"  kB
+  , Tuple "c"                  speedOfLight
+  , Tuple "e"                  e
+  , Tuple "electricConstant"   ε0
+  , Tuple "eps0"               ε0
+  , Tuple "ε0"                 ε0
   , Tuple "electronCharge"     electronCharge
   , Tuple "elementaryCharge"   electronCharge
-  , Tuple "c"                  speedOfLight
-  , Tuple "speedOfLight"       speedOfLight
-  , Tuple "planckConstant"     planckConstant
-  , Tuple "hbar"               ℏ
-  , Tuple "ℏ"                  ℏ
-  , Tuple "µ0"                 µ0
-  , Tuple "mu0"                µ0
-  , Tuple "magneticConstant"   µ0
-  , Tuple "ε0"                 ε0
-  , Tuple "eps0"               ε0
-  , Tuple "electricConstant"   ε0
-  , Tuple "bohrMagneton"       µB
-  , Tuple "µ_B"                µB
-  , Tuple "muB"                µB
-  , Tuple "alpha"              α
-  , Tuple "protonMass"         protonMass
-  , Tuple "avogadroConstant"   avogadroConstant
-  , Tuple "N_A"                avogadroConstant
-  , Tuple "k_B"                kB
-  , Tuple "boltzmannConstant"  kB
+  , Tuple "electronMass"       electronMass
+  , Tuple "G"                  gravitationalConstant
   , Tuple "g0"                 g0
   , Tuple "gravity"            g0
+  , Tuple "hbar"               ℏ
+  , Tuple "ℏ"                  ℏ
+  , Tuple "k_B"                kB
+  , Tuple "magneticConstant"   µ0
+  , Tuple "mu0"                µ0
+  , Tuple "µ0"                 µ0
+  , Tuple "muB"                µB
+  , Tuple "µ_B"                µB
+  , Tuple "N_A"                avogadroConstant
+  , Tuple "pi"                 pi
+  , Tuple "π"                  pi
+  , Tuple "planckConstant"     planckConstant
+  , Tuple "protonMass"         protonMass
+  , Tuple "speedOfLight"       speedOfLight
   ]
