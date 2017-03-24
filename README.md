@@ -47,9 +47,8 @@ Features
   vol * density -> kg
   ```
   ```
-  grav = 9.81m/s²
   len = 20cm
-  2pi*sqrt(len/grav) -> ms
+  2pi*sqrt(len/g0) -> ms
   ```
   Predefined constants (type `list` to see them all): speed of light (`c`),
   Plancks constant (`hbar`), electron mass (`electronMass`), elementary charge

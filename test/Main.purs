@@ -638,10 +638,9 @@ main = runTest do
 
     test "Pendulum" do
       let env1 = initialEnvironment
-          env2 = (repl env1 "grav = 9.81m/s²").newEnv
-          env3 = (repl env2 "len = 20cm").newEnv
+          env2 = (repl env1 "len = 20cm").newEnv
 
-      expectOutput env3 "897.14ms" "2pi*sqrt(len/grav) -> ms"
+      expectOutput env2 "897.294ms" "2pi*sqrt(len/g0) -> ms"
 
     test "Unicode" do
       expectOutput' "6.62607e-34J·s" "2π×ℏ"
