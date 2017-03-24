@@ -13,12 +13,12 @@ import Data.Foldable (intercalate)
 import Data.Maybe (Maybe(..))
 import Data.StrMap (lookup, insert, foldMap)
 
-import Quantities (Quantity, UnificationError, pow, scalar, qNegate, qAdd,
+import Quantities (Quantity, UnificationError, pow, scalar', qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
                    convertTo, errorMessage, prettyPrint, fullSimplify,
                    derivedUnit, acos, asin, atan, sin, cos, tan, exp, ln,
                    sinh, cosh, tanh, asinh, acosh, atanh, ceil, floor, log10,
-                   round)
+                   round, isFinite)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..), Statement(..))
 import Insect.Environment (Environment, initialEnvironment)
@@ -27,6 +27,7 @@ import Insect.Environment (Environment, initialEnvironment)
 data EvalError
   = UnificationError UnificationError
   | LookupError String
+  | NumericalError
 
 -- | A type synonym for error handling. A value of type `Expect Number` is
 -- | expected to be a number but might also result in an evaluation error.
@@ -37,6 +38,12 @@ data MessageType = Value | ValueSet | Info | Error | Cmd
 
 -- | The output type of the interpreter.
 data Message = Message MessageType String
+
+-- | Check if the numerical value of a quantity is finite, throw a
+-- | `NumericalError` otherwise.
+checkFinite ∷ Quantity → Expect Quantity
+checkFinite q | isFinite q = pure q
+              | otherwise  = Left NumericalError
 
 -- | Apply a mathematical function to a physical quantity.
 applyFunction ∷ Func → Quantity → Expect Quantity
@@ -64,18 +71,18 @@ applyFunction fn q = lmap UnificationError $ (run fn) q
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
-eval env (Scalar n)      = pure $ scalar n
+eval env (Scalar n)      = pure $ scalar' n
 eval env (Unit u)        = pure $ quantity 1.0 u
 eval env (Variable name) =
   case lookup name env of
     Just q → pure q
     Nothing → Left (LookupError name)
 eval env (Negate x)      = qNegate <$> eval env x
-eval env (Apply fn x)    = eval env x >>= applyFunction fn
+eval env (Apply fn x)    = eval env x >>= applyFunction fn >>= checkFinite
 eval env (BinOp op x y)  = do
   x' <- eval env x
   y' <- eval env y
-  (run op) x' y'
+  (run op) x' y' >>= checkFinite
   where
     run :: BinOp -> Quantity -> Quantity -> Expect Quantity
     run Sub       a b = qSubtract' a b
@@ -97,6 +104,8 @@ eval env (BinOp op x y)  = do
 evalErrorMessage ∷ EvalError → String
 evalErrorMessage (UnificationError ue) = errorMessage ue
 evalErrorMessage (LookupError name) = "Unknown variable '" <> name <> "'"
+evalErrorMessage NumericalError = "A numerical error has occured (division " <>
+                                  "by zero or out of bounds)"
 
 -- | Interpreter return type
 type Response = { msg ∷ Message, newEnv ∷ Environment }
