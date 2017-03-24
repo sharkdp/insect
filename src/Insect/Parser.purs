@@ -21,7 +21,7 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
                    watt, week, yard, (./), pascal, coulomb, volt, farad, ohm,
                    siemens, weber, tesla, henry, lumen, lux, becquerel, gray,
                    sievert, katal, hectare, liter, tonne, electronvolt, ampere,
-                   mole, kelvin, candela)
+                   mole, kelvin, candela, month, year)
 
 import Data.Array (some, fromFoldable)
 import Data.Either (Either(..))
@@ -209,6 +209,8 @@ normalUnitDict = Dictionary
   , hour ==> ["hours", "hour", "h"]
   , day ==> ["days", "day"]
   , week ==> ["weeks", "week", "w"]
+  , month ==> ["months", "month"]
+  , year ==> ["years", "year"]
   , gram ==> ["grams", "gram", "g"]
   , meter ==> ["meters", "meter", "m"]
   ]
