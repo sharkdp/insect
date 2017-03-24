@@ -1,7 +1,7 @@
 insect
 ======
 
-A repl-style scientific calculator with unit support.
+A REPL-style scientific calculator with unit support.
 
 [![insect](media/insect-32x32.png)](https://shark.fish/insect/)
 
