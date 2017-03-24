@@ -77,7 +77,7 @@ if (interactive) {
         if (res.msgType === "value" || res.msgType === "value-set") {
           msg = "\n  " + colored("36", msg);
         } else if (res.msgType == "error") {
-          msg = "\n  " + colored("31", msg);
+          msg = "\n  " + colored("31", msg.replace("\n", "\n  "));
         } else if (res.msgType == "info") {
           msg = msg.replace(/`([^`\n]+)`/g, '\x1b[36m$1\x1b[0m');
           msg = msg.replace(/\*([^\*\n]+)\*/g, '\x1b[01m$1\x1b[0m');

@@ -1,6 +1,6 @@
 {
   "name": "insect",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "REPL-style scientific calculator",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
