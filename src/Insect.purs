@@ -2,6 +2,9 @@ module Insect
   ( repl
   , initialEnvironment
   , supportedUnits
+  , fmtPlain
+  , fmtJqueryTerminal
+  , fmtConsole
   ) where
 
 import Prelude
@@ -18,10 +21,8 @@ import Insect.Parser (Dictionary(..), (==>),
 import Insect.Interpreter (MessageType(..), Message(..), runInsect)
 import Insect.Environment (Environment)
 import Insect.Environment as E
-
--- | Re-export the initial environment
-initialEnvironment ∷ Environment
-initialEnvironment = E.initialEnvironment
+import Insect.Format (Formatter, format)
+import Insect.Format as F
 
 -- | List of all supported units
 supportedUnits ∷ Array String
@@ -37,25 +38,52 @@ msgTypeToString Info     = "info"
 msgTypeToString Error    = "error"
 msgTypeToString Value    = "value"
 msgTypeToString ValueSet = "value-set"
-msgTypeToString Cmd      = "command"
 
 -- | Run Insect, REPL-style.
-repl ∷ Environment → String → { msg ∷ String
-                              , msgType ∷ String
-                              , newEnv ∷ Environment }
-repl env userInput =
+repl ∷ Formatter → Environment → String → { msg ∷ String
+                                          , newEnv ∷ Environment
+                                          , msgType ∷ String     }
+repl fmt env userInput =
   case parseInsect userInput of
     Left pErr →
       let pos = parseErrorPosition pErr
       in case pos of
            (Position rec) →
-             { msg: "Parse error: " <> parseErrorMessage pErr <>
-                    " at position " <> show rec.column
+             { msg: format fmt
+                 [ F.error $ "Parse error at position " <>
+                             show rec.column <> ": "
+                 , F.text (parseErrorMessage pErr)
+                 ]
              , msgType: "error"
              , newEnv: env }
-    Right statement → do
+    Right statement →
       let ans = runInsect env statement
-      case ans.msg of
-        (Message msgType msg) → { msgType: msgTypeToString msgType
-                                , msg: msg
-                                , newEnv: ans.newEnv }
+      in case ans.msg of
+           (Message msgType msg) →
+             { msgType: msgTypeToString msgType
+             , msg: format fmt msg
+             , newEnv: ans.newEnv }
+           MQuit →
+              { msgType: "quit"
+              , msg: ""
+              , newEnv: ans.newEnv }
+           MClear →
+             { msgType: "clear"
+             , msg: ""
+             , newEnv: ans.newEnv }
+
+-- | Re-export the initial environment
+initialEnvironment ∷ Environment
+initialEnvironment = E.initialEnvironment
+
+-- | Re-export the plain formatter
+fmtPlain ∷ Formatter
+fmtPlain = F.fmtPlain
+
+-- | Re-export the jquery terminal formatter
+fmtJqueryTerminal ∷ Formatter
+fmtJqueryTerminal = F.fmtJqueryTerminal
+
+-- | Re-export the console formatter
+fmtConsole ∷ Formatter
+fmtConsole = F.fmtConsole

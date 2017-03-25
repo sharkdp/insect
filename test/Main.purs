@@ -10,7 +10,7 @@ import Control.Monad.Aff.AVar (AVAR)
 import Data.Decimal (fromNumber)
 import Data.StrMap (insert, keys)
 import Data.Either(Either(..))
-import Data.Foldable (traverse_, for_, intercalate) 
+import Data.Foldable (traverse_, for_, intercalate)
 
 import Test.Unit (suite, test, failure)
 import Test.Unit.Main (runTest)
@@ -27,6 +27,7 @@ import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), siPrefixDict,
                       normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Environment (Environment, initialEnvironment)
+import Insect.Format (fmtPlain)
 import Insect (repl)
 
 shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
@@ -57,7 +58,7 @@ shouldFail input = do
 
 expectOutput ∷ ∀ eff. Environment → String → String → Aff eff Unit
 expectOutput env expected inp =
-  let res = repl env inp
+  let res = repl fmtPlain env inp
       out = res.msg
   in
     unless (out == expected) do
@@ -634,15 +635,15 @@ main = runTest do
 
     test "Earth mass" do
       let env1 = initialEnvironment
-          env2 = (repl env1 "r = 6000km").newEnv
-          env3 = (repl env2 "vol = 4/3 * pi * r³").newEnv
-          env4 = (repl env3 "density = 5g/cm³").newEnv
+          env2 = (repl fmtPlain env1 "r = 6000km").newEnv
+          env3 = (repl fmtPlain env2 "vol = 4/3 * pi * r³").newEnv
+          env4 = (repl fmtPlain env3 "density = 5g/cm³").newEnv
 
       expectOutput env4 "4.52389e+24kg" "vol * density -> kg"
 
     test "Pendulum" do
       let env1 = initialEnvironment
-          env2 = (repl env1 "len = 20cm").newEnv
+          env2 = (repl fmtPlain env1 "len = 20cm").newEnv
 
       expectOutput env2 "897.294ms" "2pi*sqrt(len/g0) -> ms"
 

@@ -410,12 +410,11 @@ checkIdentifier ∷ Tuple String Expression → P Statement
 checkIdentifier (Tuple var value) =
   case runParser var (derivedUnit <* eof) of
     Right _ →
-      fail $ "The identifier '" <> var <> "' is reserved for a physical unit"
+      fail $ "'" <> var <> "' is reserved for a physical unit"
     Left _ →
       case runParser var (funcName <* eof) of
         Right _ →
-          fail $ "The identifier '" <> var <> "' is reserved for a " <>
-                 "mathematical function"
+          fail $ "'" <> var <> "' is reserved for a math. function"
         Left _ →
           pure $ Assignment var value
 

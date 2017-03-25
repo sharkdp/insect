@@ -9,14 +9,14 @@ function usage() {
   process.exit(1);
 }
 
-function runInsect(line) {
+function runInsect(fmt, line) {
   var lineTrimmed = line.trim();
   if (lineTrimmed === "" || lineTrimmed[0] === "#") {
     return undefined;
   }
 
   // Run insect
-  var res = Insect.repl(insectEnv)(line);
+  var res = Insect.repl(fmt)(insectEnv)(line);
 
   // Update environment
   insectEnv = res.newEnv;
@@ -32,16 +32,15 @@ if (process.argv.length >= 4) {
   if (arg === "-h" || arg === "--help") {
     usage();
   } else {
-    var res = runInsect(arg);
-    if (res.msgType === "value") {
+    // Execute a single command
+    var res = runInsect(Insect.fmtPlain, arg);
+    if (res.msgType === "value" || res.msgType === "info") {
       console.log(res.msg);
+    } else if (res.msgType === "error") {
+      console.error(res.msg);
     }
     process.exit(0);
   }
-}
-
-function colored(col, str) {
-  return '\x1b[' + col + 'm' + str + '\x1b[0m';
 }
 
 var interactive = process.stdin.isTTY;
@@ -53,37 +52,21 @@ if (interactive) {
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: '> '
+    prompt: '\x1b[01m>>>\x1b[0m '
   });
 
   rl.prompt();
 
   rl.on('line', function(line) {
-    var res = runInsect(line);
+    var res = runInsect(Insect.fmtConsole, line);
 
     if (res) {
-      if (res.msgType == "command") {
-        if (res.msg == "quit") {
-          process.exit(0);
-        } else if (res.msg == "clear") {
-          process.stdout.write('\033[2J\033[0f');
-        } else {
-          console.error("Unknown command '" + res.msg + "'");
-        }
-      }
-      else {
-        // Format output
-        var msg = res.msg;
-        if (res.msgType === "value" || res.msgType === "value-set") {
-          msg = "\n  " + colored("36", msg);
-        } else if (res.msgType == "error") {
-          msg = "\n  " + colored("31", msg.replace("\n", "\n  "));
-        } else if (res.msgType == "info") {
-          msg = msg.replace(/`([^`\n]+)`/g, '\x1b[36m$1\x1b[0m');
-          msg = msg.replace(/\*([^\*\n]+)\*/g, '\x1b[01m$1\x1b[0m');
-        }
-
-        console.log(msg + "\n");
+      if (res.msgType == "quit") {
+        process.exit(0);
+      } else if (res.msgType == "clear") {
+        process.stdout.write('\033[2J\033[0f');
+      } else {
+        console.log(res.msg + "\n");
       }
     }
 
@@ -96,16 +79,16 @@ if (interactive) {
 
   var lineReader = require("line-reader");
   lineReader.eachLine(process.stdin, function(line) {
-    var res = runInsect(line);
+    var res = runInsect(Insect.fmtPlain, line);
     if (res) {
       // Only output values and halt on errors. Ignore 'info' and 'value-set'
       // message types.
       if (res.msgType === "value") {
         console.log(res.msg);
       } else if (res.msgType == "error") {
-        console.error("Error: " + res.msg);
+        console.error(res.msg);
         process.exit(1);
-      } else if (res.msgType == "command" && res.msg == "quit") {
+      } else if (res.msgType == "quit") {
         process.exit(0);
       }
     }

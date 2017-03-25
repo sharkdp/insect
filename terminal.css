@@ -338,10 +338,10 @@
     clear: both;
 }
 .terminal a {
-    color: #E6DB74;
+    color: #F8F8F2;
 }
 .terminal a:hover {
-    color: #E6DB74;
+    color: #F8F8F2;
 }
 .terminal iframe {
     position: absolute;
