@@ -3,6 +3,8 @@
 /.psci*
 /.pulp-cache
 /TODO
+/INTERACTIVE_TESTS
+/DEMO
 /bower.json
 /bower_components/
 /deploy.sh
