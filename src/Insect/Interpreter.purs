@@ -7,12 +7,16 @@ module Insect.Interpreter
 
 import Prelude hiding (degree)
 
-import Data.Array ((:), concat)
+import Data.Array ((:), fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
+import Data.Foldable (foldMap, intercalate)
+import Data.List (sortBy, groupBy)
+import Data.List.NonEmpty (head)
 import Data.Maybe (Maybe(..))
-import Data.StrMap (lookup, insert, foldMap)
-import Data.Tuple (Tuple(..), fst)
+import Data.String (toLower)
+import Data.StrMap (lookup, insert, toList)
+import Data.Tuple (Tuple(..), fst, snd)
 
 import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
@@ -193,13 +197,19 @@ runInsect env (Command List) =
   { msg: Message Info list
   , newEnv: env }
   where
-    list = [ F.text "List of variables:", F.nl ] <> foldMap toLine env
-    toLine k v = concat [ [ F.nl, F.text "  "
-                          , F.ident k
-                          , F.text " = "
-                          ],
-                          prettyPrint v
-                        ]
+    envTuples = sortBy (comparing (fst <<< prettyPrint' <<< snd)) $ toList env
+    envGrouped = groupBy (\x y → snd x == snd y) envTuples
+    envSorted = sortBy (comparing (toLower <<< fst <<< head)) envGrouped
+    list = [ F.text "List of variables:", F.nl ] <> foldMap toLine envSorted
+    toLine kvPairs =
+         [ F.nl, F.text "  " ]
+      <> identifiers
+      <> [ F.text " = " ]
+      <> prettyPrint val
+        where
+          identifiers = fromFoldable $ intercalate [ F.text " = " ] $
+                          (singleton <<< F.ident <<< fst) <$> kvPairs
+          val = snd (head kvPairs)
 runInsect env (Command Reset) =
   { msg: Message Info [F.text "Environment has been reset."]
   , newEnv: initialEnvironment }

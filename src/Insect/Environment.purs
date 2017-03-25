@@ -28,7 +28,6 @@ initialEnvironment = fromFoldable
   , Tuple "eps0"               ε0
   , Tuple "ε0"                 ε0
   , Tuple "electronCharge"     electronCharge
-  , Tuple "elementaryCharge"   electronCharge
   , Tuple "electronMass"       electronMass
   , Tuple "G"                  gravitationalConstant
   , Tuple "g0"                 g0
