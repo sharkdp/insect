@@ -581,7 +581,7 @@ main = runTest do
       expectOutput myEnv "10m" "2 x"
       expectOutput myEnv "25m²" "x x"
       expectOutput myEnv "25m²" "x²"
-      expectOutput myEnv "Unknown variable 'x2'" "x2"
+      expectOutput myEnv "Unknown identifier: x2" "x2"
 
     test "Function inverses" do
       expectOutput' "0.1234" "sin(asin(0.1234))"

@@ -18,13 +18,7 @@
       // Load KeyboardEvent polyfill for old browsers
       keyboardeventKeyPolyfill.polyfill();
 
-      var globalEnv = Insect.initialEnvironment;
-
-      var commands = ["help", "list", "ls", "reset", "clear", "quit", "exit"];
-
-      var functions = ["acos", "acosh", "asin", "asinh", "atan", "atanh",
-                       "ceil", "cos", "cosh", "exp", "floor", "ln", "log",
-                       "log10", "round", "sin", "sinh", "sqrt", "tan", "tanh"];
+      var insectEnv = Insect.initialEnvironment;
 
       function interpret(line) {
         // Skip empty lines or line comments
@@ -34,8 +28,8 @@
         }
 
         // Run insect
-        var res = Insect.repl(Insect.fmtJqueryTerminal)(globalEnv)(line);
-        globalEnv = res.newEnv;
+        var res = Insect.repl(Insect.fmtJqueryTerminal)(insectEnv)(line);
+        insectEnv = res.newEnv;
 
         // Handle shell commands
         if (res.msgType == "clear") {
@@ -45,7 +39,7 @@
         } else if (res.msgType == "quit") {
           // Treat as reset:
           this.clear();
-          globalEnv = Insect.initialEnvironment;
+          insectEnv = Insect.initialEnvironment;
           return "";
         }
 
@@ -83,10 +77,14 @@
             return line.trim() !== "";
           },
           completion: function(inp, cb) {
-            var variables = Object.keys(globalEnv);
-            cb(commands.concat(functions)
+            var variables = Object.keys(insectEnv);
+
+            var keywords =
+              variables.concat(Insect.functions)
                        .concat(Insect.supportedUnits)
-                       .concat(variables));
+                       .concat(Insect.commands);
+
+            cb(keywords.sort());
           }
         });
       });

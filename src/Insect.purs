@@ -5,6 +5,8 @@ module Insect
   , fmtPlain
   , fmtJqueryTerminal
   , fmtConsole
+  , commands
+  , functions
   ) where
 
 import Prelude
@@ -18,6 +20,7 @@ import Text.Parsing.Parser (parseErrorPosition, parseErrorMessage)
 
 import Insect.Parser (Dictionary(..), (==>),
                       normalUnitDict, imperialUnitDict, parseInsect)
+import Insect.Parser as P
 import Insect.Interpreter (MessageType(..), Message(..), runInsect)
 import Insect.Environment (Environment)
 import Insect.Environment as E
@@ -87,3 +90,11 @@ fmtJqueryTerminal = F.fmtJqueryTerminal
 -- | Re-export the console formatter
 fmtConsole ∷ Formatter
 fmtConsole = F.fmtConsole
+
+-- | Re-export the list of commands
+commands ∷ Array String
+commands = P.commands
+
+-- | Re-export the list of function names
+functions ∷ Array String
+functions = P.functions

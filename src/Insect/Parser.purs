@@ -3,6 +3,8 @@ module Insect.Parser
   ( DictEntry(..)
   , (==>)
   , Dictionary(..)
+  , commands
+  , functions
   , siPrefixDict
   , normalUnitDict
   , imperialUnitDict
@@ -26,7 +28,7 @@ import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
 import Data.Array (some, fromFoldable)
 import Data.Either (Either(..))
 import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
-import Data.Foldable (foldr)
+import Data.Foldable (foldr, foldMap)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
@@ -55,6 +57,10 @@ identStart = letter <|> char '_'
 identLetter ∷ P Char
 identLetter = letter <|> digit <|> char '_' <|> char '\''
 
+-- | A list of allowed commands
+commands ∷ Array String
+commands = ["help", "?", "list", "ls", "ll", "reset", "clear", "cls", "quit", "exit"]
+
 -- | The language definition.
 insectLanguage ∷ LanguageDef
 insectLanguage = LanguageDef
@@ -66,8 +72,7 @@ insectLanguage = LanguageDef
   , identLetter: identLetter
   , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '=']
   , opLetter: oneOf ['>', '*']
-  , reservedNames: ["help", "?", "list", "ls", "reset", "clear", "cls", "quit",
-                    "exit", "²", "³"]
+  , reservedNames: commands <> ["²", "³"]
   , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "**",
                       "="]
   , caseSensitive: true
@@ -269,29 +274,39 @@ derivedUnit =
 variable ∷ P Expression
 variable = Variable <$> token.identifier
 
+-- | Possible names for the mathematical functions.
+funcNameDict ∷ Dictionary Func
+funcNameDict = Dictionary
+  [ Acosh ==> ["acosh"]
+  , Acos ==> ["acos"]
+  , Asinh ==> ["asinh"]
+  , Asin ==> ["asin"]
+  , Atanh ==> ["atanh"]
+  , Atan ==> ["atan"]
+  , Ceil ==> ["ceil"]
+  , Cosh ==> ["cosh"]
+  , Cos ==> ["cos"]
+  , Exp ==> ["exp"]
+  , Floor ==> ["floor"]
+  , Log10 ==> ["log10"]
+  , Ln ==> ["log", "ln"]
+  , Round ==> ["round"]
+  , Sinh ==> ["sinh"]
+  , Sin ==> ["sin"]
+  , Sqrt ==> ["sqrt"]
+  , Tanh ==> ["tanh"]
+  , Tan ==> ["tan"]
+  ]
+
+-- | A list of all mathematical function names (for tab-completion).
+functions ∷ Array String
+functions =
+  case funcNameDict of
+    Dictionary dict → foldMap (\(_ ==> names) → names) dict
+
 -- | Parse the name of a mathematical function.
 funcName ∷ P Func
-funcName =
-      (string "acosh" *> pure Acosh)
-  <|> (string "acos"  *> pure Acos)
-  <|> (string "asinh" *> pure Asinh)
-  <|> (string "asin"  *> pure Asin)
-  <|> (string "atanh" *> pure Atanh)
-  <|> (string "atan"  *> pure Atan)
-  <|> (string "ceil"  *> pure Ceil)
-  <|> (string "cosh"  *> pure Cosh)
-  <|> (string "cos"   *> pure Cos)
-  <|> (string "exp"   *> pure Exp)
-  <|> (string "floor" *> pure Floor)
-  <|> (string "log10" *> pure Log10)
-  <|> (string "log"   *> pure Ln)
-  <|> (string "ln"    *> pure Ln)
-  <|> (string "round" *> pure Round)
-  <|> (string "sinh"  *> pure Sinh)
-  <|> (string "sin"   *> pure Sin)
-  <|> (string "sqrt"  *> pure Sqrt)
-  <|> (string "tanh"  *> pure Tanh)
-  <|> (string "tan"   *> pure Tan)
+funcName = buildDictParser funcNameDict <?> "function name"
 
 -- | A version of `sepBy1` that returns a `NonEmpty List`.
 sepBy1 ∷ ∀ m s a sep. Monad m ⇒ ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
@@ -390,7 +405,7 @@ command ∷ P Command
 command =
   (
         (reserved "help" <|> reserved "?") *> pure Help
-    <|> (reserved "list" <|> reserved "ls") *> pure List
+    <|> (reserved "list" <|> reserved "ls" <|> reserved "ll") *> pure List
     <|> (reserved "reset") *> pure Reset
     <|> (reserved "clear" <|> reserved "cls") *> pure Clear
     <|> (reserved "quit" <|> reserved "exit") *> pure Quit

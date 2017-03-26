@@ -52,7 +52,26 @@ if (interactive) {
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    prompt: '\x1b[01m>>>\x1b[0m '
+    prompt: '\x1b[01m>>>\x1b[0m ',
+    completer: function(line) {
+      var variables = Object.keys(insectEnv);
+
+      var keywords =
+        variables.concat(Insect.functions)
+        .concat(Insect.supportedUnits)
+        .concat(Insect.commands);
+
+      var lastWord = line;
+      if (line.trim() !== "") {
+        var words = line.split(/\b/);
+        lastWord = words[words.length - 1];
+        keywords= keywords.filter(function(kw) {
+          return kw.indexOf(lastWord) === 0;
+        });
+      }
+
+      return [keywords, lastWord];
+    }
   });
 
   rl.prompt();
