@@ -30,6 +30,7 @@ import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
 import Insect.Environment (Environment, initialEnvironment)
 import Insect.Format (Markup)
 import Insect.Format as F
+import Insect.PrettyPrint (pretty, prettyQuantity)
 
 -- | Types of errors that may appear during evaluation.
 data EvalError
@@ -148,33 +149,29 @@ evalErrorMessage NumericalError =
   [ F.error "Numerical error: "
   , F.text "division by zero or out-of-bounds error" ]
 
--- | Format a physical quantity.
-prettyPrint ∷ Quantity → Markup
-prettyPrint q =
-  case prettyPrint' q of
-    Tuple v u → [ F.val v, F.unit u ]
-
 -- | Interpreter return type.
 type Response = { msg ∷ Message, newEnv ∷ Environment }
 
 -- | Helper to construct an interpreter response
-message ∷ MessageType → Environment → Expect Quantity → Response
-message _ env (Left e) =
+message ∷ Expression → MessageType → Environment → Expect Quantity → Response
+message _ _ env (Left e) =
   { msg: Message Error (evalErrorMessage e)
   , newEnv: env
   }
-message mt env (Right q) =
-  { msg: Message mt (F.whitespace "  " : prettyPrint q)
+message expr mt env (Right q) =
+  { msg: Message mt $    (F.optional <$> pretty expr)
+                      <> (F.optional <$> [ F.nl, F.nl, F.text "  ", F.text " = " ])
+                      <> prettyQuantity q
   , newEnv: insert "ans" q env
   }
 
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → Response
-runInsect env (Expression e) = message Value env (fullSimplify <$> eval env e)
+runInsect env (Expression e) = message e Value env (fullSimplify <$> eval env e)
 runInsect env (Assignment n v) =
   case eval env v of
-    Left evalErr → message Error env (Left evalErr)
-    Right value → message ValueSet (insert n value env) (Right (fullSimplify value))
+    Left evalErr → message v Error env (Left evalErr)
+    Right value → message v ValueSet (insert n value env) (Right (fullSimplify value))
 runInsect env (Command Help) = { msg: Message Info
   [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl
@@ -205,7 +202,7 @@ runInsect env (Command List) =
          [ F.nl, F.text "  " ]
       <> identifiers
       <> [ F.text " = " ]
-      <> prettyPrint val
+      <> prettyQuantity val
         where
           identifiers = fromFoldable $ intercalate [ F.text " = " ] $
                           (singleton <<< F.ident <<< fst) <$> kvPairs

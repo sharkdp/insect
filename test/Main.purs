@@ -13,6 +13,7 @@ import Data.Either(Either(..))
 import Data.Foldable (traverse_, for_, intercalate)
 
 import Test.Unit (suite, test, failure)
+import Test.Unit.Assert (equal)
 import Test.Unit.Main (runTest)
 import Test.Unit.Console (TESTOUTPUT)
 
@@ -27,7 +28,8 @@ import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), siPrefixDict,
                       normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Environment (Environment, initialEnvironment)
-import Insect.Format (fmtPlain)
+import Insect.Format (format, fmtPlain)
+import Insect.PrettyPrint (pretty)
 import Insect (repl)
 
 shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
@@ -66,6 +68,25 @@ expectOutput env expected inp =
                 "Input:    '" <> inp <> "'\n" <>
                 "Output:   '" <> out <> "'\n" <>
                 "Expected: '" <> expected <> "'\n"
+
+prettyPrintCheck ∷ ∀ eff. String → Aff eff Unit
+prettyPrintCheck input =
+  case parseInsect input of
+    Left err →
+      case parseErrorPosition err of
+        (Position pos) →
+          failure $ "Parse error for input '" <> input <> "': "
+                                <> parseErrorMessage err
+                                <> " at position "
+                                <> show pos.column
+    Right output →
+      case output of
+        Expression expr →
+          -- Pretty print the AST, parse it again and check against the
+          -- original AST.
+          shouldParseAs output (format fmtPlain (pretty expr))
+        _ →
+          failure $ "Input is not an expression"
 
 
 main ∷ Eff (console ∷ CONSOLE, testOutput ∷ TESTOUTPUT, avar ∷ AVAR) Unit
@@ -560,6 +581,52 @@ main = runTest do
       shouldFail "meter=2" -- 'meter' is a reserved unit
       shouldFail "list=4" -- 'list' is a reserved keyword
       shouldFail "sin=3" -- 'sin is a reserved keyword
+
+  let pretty' str =
+        case parseInsect str of
+          Right (Expression expr) → format fmtPlain (pretty expr)
+          _ → "Error"
+
+  let equalPretty out inp =
+        equal out (pretty' inp)
+
+  suite "Pretty printer" do
+    test "Consistency" do
+      prettyPrintCheck "-2.3e-12387"
+      prettyPrintCheck "2.3e-12387"
+      prettyPrintCheck "18379173"
+      prettyPrintCheck "123.123 km^2 / s^2"
+      prettyPrintCheck "2+3"
+      prettyPrintCheck "2+3*5"
+      prettyPrintCheck "a+b*c^d-e*f"
+      prettyPrintCheck "sin(x)^3"
+      prettyPrintCheck "sin(cos(atanh(x)+2))^3"
+      prettyPrintCheck "2^3^4"
+      prettyPrintCheck "(2^3)^4"
+      prettyPrintCheck "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
+      prettyPrintCheck "40kg * 9.8m/s² * 150cm"
+      prettyPrintCheck "4/3 * pi * r³"
+      prettyPrintCheck "vol * density -> kg"
+      prettyPrintCheck "atan(30cm / 2m)"
+      prettyPrintCheck "500km/day -> km/h"
+      prettyPrintCheck "1mrad -> °"
+      prettyPrintCheck "52weeks -> days"
+      prettyPrintCheck "5in + 2ft -> cm"
+      prettyPrintCheck "6Mbit/s * 1.5h -> GB"
+
+    test "Format" do
+      equalPretty "2 + 3" "2+3"
+      equalPretty "2 × 3" "2*3"
+      equalPretty "2^3" "2^3"
+      equalPretty "2km" "2km"
+      equalPretty "sin(30°)" "sin(30°)"
+      equalPretty "2 × 3 × 4" "2*3*4"
+      equalPretty "2 × 3 × 4" "2*(3*4)"
+      equalPretty "2 + 3 + 4" "2+3+4"
+      equalPretty "2 + 3 + 4" "2+(3+4)"
+      equalPretty "atan(30cm / 2m)" "atan(30cm / 2m)"
+      equalPretty "1mrad -> °" "1mrad -> °"
+      equalPretty "2km + 2cm -> in" "2km+2cm -> in"
 
   let expectOutput' = expectOutput initialEnvironment
 
