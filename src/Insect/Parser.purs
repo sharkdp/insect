@@ -418,6 +418,7 @@ assignment = do
   var ← token.identifier
   reservedOp "="
   value ← expression
+  eof
   pure $ Tuple var value
 
 -- | Try to parse the identifier as a unit, and fail if it succeeds.

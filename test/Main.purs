@@ -575,6 +575,7 @@ main = runTest do
       shouldFail "x+2=3"
       shouldFail "3=5"
       shouldFail "x="
+      shouldFail "x=3+"
 
     test "Reserved names" do
       shouldFail "m=2" -- 'm' is reserved unit
