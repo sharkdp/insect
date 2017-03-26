@@ -53,7 +53,8 @@ repl fmt env userInput =
       in case pos of
            (Position rec) →
              { msg: format fmt
-                 [ F.error $ "Parse error at position " <>
+                 [ F.optional (F.text "  ")
+                 , F.error $ "Parse error at position " <>
                              show rec.column <> ": "
                  , F.text (parseErrorMessage pErr)
                  ]

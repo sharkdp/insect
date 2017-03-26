@@ -10,6 +10,7 @@ module Insect.Format
   , error
   , val
   , ident
+  , function
   , unit
   , optional
   , nl
@@ -30,6 +31,7 @@ data FormatType
   | FTError
   | FTValue
   | FTIdentifier
+  | FTFunction
   | FTUnit
 
 data OutputType
@@ -61,6 +63,10 @@ val = Formatted Normal FTValue
 -- | Format as an identifier.
 ident ∷ String → FormattedString
 ident = Formatted Normal FTIdentifier
+
+-- | Format as a function name.
+function ∷ String → FormattedString
+function = Formatted Normal FTFunction
 
 -- | Format as a physical unit.
 unit ∷ String → FormattedString
@@ -98,9 +104,10 @@ fmtJqueryTerminal ∷ Formatter
 fmtJqueryTerminal _ FTText s = s
 fmtJqueryTerminal _ FTEmphasized s = "[[b;;]" <> s <> "]"
 fmtJqueryTerminal _ FTError s = jtColored "F92672" s
-fmtJqueryTerminal _ FTValue s = jtColored "FFFFFF" s
-fmtJqueryTerminal _ FTIdentifier s = jtColored "66D9EF" s
-fmtJqueryTerminal _ FTUnit s = "[[i;#E6DB74;]" <> s <> "]"
+fmtJqueryTerminal _ FTValue s = jtColored "66D9EF" s
+fmtJqueryTerminal _ FTIdentifier s = jtColored "FD971F" s
+fmtJqueryTerminal _ FTFunction s = "[[i;;]" <> s <> "]"
+fmtJqueryTerminal _ FTUnit s = "[[i;#A6E22E;]" <> s <> "]"
 
 consoleCode ∷ String → String → String
 consoleCode code str = "\x1b[" <> code <> "m" <> str <> "\x1b[0m"
@@ -112,8 +119,11 @@ fmtConsole _ FTEmphasized s = consoleCode ansiBold s
   where ansiBold = "01"
 fmtConsole _ FTError s = consoleCode ansiRed s
   where ansiRed = "31"
-fmtConsole _ FTValue s = s
+fmtConsole _ FTValue s = consoleCode ansiCyan s
+  where ansiCyan = "36"
 fmtConsole _ FTIdentifier s = consoleCode ansiYellow s
   where ansiYellow = "33"
-fmtConsole _ FTUnit s = consoleCode ansiCyan s
-  where ansiCyan = "36"
+fmtConsole _ FTFunction s = consoleCode ansiItalic s
+  where ansiItalic = "03"
+fmtConsole _ FTUnit s = consoleCode ansiGreen s
+  where ansiGreen = "32"

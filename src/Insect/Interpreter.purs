@@ -7,7 +7,7 @@ module Insect.Interpreter
 
 import Prelude hiding (degree)
 
-import Data.Array (fromFoldable, singleton)
+import Data.Array ((:), fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate)
@@ -118,16 +118,16 @@ unificationErrorMessage (UnificationError u1 u2) =
       if u2 == unity
         then scalarErr u1
         else
-            [ F.error "Unification error:", F.nl, F.nl
-            , F.text "  Cannot unify unit ", F.unit (toString u1)
+            [ F.error "  Unification error:", F.nl, F.nl
+            , F.text "    Cannot unify unit ", F.unit (toString u1)
             ] <> baseRep u1 <>
             [ F.nl
-            , F.text "          with unit ", F.unit (toString u2)
+            , F.text "            with unit ", F.unit (toString u2)
             ] <> baseRep u2
   where
     scalarErr u =
-      [ F.error "Unification error:", F.nl, F.nl
-      , F.text "  Cannot convert quantity of unit "
+      [ F.error "  Unification error:", F.nl, F.nl
+      , F.text "    Cannot convert quantity of unit "
       , F.unit (toString u)
       , F.text " to a ", F.unit "scalar"
       ]
@@ -143,50 +143,62 @@ evalErrorMessage ∷ EvalError → Markup
 evalErrorMessage (QUnificationError ue) =
   unificationErrorMessage ue
 evalErrorMessage (LookupError name) =
-  [ F.error "Unknown identifier: "
+  [ F.optional (F.text "  ")
+  , F.error "Unknown identifier: "
   , F.ident name]
 evalErrorMessage NumericalError =
-  [ F.error "Numerical error: "
+  [ F.optional (F.text "  ")
+  , F.error "Numerical error: "
   , F.text "division by zero or out-of-bounds error" ]
 
 -- | Interpreter return type.
 type Response = { msg ∷ Message, newEnv ∷ Environment }
 
--- | Helper to construct an interpreter response
-message ∷ Expression → MessageType → Environment → Expect Quantity → Response
-message _ _ env (Left e) =
-  { msg: Message Error (evalErrorMessage e)
+-- | Show pretty-printed input and the error message.
+errorWithInput ∷ Markup → Expression → Environment → EvalError → Response
+errorWithInput prefix expr env err =
+  { msg: Message Error $ (F.optional <$> F.text "  " : prefix <> pretty expr)
+                         <> (F.optional <$> [ F.nl, F.nl ])
+                         <> evalErrorMessage err
   , newEnv: env
-  }
-message expr mt env (Right q) =
-  { msg: Message mt $    (F.optional <$> pretty expr)
-                      <> (F.optional <$> [ F.nl, F.nl, F.text "  ", F.text " = " ])
-                      <> prettyQuantity q
-  , newEnv: insert "ans" q env
   }
 
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → Response
-runInsect env (Expression e) = message e Value env (fullSimplify <$> eval env e)
+runInsect env (Expression e) =
+  case (fullSimplify <$> eval env e) of
+    Left evalErr → errorWithInput [] e env evalErr
+    Right value →
+      { msg: Message Value $    (F.optional <$> F.text "  " : pretty e)
+                             <> (F.optional <$> [ F.nl, F.nl , F.text "   = " ])
+                             <> prettyQuantity value
+      , newEnv: insert "ans" value env
+      }
 runInsect env (Assignment n v) =
   case eval env v of
-    Left evalErr → message v Error env (Left evalErr)
-    Right value → message v ValueSet (insert n value env) (Right (fullSimplify value))
+    Left evalErr → errorWithInput [ F.ident n, F.text " = " ] v env evalErr
+    Right value' →
+      let value = fullSimplify value'
+      in { msg: Message ValueSet $
+                     (F.optional <$> [ F.text "  ", F.ident n, F.text " = " ])
+                  <> prettyQuantity value
+         , newEnv: insert n value env
+         }
 runInsect env (Command Help) = { msg: Message Info
   [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl
   , F.text "one of these examples:", F.nl
   , F.text "", F.nl
-  , F.emph "  > ", F.val "1920/16*9", F.text "             "
-  , F.emph "  > ", F.val "sin(30", F.unit "deg", F.val ")", F.nl
+  , F.emph "  > ", F.val "1920", F.text "/", F.val "16", F.text "*", F.val "9", F.text "             "
+  , F.emph "  > ", F.function "sin", F.text "(", F.val "30", F.unit "deg", F.text ")", F.nl
   , F.text "", F.nl
-  , F.emph "  > ", F.val "2", F.unit "min", F.val " + 30", F.unit "s", F.text "            "
-  , F.emph "  > ", F.val "6", F.unit "Mbit/s", F.val " * 1.5", F.unit "h", F.val " -> ", F.unit "GB", F.val "", F.nl
+  , F.emph "  > ", F.val "2", F.unit "min", F.text " + ", F.val "30", F.unit "s", F.text "            "
+  , F.emph "  > ", F.val "6", F.unit "Mbit/s", F.text " * ", F.val "1.5", F.unit "h", F.text " -> ", F.unit "GB", F.val "", F.nl
   , F.text "", F.nl
-  , F.emph "  > ", F.emph "list", F.text "                  "
-  , F.emph "  > ", F.val "r = 80", F.unit "cm", F.nl
-  , F.emph "  > ", F.val "40000", F.unit "km/c", F.val " -> ", F.unit "ms", F.text "       "
-  , F.emph "  > ", F.val "pi*r^2 -> ", F.unit "m^2", F.nl
+  , F.emph "  > ", F.text "list", F.text "                  "
+  , F.emph "  > ", F.ident "r", F.text " = ", F.val "80", F.unit "cm", F.nl
+  , F.emph "  > ", F.val "40000", F.unit "km", F.text "/", F.ident "c", F.text " -> ", F.unit "ms", F.text "       "
+  , F.emph "  > ", F.ident "pi", F.text " * ", F.ident "r", F.text "^", F.val "2", F.text " -> ", F.unit "m", F.text "^", F.val "2", F.nl
   , F.text "", F.nl
   , F.text "More information: https://github.com/sharkdp/insect"
   ], newEnv : env }

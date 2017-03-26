@@ -51,7 +51,8 @@ prettyVariable name = [ F.ident name ]
 
 -- | Petty print a function application.
 prettyApply ∷ Func → Expression → Markup
-prettyApply fn x = [ F.emph (funcToStr fn), F.text "(" ] <> pretty x <> [ F.text ")" ]
+prettyApply fn x = [ F.function (funcToStr fn)
+                   , F.text "(" ] <> pretty x <> [ F.text ")" ]
   where
     funcToStr ∷ Func → String
     funcToStr Acosh = "acosh"
