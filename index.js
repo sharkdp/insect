@@ -46,12 +46,15 @@ if (process.argv.length >= 4) {
 var interactive = process.stdin.isTTY;
 
 if (interactive) {
-  var readline = require('readline');
+  var readline = require('historic-readline');
+  var xdgBasedir = require('xdg-basedir');
+  var path = require('path');
 
   // Set up REPL
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
+    path: path.join(xdgBasedir.config, "insect-history"),
     prompt: '\x1b[01m>>>\x1b[0m ',
     completer: function(line) {
       var variables = Object.keys(insectEnv);
@@ -71,27 +74,28 @@ if (interactive) {
       }
 
       return [keywords, lastWord];
-    }
-  });
+    },
+    next: function(rl) {
+      rl.prompt();
 
-  rl.prompt();
+      rl.on('line', function(line) {
+        var res = runInsect(Insect.fmtConsole, line);
 
-  rl.on('line', function(line) {
-    var res = runInsect(Insect.fmtConsole, line);
+        if (res) {
+          if (res.msgType == "quit") {
+            process.exit(0);
+          } else if (res.msgType == "clear") {
+            process.stdout.write('\033[2J\033[0f');
+          } else {
+            console.log(res.msg + "\n");
+          }
+        }
 
-    if (res) {
-      if (res.msgType == "quit") {
+        rl.prompt();
+      }).on('close', function() {
         process.exit(0);
-      } else if (res.msgType == "clear") {
-        process.stdout.write('\033[2J\033[0f');
-      } else {
-        console.log(res.msg + "\n");
-      }
+      });
     }
-
-    rl.prompt();
-  }).on('close', function() {
-    process.exit(0);
   });
 } else {
   // Read from non-interactive stream (shell pipe)
