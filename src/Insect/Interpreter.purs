@@ -7,7 +7,7 @@ module Insect.Interpreter
 
 import Prelude hiding (degree)
 
-import Data.Array ((:), fromFoldable, singleton)
+import Data.Array (fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate)
@@ -16,7 +16,7 @@ import Data.List.NonEmpty (head)
 import Data.Maybe (Maybe(..))
 import Data.String (toLower)
 import Data.StrMap (lookup, insert, toList)
-import Data.Tuple (Tuple(..), fst, snd)
+import Data.Tuple (fst, snd)
 
 import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,

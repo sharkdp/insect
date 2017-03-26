@@ -142,7 +142,7 @@ main = runTest do
       shouldFail "123e+"
       shouldFail "123e-"
 
-  suite "Parser - Units" do
+  suite "Parser - Units (this may take some time)" do
     test "Simple" do
       allParseAs (Expression (Unit meter))
         [ "m"
