@@ -95,17 +95,40 @@ pretty (Variable name)                 = prettyVariable name
 pretty (Negate (Scalar s))             = F.text "-" : prettyScalar s
 pretty (Negate x)                      = F.text "-(" : pretty x <> [ F.text ")" ]
 pretty (Apply fn x)                    = prettyApply fn x
+-- ConvertTo (->) never needs parens, it has the lowest precedence:
 pretty (BinOp ConvertTo x y)           = pretty x <> prettyOp ConvertTo <> pretty y
+-- Fuse multiplication of a scalar and a unit to a quantity:
 pretty (BinOp Mul (Scalar s) (Unit u)) = prettyQuantity' s u
-pretty (BinOp Mul x y)                 = addP x <> prettyOp Mul <> addP y
+-- Leave out parens for multiplication, if possible:
+pretty (BinOp Mul x y) = addP x <> prettyOp Mul <> addP y
   where
     addP ex = case ex of
+                (BinOp Pow _ _) → pretty ex
                 (BinOp Mul _ _) → pretty ex
                 _               → withParens ex
-pretty (BinOp Add x y)     = addP x <> prettyOp Add <> addP y
+-- Leave out parens for division, if possible:
+pretty (BinOp Div x y) = addPLeft x <> prettyOp Div <> addPRight y
+  where
+    addPLeft ex = case ex of
+                    (BinOp Pow _ _) → pretty ex
+                    (BinOp Mul _ _) → pretty ex
+                    _               → withParens ex
+    addPRight ex = case ex of
+                     (BinOp Pow _ _) → pretty ex
+                     _               → withParens ex
+-- Leave out parens for addition, if possible:
+pretty (BinOp Add x y) = addP x <> prettyOp Add <> addP y
   where
     addP ex = case ex of
+                (BinOp Pow _ _) → pretty ex
+                (BinOp Mul _ _) → pretty ex
                 (BinOp Add _ _) → pretty ex
                 _               → withParens ex
-
-pretty (BinOp op x y)  = withParens x <> prettyOp op <> withParens y
+-- Leave out parens for subtraction, if possible:
+pretty (BinOp Sub x y) = addP x <> prettyOp Sub <> addP y
+  where
+    addP ex = case ex of
+                (BinOp Pow _ _) → pretty ex
+                (BinOp Mul _ _) → pretty ex
+                _               → withParens ex
+pretty (BinOp op x y) = withParens x <> prettyOp op <> withParens y
