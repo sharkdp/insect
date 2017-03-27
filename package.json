@@ -1,7 +1,7 @@
 {
   "name": "insect",
   "version": "3.0.0",
-  "description": "REPL-style scientific calculator",
+  "description": "REPL-style scientific calculator with full support for physical units",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
   "repository": {
