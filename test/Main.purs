@@ -654,8 +654,8 @@ main = runTest do
 
   let expectOutput' = expectOutput initialEnvironment
 
-  suite "Integration" do
-    test "Simple" do
+  suite "Integration tests" do
+    test "Simple input" do
       expectOutput' "3m" "3m"
       expectOutput' "3m" " 3.0 meter  "
 
@@ -701,7 +701,12 @@ main = runTest do
       expectOutput' "4" "round(3.9)"
       expectOutput' "3" "round(3.1)"
 
-    test "Simple" do
+    test "Unit simplification" do
+      expectOutput' "36000Mbit" "5Mbit/s * 2h"
+      expectOutput' "2500cm²" "5cm · 5m"
+      expectOutput' "0.2km" "120km/h*6s"
+
+    test "Examples" do
       expectOutput' "1080" "1920/16*9"
       expectOutput' "4294967296" "2^32"
       expectOutput' "0.512957" "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
@@ -709,7 +714,7 @@ main = runTest do
       expectOutput' "2.5min" "2min + 30s"
       expectOutput' "150s" "2min + 30s -> sec"
       expectOutput' "904779000000km³" "4/3 * pi * (6000km)³"
-      expectOutput' "58800kg·m·cm/s²" "40kg * 9.8m/s² * 150cm"
+      expectOutput' "588m²·kg/s²" "40kg * 9.8m/s² * 150cm"
       expectOutput' "0.5" "sin(30°)"
 
       expectOutput' "26.8224m/s" "60mph -> m/s"
