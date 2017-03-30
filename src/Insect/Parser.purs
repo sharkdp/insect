@@ -17,7 +17,7 @@ import Control.Alt ((<|>))
 import Control.Lazy (fix)
 
 import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
-                   femto, foot, giga, gram, hecto, hertz, hour, inch, joule,
+                   femto, foot, giga, gram, gallon, hecto, hertz, hour, inch, joule,
                    kilo, mega, meter, micro, mile, milli, minute, nano,
                    newton, ounce, peta, pico, pound, radian, second, tera,
                    watt, week, yard, (./), pascal, coulomb, volt, farad, ohm,
@@ -236,6 +236,7 @@ imperialUnitDict = Dictionary
   , foot ==> ["feet", "foot", "ft"]
   , ounce ==> ["ounces", "ounce", "oz"]
   , pound ==> ["pounds", "pound", "lb"]
+  , gallon ==> ["gallon", "gal"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
