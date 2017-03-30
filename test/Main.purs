@@ -486,6 +486,10 @@ main = runTest do
         [ "2.3m -> in"
         , "  2.3 meters->inches "
         , "  2.3 m  ->  in "
+        , "2.3m→in"
+        , "  2.3 m  →  in "
+        , "2.3m to in"
+        , "  2.3 m  to  in "
         ]
 
       allParseAs (Expression (BinOp ConvertTo (q 120.0 minute) (Unit hour)))
@@ -494,6 +498,11 @@ main = runTest do
         ]
 
       shouldFail "2.3m->"
+      shouldFail "-> km"
+      shouldFail "2.3m →"
+      shouldFail "2.3m to"
+      shouldFail "to km"
+      shouldFail "to"
 
     test "Complex units" do
       allParseAs (Expression (BinOp ConvertTo (BinOp Mul (scalar 36.0) (BinOp Div (Unit (kilo meter)) (Unit hour))) (Unit (mile ./ hour))))
@@ -516,6 +525,7 @@ main = runTest do
       shouldParseAs (Expression (Variable "_prefixed")) "_prefixed"
       shouldParseAs (Expression (Variable "x'")) "x'"
       shouldParseAs (Expression (Variable "t''")) "t''"
+      shouldParseAs (Expression (Variable "to_")) "to_"
 
       shouldFail "xs,as"
       shouldFail "hello$"

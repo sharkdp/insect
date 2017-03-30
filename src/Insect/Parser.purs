@@ -70,9 +70,9 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: identStart
   , identLetter: identLetter
-  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '=']
+  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '→', '=']
   , opLetter: oneOf ['>', '*']
-  , reservedNames: commands <> ["²", "³"]
+  , reservedNames: commands <> ["²", "³", "to"]
   , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "**",
                       "="]
   , caseSensitive: true
@@ -386,7 +386,7 @@ expression =
                            <|> reservedOp "×"
     subOp = reservedOp "-"
     addOp = reservedOp "+"
-    arrOp = reservedOp "->"
+    arrOp = reservedOp "->" <|> reservedOp "→" <|> reserved "to"
 
     square q = BinOp Pow q (Scalar $ fromNumber 2.0)
     cube q = BinOp Pow q (Scalar $ fromNumber 3.0)
