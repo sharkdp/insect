@@ -740,3 +740,7 @@ main = runTest do
 
     test "Unicode" do
       expectOutput' "6.62607e-34J·s" "2π×ℏ"
+
+      let env1 = initialEnvironment
+          env2 = (repl fmtPlain env1 "λ = 2 × 300µm").newEnv
+      expectOutput env2 "499.654GHz" "ν = c/λ → GHz"

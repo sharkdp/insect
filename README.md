@@ -59,6 +59,12 @@ Features
 
   **Note:** You can use `ans` (answer) to refer the result of the last calculation.
 
+- Unicode support:
+  ```
+  λ = 2 × 300µm
+  ν = c/λ → GHz
+  ```
+
 - Commands:
   ```
   help, ?
