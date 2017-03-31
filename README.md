@@ -10,7 +10,7 @@ A REPL-style scientific calculator with full support for physical units.
 
 Documentation
 -------------
-- Evaluation of mathematical expressions:
+- **Evaluate mathematical expressions**:
   ```
   1920/16*9
   2^32
@@ -28,9 +28,9 @@ Documentation
   40kg * 9.8m/s² * 150cm
   sin(30°)
   ```
-  * **Supported units**: `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `gallon`, `gal`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
+  * **Supported units**: see *Reference* section below.
 
-  * **Automatic simplification**: `15km/h * 30min = 7.5km`.
+  * **Implicit conversions**: `15km/h * 30min` evaluates to `7.5km`.
 
   * **Useful error messages**:
     ```
@@ -41,7 +41,7 @@ Documentation
               with unit W (base units: kg·m²·s⁻³)
     ```
 
-- **Explicit unit conversions** with the `->` operator (alias: `to`):
+- **Explicit unit conversions**: the conversion operator `->` (aliases: `→`, `to`):
   ```
   60mph -> m/s
   500km/day -> km/h
@@ -69,7 +69,7 @@ Documentation
   bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
   (`k_B`), gravitational acceleration (`g0`), ...
 
-  * **Last result**: you can use `ans` (answer) to refer the result of the last calculation.
+  * **Last result**: you can use `ans` (answer) to refer to the result of the last calculation.
 
 - **Unicode support**:
   ```
@@ -83,15 +83,15 @@ Reference
 ---------
 - Operations
 
-  | Operator       | Syntax        |
-  | -------------- | ------------- |
-  | addition       | `+`           |
-  | subtraction    | `-`           |
-  | multiplication | `*`, `·`, `×` |
-  | division       | `/`, `÷`      |
-  | exponentiation | `^`, `**`     |
-  | conversion     | `->`, `→`     |
-  | assignment     | `=`           |
+  | Operator       | Syntax          |
+  | -------------- | --------------- |
+  | addition       | `+`             |
+  | subtraction    | `-`             |
+  | multiplication | `*`, `·`, `×`   |
+  | division       | `/`, `÷`        |
+  | exponentiation | `^`, `**`       |
+  | conversion     | `->`, `→`, `to` |
+  | assignment     | `=`             |
 
 - Commands
 
@@ -102,6 +102,10 @@ Reference
   | reset environment | `reset`            |
   | clear screen      | `clear`, `cls`     |
   | exit (CLI)        | `exit`, `quit`     |
+
+- Units
+
+  `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `gallon`, `gal`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
 
 Install
 -------
