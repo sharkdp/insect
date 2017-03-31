@@ -20,9 +20,9 @@ Documentation
   * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`,
   `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`, `round`, `sin`,
   `sinh`, `sqrt`, `tan`, `tanh`.
-  * **Arbirary-precision numeric type** that can handle *very* large (or small) exponents like *10^(10^10)*.
+  * **Arbitrary-precision numeric type** that can handle *very* large (or small) exponents like *10^(10^10)*.
 
-- **Phyical units**: parsing and handling, including metric prefixes:
+- **Physical units**: parsing and handling, including metric prefixes:
   ```
   2min + 30s
   40kg * 9.8m/s² * 150cm
@@ -52,7 +52,7 @@ Documentation
   6Mbit/s * 1.5h -> GB
   ```
 
-- **Variable assigments**:
+- **Variable assignments**:
   ```
   r = 6000km
   vol = 4/3 * pi * r³
@@ -64,9 +64,9 @@ Documentation
   2pi*sqrt(len/g0) -> ms
   ```
   * **Predefined constants** (type `list` to see them all): speed of light (`c`),
-  Plancks constant (`hbar`), electron mass (`electronMass`), elementary charge
+  Planck's constant (`hbar`), electron mass (`electronMass`), elementary charge
   (`elementaryCharge`), magnetic constant (`µ0`), electric constant (`eps0`),
-  bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
+  Bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
   (`k_B`), gravitational acceleration (`g0`), ...
 
   * **Last result**: you can use `ans` (answer) to refer to the result of the last calculation.
