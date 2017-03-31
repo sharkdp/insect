@@ -8,38 +8,51 @@ A REPL-style scientific calculator with full support for physical units.
 * [**Web version**](https://shark.fish/insect/)
 * [Terminal version](#install)
 
-Features
---------
+Documentation
+-------------
 - Evaluation of mathematical expressions:
   ```
   1920/16*9
   2^32
   sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
   ```
-  Supported functions: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`,
+  * **Operators**: addition (`+`), subtraction (`-`), multiplication (`*`, `·`, `×`), division (`/`, `÷`), exponentiation (`^`, `**`)
+  * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`,
   `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`, `round`, `sin`,
   `sinh`, `sqrt`, `tan`, `tanh`.
+  * **Arbirary-precision numeric type** that can handle *very* large (or small) exponents like *10^(10^10)*.
 
-- Parsing and handling of physical units:
+- **Phyical units**: parsing and handling, including metric prefixes:
   ```
   2min + 30s
   40kg * 9.8m/s² * 150cm
   sin(30°)
   ```
-  Supported units: `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
+  * **Supported units**: `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `gallon`, `gal`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
 
-- Explicit unit conversions with the `->` operator (alias: `to`):
+  * **Automatic simplification**: `15km/h * 30min = 7.5km`.
+
+  * **Useful error messages**:
+    ```
+    > 2 watts + 4 newton meter
+
+    Unification error:
+      Cannot unify unit N·m (base units: kg·m²·s⁻²)
+              with unit W (base units: kg·m²·s⁻³)
+    ```
+
+- **Explicit unit conversions** with the `->` operator (alias: `to`):
   ```
   60mph -> m/s
   500km/day -> km/h
   1mrad -> °
   52weeks -> days
   5in + 2ft -> cm
-  atan(30cm / 2m) -> °
+  atan(30cm / 2m) -> degree
   6Mbit/s * 1.5h -> GB
   ```
 
-- Variable assigments:
+- **Variable assigments**:
   ```
   r = 6000km
   vol = 4/3 * pi * r³
@@ -50,29 +63,45 @@ Features
   len = 20cm
   2pi*sqrt(len/g0) -> ms
   ```
-  Predefined constants (type `list` to see them all): speed of light (`c`),
+  * **Predefined constants** (type `list` to see them all): speed of light (`c`),
   Plancks constant (`hbar`), electron mass (`electronMass`), elementary charge
   (`elementaryCharge`), magnetic constant (`µ0`), electric constant (`eps0`),
   bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
   (`k_B`), gravitational acceleration (`g0`), ...
 
+  * **Last result**: you can use `ans` (answer) to refer the result of the last calculation.
 
-  **Note:** You can use `ans` (answer) to refer the result of the last calculation.
-
-- Unicode support:
+- **Unicode support**:
   ```
   λ = 2 × 300µm
   ν = c/λ → GHz
   ```
 
-- Commands:
-  ```
-  help, ?
-  list, ls
-  reset
-  clear, cls
-  quit, exit
-  ```
+- **And more**: tab completion, pretty printing, syntax highlighting, ...
+
+Reference
+---------
+- Operations
+
+  | Operator       | Syntax        |
+  | -------------- | ------------- |
+  | addition       | `+`           |
+  | subtraction    | `-`           |
+  | multiplication | `*`, `·`, `×` |
+  | division       | `/`, `÷`      |
+  | exponentiation | `^`, `**`     |
+  | conversion     | `->`, `→`     |
+  | assignment     | `=`           |
+
+- Commands
+
+  | Command           | Syntax             |
+  | ----------------- | ------------------ |
+  | help text         | `help`, `?`        |
+  | list of variables | `list`, `ls`, `ll` |
+  | reset environment | `reset`            |
+  | clear screen      | `clear`, `cls`     |
+  | exit (CLI)        | `exit`, `quit`     |
 
 Install
 -------
