@@ -17,10 +17,14 @@ Documentation
   sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
   ```
   * **Operators**: addition (`+`), subtraction (`-`), multiplication (`*`, `·`, `×`), division (`/`, `÷`), exponentiation (`^`, `**`)
+  
   * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`,
   `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`, `round`, `sin`,
   `sinh`, `sqrt`, `tan`, `tanh`.
+  
   * **Arbitrary-precision numeric type** that can handle *very* large (or small) exponents like *10^(10^10)*.
+  
+  * **Exponential notation**: `6.022e-23`.
 
 - **Physical units**: parsing and handling, including metric prefixes:
   ```
@@ -77,7 +81,7 @@ Documentation
   ν = c/λ → GHz
   ```
 
-- **And more**: tab completion, pretty printing, syntax highlighting, ...
+- **And more**: tab completion, command history (arrow keys, `Ctrl`+`R`), pretty printing, syntax highlighting, ...
 
 Reference
 ---------
