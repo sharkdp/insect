@@ -16,14 +16,17 @@ Documentation
   2^32
   sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
   ```
-  * **Operators**: addition (`+`), subtraction (`-`), multiplication (`*`, `·`, `×`), division (`/`, `÷`), exponentiation (`^`, `**`)
-  
-  * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`,
-  `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`, `round`, `sin`,
-  `sinh`, `sqrt`, `tan`, `tanh`.
-  
-  * **Arbitrary-precision numeric type** that can handle *very* large (or small) exponents like *10^(10^10)*.
-  
+  * **Operators**: addition (`+`), subtraction (`-`),
+    multiplication (`*`, `·`, `×`), division (`/`, `÷`),
+    exponentiation (`^`, `**`). Full list: see *Reference* below.
+
+  * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`,
+    `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`,
+    `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`.
+
+  * **Arbitrary-precision numeric type** that can handle *very* large (or
+    small) exponents like *10^(10^10)*.
+
   * **Exponential notation**: `6.022e-23`.
 
 - **Physical units**: parsing and handling, including metric prefixes:
@@ -45,7 +48,7 @@ Documentation
               with unit W (base units: kg·m²·s⁻³)
     ```
 
-- **Explicit unit conversions**: the conversion operator `->` (aliases: `→`, `to`):
+- **Explicit unit conversions**: the `->` conversion operator (aliases: `→`, `to`):
   ```
   60mph -> m/s
   500km/day -> km/h
@@ -73,7 +76,8 @@ Documentation
   Bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
   (`k_B`), gravitational acceleration (`g0`), ...
 
-  * **Last result**: you can use `ans` (answer) to refer to the result of the last calculation.
+  * **Last result**: you can use `ans` (answer) to refer to the result of the
+    last calculation.
 
 - **Unicode support**:
   ```
@@ -85,19 +89,19 @@ Documentation
 
 Reference
 ---------
-- Operations
+- Operators (ordered by precedence: high to low)
 
-  | Operator       | Syntax          |
-  | -------------- | --------------- |
-  | addition       | `+`             |
-  | subtraction    | `-`             |
-  | multiplication | `*`, `·`, `×`   |
-  | division       | `/`, `÷`        |
-  | exponentiation | `^`, `**`       |
-  | square         | `²`             |
-  | cube           | `³`             |
-  | conversion     | `->`, `→`, `to` |
-  | assignment     | `=`             |
+  | Operator                  | Syntax          |
+  | ------------------------- | --------------- |
+  | square/cube               | `²`/`³`         |
+  | exponentiation            | `^`, `**`       |
+  | multiplication (implicit) | *whitespace*    |
+  | division                  | `/`, `÷`        |
+  | multiplication (explicit) | `*`, `·`, `×`   |
+  | subtraction               | `-`             |
+  | addition                  | `+`             |
+  | unit conversion           | `->`, `→`, `to` |
+  | assignment                | `=`             |
 
 - Commands
 
@@ -109,7 +113,7 @@ Reference
   | clear screen      | `clear`, `cls`     |
   | quit (CLI)        | `quit`, `exit`     |
 
-- Units
+- Units (remember that you can use tab completion):
 
   `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `gallon`, `gal`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
 
