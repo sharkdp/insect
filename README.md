@@ -94,6 +94,8 @@ Reference
   | multiplication | `*`, `·`, `×`   |
   | division       | `/`, `÷`        |
   | exponentiation | `^`, `**`       |
+  | square         | `²`             |
+  | cube           | `³`             |
   | conversion     | `->`, `→`, `to` |
   | assignment     | `=`             |
 
@@ -105,7 +107,7 @@ Reference
   | list of variables | `list`, `ls`, `ll` |
   | reset environment | `reset`            |
   | clear screen      | `clear`, `cls`     |
-  | exit (CLI)        | `exit`, `quit`     |
+  | quit (CLI)        | `quit`, `exit`     |
 
 - Units
 
