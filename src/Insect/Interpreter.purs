@@ -23,7 +23,7 @@ import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
                    convertTo, prettyPrint', fullSimplify, derivedUnit, acos,
                    asin, atan, sin, cos, tan, exp, ln, sinh, cosh, tanh, asinh,
                    acosh, atanh, ceil, floor, log10, round, isFinite,
-                   toStandardUnit, unity, toString)
+                   toStandardUnit, unity, toString, baseRepresentation)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
                         Statement(..))
@@ -132,11 +132,15 @@ unificationErrorMessage (UnificationError u1 u2) =
       , F.text " to a ", F.unit "scalar"
       ]
     baseRep u =
-      let u' = fst (toStandardUnit u)
-      in
-        if u' == unity
-          then []
-          else [F.text " (base units: ", F.unit (toString u'), F.text ")"]
+      if fst (toStandardUnit u) == unity
+        then []
+        else F.text " (base units: " : usStrs <> [ F.text ")" ]
+      where
+        us = baseRepresentation u
+        us' = sortBy (comparing toString) us
+        usStrs = intercalate [ F.text "·" ] $
+                   map (singleton <<< F.unit <<< toString) us'
+
 
 -- | Get the error message for an evaluation error.
 evalErrorMessage ∷ EvalError → Markup

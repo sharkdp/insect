@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "purescript-prelude": "^2.4.0",
-    "purescript-quantities": "^4.0.1",
+    "purescript-quantities": "^4.1.0",
     "purescript-parsing": "^3.2.1",
     "purescript-maps": "^2.1.2",
     "jquery.terminal": "=1.0.15",
