@@ -237,11 +237,11 @@ imperialUnitDict = Dictionary
   , foot ==> ["feet", "foot", "ft"]
   , ounce ==> ["ounces", "ounce", "oz"]
   , pound ==> ["pounds", "pound", "lb"]
-  , gallon ==> ["gallon", "gal"]
-  , pint ==> ["pint"]
-  , cup ==> ["cup"]
-  , tablespoon ==> ["tablespoon", "tbsp"]
-  , teaspoon ==> ["teaspoon", "tsp"]
+  , gallon ==> ["gallons", "gallon", "gal"]
+  , pint ==> ["pints", "pint"]
+  , cup ==> ["cups", "cup"]
+  , tablespoon ==> ["tablespoons", "tablespoon", "tbsp"]
+  , teaspoon ==> ["teaspoons", "teaspoon", "tsp"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
