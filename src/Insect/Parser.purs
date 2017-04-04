@@ -16,14 +16,15 @@ import Prelude hiding (degree)
 import Control.Alt ((<|>))
 import Control.Lazy (fix)
 
-import Quantities (DerivedUnit, atto, bit, byte, centi, day, deci, degree, exa,
-                   femto, foot, giga, gram, gallon, hecto, hertz, hour, inch, joule,
-                   kilo, mega, meter, micro, mile, milli, minute, nano,
-                   newton, ounce, peta, pico, pound, radian, second, tera,
-                   watt, week, yard, (./), pascal, coulomb, volt, farad, ohm,
-                   siemens, weber, tesla, henry, lumen, lux, becquerel, gray,
-                   sievert, katal, hectare, liter, tonne, electronvolt, ampere,
-                   mole, kelvin, candela, month, year)
+import Quantities (DerivedUnit, atto, bit, byte, centi, cup, day, deci, degree,
+                   exa, femto, foot, giga, gram, gallon, hecto, hertz, hour,
+                   inch, joule, kilo, mega, meter, micro, mile, milli, minute,
+                   nano, newton, ounce, peta, pico, pint, pound, radian, second,
+                   tera, watt, week, yard, (./), pascal, coulomb, volt, farad,
+                   ohm, siemens, weber, tesla, henry, lumen, lux, becquerel,
+                   gray, sievert, katal, hectare, liter, tablespoon, teaspoon,
+                   tonne, electronvolt, ampere, mole, kelvin, candela, month,
+                   year)
 
 import Data.Array (some, fromFoldable)
 import Data.Either (Either(..))
@@ -237,6 +238,10 @@ imperialUnitDict = Dictionary
   , ounce ==> ["ounces", "ounce", "oz"]
   , pound ==> ["pounds", "pound", "lb"]
   , gallon ==> ["gallon", "gal"]
+  , pint ==> ["pint"]
+  , cup ==> ["cup"]
+  , tablespoon ==> ["tablespoon", "tbsp"]
+  , teaspoon ==> ["teaspoon", "tsp"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
