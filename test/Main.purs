@@ -619,7 +619,7 @@ main = runTest do
       prettyPrintCheck "2^3^4^5"
       prettyPrintCheck "(2^3)^(4^5)"
       prettyPrintCheck "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
-      prettyPrintCheck "40kg * 9.8m/s² * 150cm"
+      prettyPrintCheck "40kg * 9.8m/s^2 * 150cm"
       prettyPrintCheck "4/3 * pi * r³"
       prettyPrintCheck "vol * density -> kg"
       prettyPrintCheck "atan(30cm / 2m)"
@@ -714,7 +714,7 @@ main = runTest do
       expectOutput' "2.5min" "2min + 30s"
       expectOutput' "150s" "2min + 30s -> sec"
       expectOutput' "904779000000km³" "4/3 * pi * (6000km)³"
-      expectOutput' "588m²·kg/s²" "40kg * 9.8m/s² * 150cm"
+      expectOutput' "588m²·kg/s²" "40kg * 9.8m/s^2 * 150cm"
       expectOutput' "0.5" "sin(30°)"
 
       expectOutput' "26.8224m/s" "60mph -> m/s"
@@ -732,8 +732,8 @@ main = runTest do
     test "Earth mass" do
       let env1 = initialEnvironment
           env2 = (repl fmtPlain env1 "r = 6000km").newEnv
-          env3 = (repl fmtPlain env2 "vol = 4/3 * pi * r³").newEnv
-          env4 = (repl fmtPlain env3 "density = 5g/cm³").newEnv
+          env3 = (repl fmtPlain env2 "vol = 4/3 * pi * r^3").newEnv
+          env4 = (repl fmtPlain env3 "density = 5g/cm^3").newEnv
 
       expectOutput env4 "4.52389e+24kg" "vol * density -> kg"
 

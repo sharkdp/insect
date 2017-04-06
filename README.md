@@ -31,7 +31,7 @@ Documentation
 - **Physical units**: parsing and handling, including metric prefixes:
   ```
   2min + 30s
-  40kg * 9.8m/s² * 150cm
+  40kg * 9.8m/s^2 * 150cm
   sin(30°)
   ```
   * **Supported units**: see *Reference* section below.
@@ -61,8 +61,8 @@ Documentation
 - **Variable assignments**:
   ```
   r = 6000km
-  vol = 4/3 * pi * r³
-  density = 5g/cm³
+  vol = 4/3 * pi * r^3
+  density = 5g/cm^3
   vol * density -> kg
   ```
   ```
