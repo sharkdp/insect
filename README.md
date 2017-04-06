@@ -132,7 +132,7 @@ npm install
 pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js
 ```
 
-Insect comes with a comprehensive set of [unit tests](tests/Main.purs). You can run them by calling
+Insect comes with a comprehensive set of [unit tests](test/Main.purs). You can run them by calling
 ```
 pulp test
 ```
