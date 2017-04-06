@@ -109,6 +109,12 @@ eval env (BinOp op x y)  = do
     toScalar'' q = wrap (toScalar' q)
     convertTo' source target = wrap (convertTo source (derivedUnit target))
 
+-- | Like `eval`, but calls `fullSimplify` on the result if the user did not
+-- | ask for an explicit conversion.
+evalAndSimplify ∷ Environment → Expression → Expect Quantity
+evalAndSimplify env e@(BinOp ConvertTo _ _) = eval env e
+evalAndSimplify env e = fullSimplify <$> eval env e
+
 -- | Render the error message for a unification error.
 unificationErrorMessage ∷ UnificationError → Markup
 unificationErrorMessage (UnificationError u1 u2) =
@@ -174,7 +180,7 @@ errorWithInput prefix expr env err =
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → Response
 runInsect env (Expression e) =
-  case (fullSimplify <$> eval env e) of
+  case evalAndSimplify env e of
     Left evalErr → errorWithInput [] e env evalErr
     Right value →
       { msg: Message Value $    (F.optional <$> F.text "  " : pretty e)
@@ -183,15 +189,14 @@ runInsect env (Expression e) =
       , newEnv: insert "ans" value env
       }
 runInsect env (Assignment n v) =
-  case eval env v of
+  case evalAndSimplify env v of
     Left evalErr → errorWithInput [ F.ident n, F.text " = " ] v env evalErr
-    Right value' →
-      let value = fullSimplify value'
-      in { msg: Message ValueSet $
-                     (F.optional <$> [ F.text "  ", F.ident n, F.text " = " ])
-                  <> prettyQuantity value
-         , newEnv: insert n value env
-         }
+    Right value →
+      { msg: Message ValueSet $
+                  (F.optional <$> [ F.text "  ", F.ident n, F.text " = " ])
+               <> prettyQuantity value
+      , newEnv: insert n value env
+      }
 runInsect env (Command Help) = { msg: Message Info
   [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl

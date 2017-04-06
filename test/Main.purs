@@ -672,6 +672,11 @@ main = runTest do
       expectOutput' "18" "3²·2"
       expectOutput' "54" "3³*2"
 
+    test "Conversions" do
+      expectOutput' "5.08cm" "2in to cm"
+      expectOutput' "500m·cm" "5m^2 -> m*cm"
+      expectOutput' "500cm·m" "5m^2 -> cm*m"
+
     test "Implicit multiplication" do
       let myEnv = insert "x" (5.0 .* meter) initialEnvironment
       expectOutput myEnv "5m" "x"
