@@ -1,9 +1,8 @@
 insect
 ======
 
+<img src="media/insect-32x32.png" align="right">
 A REPL-style scientific calculator with full support for physical units.
-
-[![insect](media/insect-32x32.png)](https://shark.fish/insect/)
 
 * [**Web version**](https://shark.fish/insect/)
 * [Terminal version](#install)
