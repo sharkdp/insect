@@ -51,7 +51,7 @@ Documentation
   ```
   60mph -> m/s
   500km/day -> km/h
-  1mrad -> °
+  1mrad -> degree
   52weeks -> days
   5in + 2ft -> cm
   atan(30cm / 2m) -> degree
