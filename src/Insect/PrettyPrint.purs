@@ -79,14 +79,19 @@ prettyApply fn x = [ F.function (funcToStr fn)
 parens ∷ Markup → Markup
 parens m = F.text "(" : m <> [ F.text ")" ]
 
--- | Add parenthesis, if needed.
+-- | Add parenthesis, if needed - conservative version for exponentiation.
+withParens' ∷ Expression → Markup
+withParens' u@(Unit _)     = pretty u
+withParens' s@(Scalar _)   = pretty s
+withParens' v@(Variable _) = pretty v
+withParens' a@(Apply _ _)  = pretty a
+withParens' x              = parens (pretty x)
+
+-- | Add parenthesis, if needed - liberal version, can not be used for
+-- | Exponentiation.
 withParens ∷ Expression → Markup
-withParens s@(Scalar _)                      = pretty s
-withParens u@(Unit _)                        = pretty u
-withParens v@(Variable _)                    = pretty v
-withParens a@(Apply _ _)                     = pretty a
 withParens e@(BinOp Mul (Scalar s) (Unit u)) = pretty e
-withParens x                                 = parens (pretty x)
+withParens e = withParens' e
 
 -- | Pretty print an Insect expression.
 pretty ∷ Expression → Markup
@@ -132,4 +137,4 @@ pretty (BinOp Sub x y) = addP x <> prettyOp Sub <> addP y
                 (BinOp Pow _ _) → pretty ex
                 (BinOp Mul _ _) → pretty ex
                 _               → withParens ex
-pretty (BinOp op x y) = withParens x <> prettyOp op <> withParens y
+pretty (BinOp op x y) = withParens' x <> prettyOp op <> withParens' y

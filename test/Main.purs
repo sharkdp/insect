@@ -631,6 +631,10 @@ main = runTest do
       prettyPrintCheck "2d"
       prettyPrintCheck "5t"
       prettyPrintCheck "länge * x_2 * µ * _prefixed"
+      prettyPrintCheck "2m^3"
+      prettyPrintCheck "(2m)^3"
+      prettyPrintCheck "(2m)^(3kg)"
+      prettyPrintCheck "(2m)^(3kg)^((4in)^(5ft))^(6s)"
 
     test "Format" do
       equalPretty "2 + 3" "2+3"
