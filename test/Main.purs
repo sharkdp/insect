@@ -635,6 +635,9 @@ main = runTest do
       prettyPrintCheck "(2m)^3"
       prettyPrintCheck "(2m)^(3kg)"
       prettyPrintCheck "(2m)^(3kg)^((4in)^(5ft))^(6s)"
+      prettyPrintCheck "-sqrt(-30m^3)"
+      prettyPrintCheck "-3^4"
+      prettyPrintCheck "(-3)^4"
 
     test "Format" do
       equalPretty "2 + 3" "2+3"

@@ -98,8 +98,7 @@ pretty ∷ Expression → Markup
 pretty (Scalar n)                      = prettyScalar n
 pretty (Unit u)                        = prettyUnit u
 pretty (Variable name)                 = prettyVariable name
-pretty (Negate (Scalar s))             = F.text "-" : prettyScalar s
-pretty (Negate x)                      = F.text "-(" : pretty x <> [ F.text ")" ]
+pretty (Negate x)                      = F.text "-" : withParens x
 pretty (Apply fn x)                    = prettyApply fn x
 -- ConvertTo (->) never needs parens, it has the lowest precedence:
 pretty (BinOp ConvertTo x y)           = pretty x <> prettyOp ConvertTo <> pretty y
