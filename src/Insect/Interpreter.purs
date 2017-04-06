@@ -134,8 +134,12 @@ unificationErrorMessage (UnificationError u1 u2) =
     baseRep u =
       if fst (toStandardUnit u) == unity
         then []
-        else F.text " (base units: " : usStrs <> [ F.text ")" ]
+        else
+          if toString u == F.format F.fmtPlain usStrs
+            then []
+            else br
       where
+        br = F.text " (base units: " : usStrs <> [ F.text ")" ]
         us = baseRepresentation u
         us' = sortBy (comparing toString) us
         usStrs = intercalate [ F.text "·" ] $
