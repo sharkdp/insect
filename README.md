@@ -116,17 +116,23 @@ Reference
 
   `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `cup`, `cups`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `gallon`, `gallons`, `gal`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pint`, `pints`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `tablespoon`, `tablespoons`, `tbsp`, `teaspoon`, `teaspoons`, `tsp`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `w`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
 
-Install
--------
+Install terminal version
+------------------------
 In addition to the web interface, there is also a command line version which can by installed via [npm](https://www.npmjs.com/package/insect):
 ```sh
 npm install -g insect
 ```
 
-Build
------
-```sh
+Development
+-----------
+Insect is written in PureScript (See [Getting Started](http://www.purescript.org/learn/getting-started/) guide). You can install all dependencies and build the whole project by running:
+```
 bower install
 npm install
 pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js
+```
+
+Insect comes with a comprehensive set of [unit tests](tests/Main.purs). You can run them by calling
+```
+pulp test
 ```
