@@ -15,7 +15,7 @@ import Data.List (sortBy, groupBy)
 import Data.List.NonEmpty (head)
 import Data.Maybe (Maybe(..))
 import Data.String (toLower)
-import Data.StrMap (lookup, insert, toList)
+import Data.StrMap (lookup, insert, toUnfoldable)
 import Data.Tuple (fst, snd)
 
 import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
@@ -219,7 +219,7 @@ runInsect env (Command List) =
   { msg: Message Info list
   , newEnv: env }
   where
-    envTuples = sortBy (comparing (fst <<< prettyPrint' <<< snd)) $ toList env
+    envTuples = sortBy (comparing (fst <<< prettyPrint' <<< snd)) $ toUnfoldable env
     envGrouped = groupBy (\x y → snd x == snd y) envTuples
     envSorted = sortBy (comparing (toLower <<< fst <<< head)) envGrouped
     list = [ F.text "List of variables:", F.nl ] <> foldMap toLine envSorted

@@ -108,7 +108,7 @@ number = do
   let fracPart = fromMaybe "" mFracPart
 
   mExpPart ← optionMaybe $ try do
-    string "e"
+    _ ← string "e"
     notFollowedBy identStart
     sad ← signAndDigits
     pure ("e" <> sad)
@@ -318,9 +318,7 @@ funcName = buildDictParser funcNameDict <?> "function name"
 sepBy1 ∷ ∀ m s a sep. Monad m ⇒ ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
 sepBy1 p sep = do
   a ← p
-  as ← many $ do
-    sep
-    p
+  as ← many $ sep *> p
   pure (a :| as)
 
 -- | Fold a non-empty structure, collecting results using a binary operation.
