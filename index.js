@@ -55,7 +55,6 @@ if (interactive) {
     input: process.stdin,
     output: process.stdout,
     path: path.join(xdgBasedir.config, "insect-history"),
-    prompt: '\x1b[01m>>>\x1b[0m ',
     completer: function(line) {
       var variables = Object.keys(insectEnv);
 
@@ -76,6 +75,12 @@ if (interactive) {
       return [keywords, lastWord];
     },
     next: function(rl) {
+      var prompt = '\x1b[01m>>>\x1b[0m ';
+
+      // The visual length of the prompt (4) needs to be set explicitly for
+      // older versions of node:
+      rl.setPrompt(prompt, 4);
+
       rl.prompt();
 
       rl.on('line', function(line) {
