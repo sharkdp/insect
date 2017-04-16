@@ -1,6 +1,6 @@
 {
   "name": "insect",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "REPL-style scientific calculator with full support for physical units",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
@@ -26,6 +26,6 @@
     "decimal.js": "^7.1.1",
     "historic-readline": "^1.0.8",
     "line-reader": "^0.4.0",
-    "xdg-basedir": "^3.0.0"
+    "xdg-basedir": "^2.0.0"
   }
 }
