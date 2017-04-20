@@ -17,7 +17,7 @@ Documentation
   ```
   * **Operators**: addition (`+`), subtraction (`-`),
     multiplication (`*`, `·`, `×`), division (`/`, `÷`),
-    exponentiation (`^`, `**`). Full list: see *Reference* below.
+    exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
   * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`,
     `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`,
@@ -34,7 +34,7 @@ Documentation
   40kg * 9.8m/s^2 * 150cm
   sin(30°)
   ```
-  * **Supported units**: see *Reference* section below.
+  * **Supported units**: see [*Reference*](#reference) section below.
 
   * **Implicit conversions**: `15km/h * 30min` evaluates to `7.5km`.
 
