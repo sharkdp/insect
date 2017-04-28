@@ -216,7 +216,7 @@ normalUnitDict = Dictionary
   , minute ==> ["minutes", "minute", "min"]
   , hour ==> ["hours", "hour", "h"]
   , day ==> ["days", "day"]
-  , week ==> ["weeks", "week", "w"]
+  , week ==> ["weeks", "week"]
   , month ==> ["months", "month"]
   , year ==> ["years", "year"]
   , gram ==> ["grams", "gram", "g"]
