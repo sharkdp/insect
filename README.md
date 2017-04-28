@@ -101,6 +101,8 @@ Reference
   | addition                  | `+`             |
   | unit conversion           | `->`, `→`, `to` |
   | assignment                | `=`             |
+  
+  Note that *implicit* multiplication has a higher precedence than division, i.e. `50cm/2m` will be parsed as `50cm/(2m)`.
 
 - Commands
 
