@@ -26,7 +26,7 @@ Documentation
   * **Arbitrary-precision numeric type** that can handle *very* large (or
     small) exponents like *10^(10^10)*.
 
-  * **Exponential notation**: `6.022e-23`.
+  * **Exponential notation**: `6.022e23`.
 
 - **Physical units**: parsing and handling, including metric prefixes:
   ```
