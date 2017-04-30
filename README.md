@@ -1,7 +1,7 @@
 insect
 ======
 
-A REPL-style scientific calculator with full support for physical units.
+A high precision scientific calculator with full support for physical units.
 <img src="media/insect-32x32.png" align="right">
 
 * [**Web version**](https://insect.sh/)
@@ -127,7 +127,7 @@ npm install -g insect
 
 Development
 -----------
-Insect is written in PureScript (See [Getting Started](http://www.purescript.org/learn/getting-started/) guide). You can install all dependencies and build the whole project by running:
+Insect is written in PureScript (see [Getting Started](http://www.purescript.org/learn/getting-started/) guide). You can install all dependencies and build the whole project by running:
 ```
 bower install
 npm install
