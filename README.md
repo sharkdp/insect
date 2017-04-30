@@ -125,6 +125,11 @@ In addition to the web interface, there is also a command line version which can
 npm install -g insect
 ```
 
+For Arch Linux, there is a [package on AUR](https://aur.archlinux.org/packages/insect/):
+```sh
+yaourt -S insect
+```
+
 Development
 -----------
 Insect is written in PureScript (see [Getting Started](http://www.purescript.org/learn/getting-started/) guide). You can install all dependencies and build the whole project by running:
