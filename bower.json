@@ -4,7 +4,7 @@
   "authors": [
     "David Peter <mail@david-peter.de>"
   ],
-  "description": "Interactive scientific calculator",
+  "description": "High precision scientific calculator with support for physical units",
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -13,8 +13,8 @@
     "output"
   ],
   "dependencies": {
-    "purescript-quantities": "^5.0.2",
-    "purescript-parsing": "^4.0.0",
+    "purescript-quantities": "^5.0.3",
+    "purescript-parsing": "^4.2.0",
     "purescript-maps": "^3.0.0",
     "jquery.terminal": "=1.1.2",
     "keyboardevent-key-polyfill": "=1.1.0"
