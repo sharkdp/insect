@@ -13,7 +13,7 @@
     "output"
   ],
   "dependencies": {
-    "purescript-quantities": "^5.0.3",
+    "purescript-quantities": "^5.1.0",
     "purescript-parsing": "^4.2.0",
     "purescript-maps": "^3.0.0",
     "jquery.terminal": "=1.1.2",

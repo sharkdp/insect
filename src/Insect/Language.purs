@@ -30,6 +30,7 @@ data Func
   | Cosh
   | Exp
   | Floor
+  | Gamma
   | Ln
   | Log10
   | Round

@@ -20,8 +20,8 @@ Documentation
     exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
   * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`,
-    `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `ln`, `log`, `log10`,
-    `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`.
+    `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `gamma`, `ln`, `log`,
+    `log10`, `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`.
 
   * **Arbitrary-precision numeric type** that can handle *very* large (or
     small) exponents like *10^(10^10)*.

@@ -294,6 +294,7 @@ funcNameDict = Dictionary
   , Cos ==> ["cos"]
   , Exp ==> ["exp"]
   , Floor ==> ["floor"]
+  , Gamma ==> ["gamma"]
   , Log10 ==> ["log10"]
   , Ln ==> ["log", "ln"]
   , Round ==> ["round"]

@@ -66,6 +66,7 @@ prettyApply fn x = [ F.function (funcToStr fn)
     funcToStr Cos   = "cos"
     funcToStr Exp   = "exp"
     funcToStr Floor = "floor"
+    funcToStr Gamma = "gamma"
     funcToStr Log10 = "log10"
     funcToStr Ln    = "ln"
     funcToStr Round = "round"

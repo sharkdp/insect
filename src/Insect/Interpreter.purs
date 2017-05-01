@@ -22,7 +22,7 @@ import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
                    convertTo, prettyPrint', fullSimplify, derivedUnit, acos,
                    asin, atan, sin, cos, tan, exp, ln, sinh, cosh, tanh, asinh,
-                   acosh, atanh, ceil, floor, log10, round, isFinite,
+                   acosh, atanh, ceil, floor, gamma, log10, round, isFinite,
                    toStandardUnit, unity, toString, baseRepresentation)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
@@ -69,6 +69,7 @@ applyFunction fn q = lmap QUnificationError $ (run fn) q
     run Cosh  = cosh
     run Exp   = exp
     run Floor = floor
+    run Gamma = gamma
     run Ln    = ln
     run Log10 = log10
     run Round = round
