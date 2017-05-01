@@ -23,7 +23,8 @@ import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
                    convertTo, prettyPrint', fullSimplify, derivedUnit, acos,
                    asin, atan, sin, cos, tan, exp, ln, sinh, cosh, tanh, asinh,
                    acosh, atanh, ceil, floor, gamma, log10, round, isFinite,
-                   toStandardUnit, unity, toString, baseRepresentation)
+                   toStandardUnit, unity, toString, baseRepresentation,
+                   factorial)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
                         Statement(..))
@@ -87,6 +88,7 @@ eval env (Variable name) =
   case lookup name env of
     Just q → pure q
     Nothing → Left (LookupError name)
+eval env (Factorial x)   = eval env x >>= factorial >>> lmap QUnificationError
 eval env (Negate x)      = qNegate <$> eval env x
 eval env (Apply fn x)    = eval env x >>= applyFunction fn >>= checkFinite
 eval env (BinOp op x y)  = do

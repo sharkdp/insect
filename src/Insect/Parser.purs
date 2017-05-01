@@ -71,11 +71,11 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: identStart
   , identLetter: identLetter
-  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '→', '=']
+  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '!', '→', '=']
   , opLetter: oneOf ['>', '*']
   , reservedNames: commands <> ["²", "³", "to"]
-  , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "**",
-                      "="]
+  , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "!",
+                      "**", "="]
   , caseSensitive: true
 }
 
@@ -343,13 +343,21 @@ expression =
           <|> variable
           )
 
+      suffixFac ∷ P Expression
+      suffixFac = do
+        a ← atomic
+        mf ← optionMaybe (facOp *> pure Factorial)
+        case mf of
+          Just f → pure $ f a
+          Nothing → pure a
+
       suffixPow ∷ P Expression
       suffixPow = do
-        a ← atomic
+        x ← suffixFac
         mFn ← optionMaybe ((sqrOp *> pure square) <|> (cubOp *> pure cube))
         case mFn of
-          Just fn → pure $ fn a
-          Nothing → pure a
+          Just fn → pure $ fn x
+          Nothing → pure x
 
       sepByPow ∷ P Expression
       sepByPow = foldr1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
@@ -381,6 +389,7 @@ expression =
 
   where
 
+    facOp = reservedOp "!"
     powOp = reservedOp "^" <|> reservedOp "**"
     -- these two need to be parsed as keywords in order to allow for other
     -- operators to follow (e.g. 3²*2)

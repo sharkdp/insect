@@ -99,6 +99,7 @@ pretty ∷ Expression → Markup
 pretty (Scalar n)                      = prettyScalar n
 pretty (Unit u)                        = prettyUnit u
 pretty (Variable name)                 = prettyVariable name
+pretty (Factorial x)                   = withParens x <> [F.text "!"]
 pretty (Negate x)                      = F.text "-" : withParens x
 pretty (Apply fn x)                    = prettyApply fn x
 -- ConvertTo (->) never needs parens, it has the lowest precedence:

@@ -300,6 +300,26 @@ main = runTest do
         ]
 
   suite "Parser - Operators" do
+    test "Factorial" do
+      allParseAs (Expression (Factorial (scalar 4.0))) $
+        [ "4!"
+        , "4.0!"
+        , "4 !"
+        , " 4 ! "
+        , "(4)!"
+        ]
+
+      allParseAs (Expression (BinOp Pow (Factorial (scalar 5.0)) (scalar 3.0))) $
+        [ "5!^3"
+        , "5!³"
+        , "(5!)^3"
+        ]
+
+      allParseAs (Expression (Negate (Factorial (scalar 5.0)))) $
+        [ "-5!"
+        , "-(5!)"
+        ]
+
     test "Exponentiation" do
       allParseAs (Expression (BinOp Pow (scalar 5.0) (scalar 3.0))) $
         [ "5^3"
@@ -638,6 +658,10 @@ main = runTest do
       prettyPrintCheck "-sqrt(-30m^3)"
       prettyPrintCheck "-3^4"
       prettyPrintCheck "(-3)^4"
+      prettyPrintCheck "5!³"
+      prettyPrintCheck "2^3!"
+      prettyPrintCheck "-3!"
+      prettyPrintCheck "(-3)!"
 
     test "Format" do
       equalPretty "2 + 3" "2+3"

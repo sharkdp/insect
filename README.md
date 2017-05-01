@@ -92,6 +92,7 @@ Reference
 
   | Operator                  | Syntax          |
   | ------------------------- | --------------- |
+  | factorial                 | `!`             |
   | square/cube               | `²`/`³`         |
   | exponentiation            | `^`, `**`       |
   | multiplication (implicit) | *whitespace*    |

@@ -62,6 +62,7 @@ data Expression
  = Scalar Decimal
  | Unit DerivedUnit
  | Variable Identifier
+ | Factorial Expression
  | Negate Expression
  | Apply Func Expression
  | BinOp BinOp Expression Expression
@@ -71,6 +72,7 @@ instance showExpression ∷ Show Expression where
   show (Scalar n)     = "(Scalar " <> show n <> ")"
   show (Unit u)       = "(Unit " <> show u <> ")"
   show (Variable n)   = "(Variable " <> show n <> ")"
+  show (Factorial x)  = "(Factorial " <> show x <> ")"
   show (Negate x)     = "(Negate " <> show x <> ")"
   show (Apply fn x)   = "(Apply " <> show fn <> " " <> show x <> ")"
   show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
