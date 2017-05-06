@@ -154,23 +154,28 @@ buildDictParser (Dictionary dict) = F.oneOf $ entryParser <$> dict
 
 siPrefixDict ∷ Dictionary (DerivedUnit → DerivedUnit)
 siPrefixDict = Dictionary
-  [ atto ==> ["a"]
-  , femto ==> ["f"]
-  , pico ==> ["p"]
-  , nano ==> ["n"]
-  , micro ==> [ "µ" -- Micro sign U+00B5
+  [ atto ==> ["atto", "a"]
+  , femto ==> ["femto", "f"]
+  -- peta and mega have to be up here (before pico and milli) in order for the
+  -- prefixes ('p' and 'm') not to be parsed as 'pico' or 'milli'.
+  , peta ==> ["peta"]
+  , mega ==> ["mega"]
+  , pico ==> ["pico", "p"]
+  , nano ==> ["nano", "n"]
+  , micro ==> [ "micro"
+              , "µ" -- Micro sign U+00B5
               , "μ" -- Greek small letter mu U+039C
               ]
-  , milli ==> ["m"]
-  , centi ==> ["c"]
-  , deci ==> ["d"]
-  , hecto ==> ["h"]
-  , kilo ==> ["k"]
+  , milli ==> ["milli", "m"]
+  , centi ==> ["centi", "c"]
+  , deci ==> ["deci", "d"]
+  , hecto ==> ["hecto", "h"]
+  , kilo ==> ["kilo", "k"]
   , mega ==> ["M"]
-  , giga ==> ["G"]
-  , tera ==> ["T"]
+  , giga ==> ["giga", "G"]
+  , tera ==> ["tera", "T"]
   , peta ==> ["P"]
-  , exa ==> ["E"]
+  , exa ==> ["exa", "E"]
   ]
 
 -- | Parse a SI prefix like `µ` or `G`.
