@@ -14,7 +14,7 @@ Documentation
   sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
   ```
   * **Operators**: addition (`+`), subtraction (`-`),
-    multiplication (`*`, `·`, `×`), division (`/`, `÷`),
+    multiplication (`*`, `·`, `×`), division (`/`, `÷`, `per`),
     exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
   * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`,
@@ -94,7 +94,7 @@ Reference
   | square/cube               | `²`/`³`         |
   | exponentiation            | `^`, `**`       |
   | multiplication (implicit) | *whitespace*    |
-  | division                  | `/`, `÷`        |
+  | division                  | `/`, `÷`, `per` |
   | multiplication (explicit) | `*`, `·`, `×`   |
   | subtraction               | `-`             |
   | addition                  | `+`             |

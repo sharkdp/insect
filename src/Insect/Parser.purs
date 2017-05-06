@@ -73,7 +73,7 @@ insectLanguage = LanguageDef
   , identLetter: identLetter
   , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '!', '→', '=']
   , opLetter: oneOf ['>', '*']
-  , reservedNames: commands <> ["²", "³", "to"]
+  , reservedNames: commands <> ["²", "³", "to", "per"]
   , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "!",
                       "**", "="]
   , caseSensitive: true
@@ -400,7 +400,7 @@ expression =
     -- operators to follow (e.g. 3²*2)
     sqrOp = reserved "²"
     cubOp = reserved "³"
-    divOp = reservedOp "/" <|> reservedOp "÷"
+    divOp = reservedOp "/" <|> reservedOp "÷" <|> reserved "per"
     mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "⋅"
                            <|> reservedOp "×"
     subOp = reservedOp "-"

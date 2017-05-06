@@ -297,6 +297,8 @@ main = runTest do
         [ "2.3km/h"
         , "2.30km/h"
         , "2.30km÷h"
+        , "2.30 kilometer per hour"
+        , "2.30km per h"
         ]
 
   suite "Parser - Operators" do
@@ -398,6 +400,7 @@ main = runTest do
     test "Division" do
       allParseAs (Expression (BinOp Div (scalar 5.0) (scalar 3.0))) $
         [ "5/3"
+        , "5 per 3"
         , " 5 / 3 "
         , " ( 5 ) / ( 3 ) "
         , " ( ( 5 ) / ( 3 ) ) "
@@ -405,6 +408,7 @@ main = runTest do
         ]
 
       shouldFail "5/"
+      shouldFail "5 per"
 
     test "Addition" do
       allParseAs (Expression (BinOp Add (scalar 5.0) (scalar 3.0))) $
@@ -463,6 +467,7 @@ main = runTest do
       allParseAs (Expression (BinOp Div (BinOp Div (scalar 42.0) (scalar 7.0)) (scalar 3.0))) $
         [ "42/7/3"
         , "(42/7)/3"
+        , "42 per 7 per 3"
         ]
 
     test "Involving units" do
@@ -485,6 +490,7 @@ main = runTest do
       allParseAs (Expression (BinOp Div (q 3.0 meter) (Unit second))) $
         [ "3m/s"
         , "3 meter / second"
+        , "3 meter per second"
         , "(3m)/s"
         ]
 
