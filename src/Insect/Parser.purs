@@ -213,6 +213,7 @@ normalUnitDict = Dictionary
   , mole ==> ["mole", "mol"]
   , kelvin ==> ["kelvin", "K"]
   , candela ==> ["candela", "cd"]
+  , watt <> hour ==> ["Wh"]
   , watt ==> ["watts", "watt", "W"]
   , byte ==> ["Bytes", "bytes", "Byte", "byte", "B"]
   , bit ==> ["bits", "bit"]
