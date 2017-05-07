@@ -68,7 +68,7 @@ Documentation
   2pi*sqrt(len/g0) -> ms
   ```
   * **Predefined constants** (type `list` to see them all): speed of light (`c`),
-  Planck's constant (`hbar`), electron mass (`electronMass`), elementary charge
+  Planck's constant (`h_bar`), electron mass (`electronMass`), elementary charge
   (`elementaryCharge`), magnetic constant (`µ0`), electric constant (`eps0`),
   Bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
   (`k_B`), gravitational acceleration (`g0`), ...

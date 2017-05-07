@@ -32,7 +32,7 @@ initialEnvironment = fromFoldable
   , Tuple "G"                  gravitationalConstant
   , Tuple "g0"                 g0
   , Tuple "gravity"            g0
-  , Tuple "hbar"               ℏ
+  , Tuple "h_bar"              ℏ
   , Tuple "ℏ"                  ℏ
   , Tuple "k_B"                kB
   , Tuple "magneticConstant"   µ0
