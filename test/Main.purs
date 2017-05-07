@@ -701,6 +701,11 @@ main = runTest do
       expectOutput' "18" "3² 2"
       expectOutput' "18" "3²·2"
       expectOutput' "54" "3³*2"
+      expectOutput' "54" "3³(2)"
+      expectOutput' "9" "(1+2)²"
+      expectOutput' "12.5664" "2²pi"
+      expectOutput' "12.5664" "2² pi"
+      expectOutput' "12.5664" "2²·pi"
 
     test "Conversions" do
       expectOutput' "5.08 cm" "2in to cm"

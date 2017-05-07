@@ -398,8 +398,8 @@ expression =
     powOp = reservedOp "^" <|> reservedOp "**"
     -- these two need to be parsed as keywords in order to allow for other
     -- operators to follow (e.g. 3²*2)
-    sqrOp = reserved "²"
-    cubOp = reserved "³"
+    sqrOp = string "²"
+    cubOp = string "³"
     divOp = reservedOp "/" <|> reservedOp "÷" <|> reserved "per"
     mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "⋅"
                            <|> reservedOp "×"
