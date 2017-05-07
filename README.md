@@ -113,9 +113,71 @@ Reference
   | clear screen      | `clear`, `cls`     |
   | quit (CLI)        | `quit`, `exit`     |
 
-- Units (remember that you can use tab completion):
+- Supported units (remember that you can use tab completion).
+  All SI-accepted units support metric prefixes.
 
-  `A`, `ampere`, `B`, `becquerel`, `bit`, `bits`, `bps`, `Bq`, `byte`, `Byte`, `bytes`, `Bytes`, `C`, `candela`, `cd`, `coulomb`, `cup`, `cups`, `d`, `day`, `days`, `deg`, `degree`, `degrees`, `electronvolt`, `eV`, `F`, `farad`, `feet`, `foot`, `ft`, `gallon`, `gallons`, `gal`, `g`, `gram`, `grams`, `gray`, `Gy`, `H`, `h`, `ha`, `hectare`, `henry`, `hertz`, `hour`, `hours`, `Hz`, `in`, `inch`, `inches`, `J`, `joule`, `joules`, `K`, `kat`, `katal`, `kelvin`, `L`, `lb`, `liter`, `liters`, `lm`, `lumen`, `lux`, `lx`, `m`, `meter`, `meters`, `mile`, `miles`, `min`, `minute`, `minutes`, `mol`, `mole`, `month`, `months`, `mph`, `N`, `newton`, `ohm`, `ounce`, `ounces`, `oz`, `Pa`, `pascal`, `pint`, `pints`, `pound`, `pounds`, `rad`, `radian`, `radians`, `S`, `s`, `sec`, `second`, `seconds`, `siemens`, `sievert`, `Sv`, `T`, `t`, `tesla`, `tablespoon`, `tablespoons`, `tbsp`, `teaspoon`, `teaspoons`, `tsp`, `ton`, `tonne`, `tonnes`, `tons`, `V`, `volt`, `W`, `watt`, `watts`, `Wb`, `weber`, `week`, `weeks`, `yard`, `yards`, `yd`, `year`, `years`, `°`, `Ω`.
+  | Unit | Syntax |
+  | ---- | ------ |
+  | [Ampere](https://en.wikipedia.org/wiki/Ampere) | `amperes`, `ampere`, `A` |
+  | [Ångström](https://en.wikipedia.org/wiki/Ångström) | `angstrom`, `Å` |
+  | [Astronomical unit](https://en.wikipedia.org/wiki/Astronomical_unit) | `AU` |
+  | [Bar](https://en.wikipedia.org/wiki/Bar_(unit)) | `bar` |
+  | [Barn](https://en.wikipedia.org/wiki/Barn_(unit)) | `barn` |
+  | [Becquerel](https://en.wikipedia.org/wiki/Becquerel) | `becquerel`, `Bq` |
+  | [Bel](https://en.wikipedia.org/wiki/Decibel) | `bel` |
+  | [Bits per second](https://en.wikipedia.org/wiki/Data_rate_units) | `bps` |
+  | [Bit](https://en.wikipedia.org/wiki/Bit) | `bits`, `bit` |
+  | [Byte](https://en.wikipedia.org/wiki/Byte) | `Bytes`, `bytes`, `Byte`, `byte`, `B` |
+  | [Candela](https://en.wikipedia.org/wiki/Candela) | `candela`, `cd` |
+  | [Coulomb](https://en.wikipedia.org/wiki/Coulomb) | `coulomb`, `C` |
+  | [Cup](https://en.wikipedia.org/wiki/Cup_(unit)) | `cups`, `cup` |
+  | [Day](https://en.wikipedia.org/wiki/Day) | `days`, `day`, `d` |
+  | [Degree](https://en.wikipedia.org/wiki/Degree_(angle)) | `degrees`, `degree`, `deg`, `°` |
+  | [Electronvolt](https://en.wikipedia.org/wiki/Electronvolt) | `electronvolt`, `eV` |
+  | [Farad](https://en.wikipedia.org/wiki/Farad) | `farad`, `F` |
+  | [Foot](https://en.wikipedia.org/wiki/Foot_(unit)) | `feet`, `foot`, `ft` |
+  | [Gallon](https://en.wikipedia.org/wiki/Gallon) | `gallons`, `gallon`, `gal` |
+  | [Gauss](https://en.wikipedia.org/wiki/Gauss_(unit)) | `gauss` |
+  | [Gram](https://en.wikipedia.org/wiki/Gram) | `grams`, `gram`, `g` |
+  | [Gray](https://en.wikipedia.org/wiki/Gray_(unit)) | `gray`, `Gy` |
+  | [Hectare](https://en.wikipedia.org/wiki/Hectare) | `hectare`, `ha` |
+  | [Henry](https://en.wikipedia.org/wiki/Henry_(unit)) | `henry`, `H` |
+  | [Hertz](https://en.wikipedia.org/wiki/Hertz) | `hertz`, `Hz` |
+  | [Hour](https://en.wikipedia.org/wiki/Hour) | `hours`, `hour`, `h` |
+  | [Inch](https://en.wikipedia.org/wiki/Inch) | `inches`, `inch`, `in` |
+  | [Joule](https://en.wikipedia.org/wiki/Joule) | `joules`, `joule`, `J` |
+  | [Katal](https://en.wikipedia.org/wiki/Katal) | `katal`, `kat` |
+  | [Kelvin](https://en.wikipedia.org/wiki/Kelvin) | `kelvin`, `K` |
+  | [Liter](https://en.wikipedia.org/wiki/Liter) | `liters`, `liter`, `L` |
+  | [Lumen](https://en.wikipedia.org/wiki/Lumen_(unit)) | `lumen`, `lm` |
+  | [Lux](https://en.wikipedia.org/wiki/Lux) | `lux`, `lx` |
+  | [Meter](https://en.wikipedia.org/wiki/Meter) | `meters`, `meter`, `m` |
+  | [Miles per hour](https://en.wikipedia.org/wiki/Miles_per_hour) | `mph` |
+  | [Mile](https://en.wikipedia.org/wiki/Mile) | `miles`, `mile` |
+  | [Minute](https://en.wikipedia.org/wiki/Minute) | `minutes`, `minute`, `min` |
+  | [Mole](https://en.wikipedia.org/wiki/Mole_(unit)) | `mole`, `mol` |
+  | [Month](https://en.wikipedia.org/wiki/Month) | `months`, `month` |
+  | [Newton](https://en.wikipedia.org/wiki/Newton_(unit)) | `newton`, `N` |
+  | [Ohm](https://en.wikipedia.org/wiki/Ohm) | `ohms`, `ohm`, `Ω` |
+  | [Ounce](https://en.wikipedia.org/wiki/Ounce) | `ounces`, `ounce`, `oz` |
+  | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit)) | `pascal`, `Pa` |
+  | [Pint](https://en.wikipedia.org/wiki/Pint) | `pints`, `pint` |
+  | [Pound](https://en.wikipedia.org/wiki/Pound_(mass)) | `pounds`, `pound`, `lb` |
+  | [Radian](https://en.wikipedia.org/wiki/Radian) | `radians`, `radian`, `rad` |
+  | [Second](https://en.wikipedia.org/wiki/Second) | `seconds`, `second`, `sec`, `s` |
+  | [Siemens](https://en.wikipedia.org/wiki/Siemens_(unit)) | `siemens`, `S` |
+  | [Sievert](https://en.wikipedia.org/wiki/Sievert) | `sievert`, `Sv` |
+  | [Tablespoon](https://en.wikipedia.org/wiki/Tablespoon) | `tablespoons`, `tablespoon`, `tbsp` |
+  | [Teaspoon](https://en.wikipedia.org/wiki/Teaspoon) | `teaspoons`, `teaspoon`, `tsp` |
+  | [Tesla](https://en.wikipedia.org/wiki/Tesla_(unit)) | `tesla`, `T` |
+  | [Tonne](https://en.wikipedia.org/wiki/Tonne) | `tonnes`, `tonne`, `tons`, `ton`, `t` |
+  | [Volt](https://en.wikipedia.org/wiki/Volt) | `volts`, `volt`, `V` |
+  | [Watt](https://en.wikipedia.org/wiki/Watt) | `watts`, `watt`, `W` |
+  | [Watt-hour](https://en.wikipedia.org/wiki/Kilowatt_hour) | `Wh` |
+  | [Weber](https://en.wikipedia.org/wiki/Weber_(unit)) | `weber`, `Wb` |
+  | [Week](https://en.wikipedia.org/wiki/Week) | `weeks`, `week` |
+  | [Yard](https://en.wikipedia.org/wiki/Yard) | `yards`, `yard`, `yd` |
+  | [Year](https://en.wikipedia.org/wiki/Year) | `years`, `year` |
 
 Install terminal version
 ------------------------
