@@ -8,7 +8,6 @@ import Prelude
 
 import Data.Array ((:))
 import Data.Decimal as D
-import Data.Tuple (Tuple(..))
 
 import Quantities as Q
 
@@ -38,8 +37,10 @@ prettyUnit u = [ F.unit (Q.toString u) ]
 -- | Pretty print a physical quantity.
 prettyQuantity ∷ Q.Quantity → Markup
 prettyQuantity q =
-  case Q.prettyPrint' q of
-    { number, space, unit } → [ F.val number, F.unit unit ]
+    [ F.val rec.number, F.text space, F.unit rec.unit ]
+  where
+    rec = Q.prettyPrint' q
+    space = if rec.space then " " else ""
 
 -- | Construct and pretty-print a physical quantity
 prettyQuantity' ∷ D.Decimal → Q.DerivedUnit → Markup

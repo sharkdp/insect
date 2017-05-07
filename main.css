@@ -35,4 +35,32 @@ p.desc {
     box-shadow: 0px 3px 8px #1a1a1a;
 }
 
+/* syntax highlighting */
+
+.hl-emphasized {
+    font-weight: 700;
+}
+
+.hl-error {
+    color: #F92672;
+}
+
+.hl-value {
+    color: #66D9EF;
+}
+
+.hl-identifier {
+    color: #FD971F;
+}
+
+.hl-function {
+    font-style: italic;
+}
+
+.hl-unit {
+    color: #A6E22E;
+}
+
+/* Github Badge */
+
 .github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}

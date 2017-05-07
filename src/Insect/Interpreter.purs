@@ -205,15 +205,15 @@ runInsect env (Command Help) = { msg: Message Info
   , F.text "involve physical quantities. You can start by trying", F.nl
   , F.text "one of these examples:", F.nl
   , F.text "", F.nl
-  , F.emph "  > ", F.val "1920", F.text "/", F.val "16", F.text "*", F.val "9", F.text "             "
-  , F.emph "  > ", F.function "sin", F.text "(", F.val "30", F.unit "deg", F.text ")", F.nl
+  , F.emph "  > ", F.val "1920", F.text " / ", F.val "16", F.text " * ", F.val "9", F.text "         "
+  , F.emph "  > ", F.function "sin", F.text "(", F.val "30", F.text " ", F.unit "deg", F.text ")", F.nl
   , F.text "", F.nl
-  , F.emph "  > ", F.val "2", F.unit "min", F.text " + ", F.val "30", F.unit "s", F.text "            "
-  , F.emph "  > ", F.val "6", F.unit "Mbit/s", F.text " * ", F.val "1.5", F.unit "h", F.text " -> ", F.unit "GB", F.val "", F.nl
+  , F.emph "  > ", F.val "2", F.text " ", F.unit "min", F.text " + ", F.val "30", F.text " ", F.unit "s", F.text "          "
+  , F.emph "  > ", F.val "6", F.text " ", F.unit "Mbit/s", F.text " * ", F.val "1.5", F.text " ", F.unit "h", F.text " -> ", F.unit "GB", F.val "", F.nl
   , F.text "", F.nl
   , F.emph "  > ", F.text "list", F.text "                  "
-  , F.emph "  > ", F.ident "r", F.text " = ", F.val "80", F.unit "cm", F.nl
-  , F.emph "  > ", F.val "40000", F.unit "km", F.text "/", F.ident "c", F.text " -> ", F.unit "ms", F.text "       "
+  , F.emph "  > ", F.ident "r", F.text " = ", F.val "80", F.text " ", F.unit "cm", F.nl
+  , F.emph "  > ", F.val "40000", F.text " ", F.unit "km", F.text " / ", F.ident "c", F.text " -> ", F.unit "ms", F.text "    "
   , F.emph "  > ", F.ident "pi", F.text " * ", F.ident "r", F.text "^", F.val "2", F.text " -> ", F.unit "m", F.text "^", F.val "2", F.nl
   , F.text "", F.nl
   , F.text "Full documentation: https://github.com/sharkdp/insect"

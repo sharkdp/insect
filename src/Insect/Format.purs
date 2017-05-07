@@ -23,7 +23,7 @@ module Insect.Format
 import Data.Array ((:))
 import Data.Foldable (foldMap)
 
-import Prelude ((<>))
+import Prelude ((<>), id)
 
 data FormatType
   = FTText
@@ -96,18 +96,18 @@ fmtPlain ∷ Formatter
 fmtPlain Normal   _ s = s
 fmtPlain Optional _ _ = "" -- ignore optional output
 
-jtColored ∷ String → String → String
-jtColored col str = "[[;#" <> col <> ";]" <> str <> "]"
+jtClass ∷ String → String → String
+jtClass name str = "[[;;;hl-" <> name <> "]" <> str <> "]"
 
 -- | Formatter for rich text output on jquery.terminal.
 fmtJqueryTerminal ∷ Formatter
-fmtJqueryTerminal _ FTText s = s
-fmtJqueryTerminal _ FTEmphasized s = "[[b;;]" <> s <> "]"
-fmtJqueryTerminal _ FTError s = jtColored "F92672" s
-fmtJqueryTerminal _ FTValue s = jtColored "66D9EF" s
-fmtJqueryTerminal _ FTIdentifier s = jtColored "FD971F" s
-fmtJqueryTerminal _ FTFunction s = "[[i;;]" <> s <> "]"
-fmtJqueryTerminal _ FTUnit s = "[[i;#A6E22E;]" <> s <> "]"
+fmtJqueryTerminal _ FTText = id
+fmtJqueryTerminal _ FTEmphasized = jtClass "emphasized"
+fmtJqueryTerminal _ FTError = jtClass "error"
+fmtJqueryTerminal _ FTValue = jtClass "value"
+fmtJqueryTerminal _ FTIdentifier = jtClass "identifier"
+fmtJqueryTerminal _ FTFunction = jtClass "function"
+fmtJqueryTerminal _ FTUnit = jtClass "unit"
 
 consoleCode ∷ String → String → String
 consoleCode code str = "\x1b[" <> code <> "m" <> str <> "\x1b[0m"

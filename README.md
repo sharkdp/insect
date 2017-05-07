@@ -28,13 +28,13 @@ Documentation
 
 - **Physical units**: parsing and handling, including metric prefixes:
   ```
-  2min + 30s
-  40kg * 9.8m/s^2 * 150cm
+  2 min + 30 s
+  40 kg * 9.8 m/s^2 * 150 cm
   sin(30°)
   ```
   * **Supported units**: see [*Reference*](#reference) section below.
 
-  * **Implicit conversions**: `15km/h * 30min` evaluates to `7.5km`.
+  * **Implicit conversions**: `15 km/h * 30 min` evaluates to `7.5 km`.
 
   * **Useful error messages**:
     ```
@@ -47,24 +47,24 @@ Documentation
 
 - **Explicit unit conversions**: the `->` conversion operator (aliases: `→`, `to`):
   ```
-  60mph -> m/s
-  500km/day -> km/h
-  1mrad -> degree
-  52weeks -> days
-  5in + 2ft -> cm
-  atan(30cm / 2m) -> degree
-  6Mbit/s * 1.5h -> GB
+  60 mph -> m/s
+  500 km/day -> km/h
+  1 mrad -> degree
+  52 weeks -> days
+  5 in + 2 ft -> cm
+  atan(30 cm / 2 m) -> degree
+  6 Mbit/s * 1.5 h -> GB
   ```
 
 - **Variable assignments**:
   ```
   r = 6000km
   vol = 4/3 * pi * r^3
-  density = 5g/cm^3
+  density = 5 g/cm^3
   vol * density -> kg
   ```
   ```
-  len = 20cm
+  len = 20 cm
   2pi*sqrt(len/g0) -> ms
   ```
   * **Predefined constants** (type `list` to see them all): speed of light (`c`),
@@ -78,7 +78,7 @@ Documentation
 
 - **Unicode support**:
   ```
-  λ = 2 × 300µm
+  λ = 2 × 300 µm
   ν = c/λ → GHz
   ```
 
@@ -101,7 +101,7 @@ Reference
   | unit conversion           | `->`, `→`, `to` |
   | assignment                | `=`             |
 
-  Note that *implicit* multiplication has a higher precedence than division, i.e. `50cm/2m` will be parsed as `50cm/(2m)`.
+  Note that *implicit* multiplication has a higher precedence than division, i.e. `50 cm / 2 m` will be parsed as `50 cm / (2 m)`.
 
 - Commands
 

@@ -673,15 +673,15 @@ main = runTest do
       equalPretty "2 + 3" "2+3"
       equalPretty "2 × 3" "2*3"
       equalPretty "2^3" "2^3"
-      equalPretty "2km" "2km"
+      equalPretty "2 km" "2km"
       equalPretty "sin(30°)" "sin(30°)"
       equalPretty "2 × 3 × 4" "2*3*4"
       equalPretty "2 × 3 × 4" "2*(3*4)"
       equalPretty "2 + 3 + 4" "2+3+4"
       equalPretty "2 + 3 + 4" "2+(3+4)"
-      equalPretty "atan(30cm / 2m)" "atan(30cm / 2m)"
-      equalPretty "1mrad -> °" "1mrad -> °"
-      equalPretty "2km + 2cm -> in" "2km+2cm -> in"
+      equalPretty "atan(30 cm / 2 m)" "atan(30cm / 2m)"
+      equalPretty "1 mrad -> °" "1mrad -> °"
+      equalPretty "2 km + 2 cm -> in" "2km+2cm -> in"
       equalPretty "2^3 + 4^5" "2^3 + 4^5"
       equalPretty "2^3 - 4^5" "2^3 - 4^5"
       equalPretty "2^3 × 4^5" "2^3 * 4^5"
@@ -693,8 +693,8 @@ main = runTest do
 
   suite "Integration tests" do
     test "Simple input" do
-      expectOutput' "3m" "3m"
-      expectOutput' "3m" " 3.0 meter  "
+      expectOutput' "3 m" "3m"
+      expectOutput' "3 m" " 3.0 meter  "
 
     test "Square and cube operators" do
       expectOutput' "18" "3²*2"
@@ -703,17 +703,17 @@ main = runTest do
       expectOutput' "54" "3³*2"
 
     test "Conversions" do
-      expectOutput' "5.08cm" "2in to cm"
-      expectOutput' "500m·cm" "5m^2 -> m*cm"
-      expectOutput' "500cm·m" "5m^2 -> cm*m"
+      expectOutput' "5.08 cm" "2in to cm"
+      expectOutput' "500 m·cm" "5m^2 -> m*cm"
+      expectOutput' "500 cm·m" "5m^2 -> cm*m"
 
     test "Implicit multiplication" do
       let myEnv = insert "x" (5.0 .* meter) initialEnvironment
-      expectOutput myEnv "5m" "x"
-      expectOutput myEnv "10m" "2x"
-      expectOutput myEnv "10m" "2 x"
-      expectOutput myEnv "25m²" "x x"
-      expectOutput myEnv "25m²" "x²"
+      expectOutput myEnv "5 m" "x"
+      expectOutput myEnv "10 m" "2x"
+      expectOutput myEnv "10 m" "2 x"
+      expectOutput myEnv "25 m²" "x x"
+      expectOutput myEnv "25 m²" "x²"
       expectOutput myEnv "Unknown identifier: x2" "x2"
 
     test "Function inverses" do
@@ -744,32 +744,32 @@ main = runTest do
       expectOutput' "3" "round(3.1)"
 
     test "Unit simplification" do
-      expectOutput' "36000Mbit" "5Mbit/s * 2h"
-      expectOutput' "2500cm²" "5cm · 5m"
-      expectOutput' "0.2km" "120km/h*6s"
+      expectOutput' "36000 Mbit" "5Mbit/s * 2h"
+      expectOutput' "2500 cm²" "5cm · 5m"
+      expectOutput' "0.2 km" "120km/h*6s"
 
     test "Examples" do
       expectOutput' "1080" "1920/16*9"
       expectOutput' "4294967296" "2^32"
       expectOutput' "0.512957" "sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2"
 
-      expectOutput' "2.5min" "2min + 30s"
-      expectOutput' "150s" "2min + 30s -> sec"
-      expectOutput' "904779000000km³" "4/3 * pi * (6000km)³"
-      expectOutput' "588m²·kg/s²" "40kg * 9.8m/s^2 * 150cm"
+      expectOutput' "2.5 min" "2min + 30s"
+      expectOutput' "150 s" "2min + 30s -> sec"
+      expectOutput' "904779000000 km³" "4/3 * pi * (6000km)³"
+      expectOutput' "588 m²·kg/s²" "40kg * 9.8m/s^2 * 150cm"
       expectOutput' "0.5" "sin(30°)"
 
-      expectOutput' "26.8224m/s" "60mph -> m/s"
-      expectOutput' "10km/h" "240km/day -> km/h"
+      expectOutput' "26.8224 m/s" "60mph -> m/s"
+      expectOutput' "10 km/h" "240km/day -> km/h"
       expectOutput' "0.0572958°" "1mrad -> °"
-      expectOutput' "364d" "52weeks -> days"
-      expectOutput' "73.66cm" "5in + 2ft -> cm"
+      expectOutput' "364 d" "52weeks -> days"
+      expectOutput' "73.66 cm" "5in + 2ft -> cm"
       expectOutput' "8.53077°" "atan(30cm / 2m) -> °"
-      expectOutput' "4.05GB" "6Mbit/s * 1.5h -> GB"
+      expectOutput' "4.05 GB" "6Mbit/s * 1.5h -> GB"
 
       expectOutput' "0.75" "3m/4m"
       expectOutput' "4" "4/2*2"
-      expectOutput' "0.5s" "1/2 Hz -> s"
+      expectOutput' "0.5 s" "1/2 Hz -> s"
 
     test "Earth mass" do
       let env1 = initialEnvironment
@@ -777,17 +777,17 @@ main = runTest do
           env3 = (repl fmtPlain env2 "vol = 4/3 * pi * r^3").newEnv
           env4 = (repl fmtPlain env3 "density = 5g/cm^3").newEnv
 
-      expectOutput env4 "4.52389e+24kg" "vol * density -> kg"
+      expectOutput env4 "4.52389e+24 kg" "vol * density -> kg"
 
     test "Pendulum" do
       let env1 = initialEnvironment
           env2 = (repl fmtPlain env1 "len = 20cm").newEnv
 
-      expectOutput env2 "897.294ms" "2pi*sqrt(len/g0) -> ms"
+      expectOutput env2 "897.294 ms" "2pi*sqrt(len/g0) -> ms"
 
     test "Unicode" do
-      expectOutput' "6.62607e-34J·s" "2π×ℏ"
+      expectOutput' "6.62607e-34 J·s" "2π×ℏ"
 
       let env1 = initialEnvironment
           env2 = (repl fmtPlain env1 "λ = 2 × 300µm").newEnv
-      expectOutput env2 "499.654GHz" "ν = c/λ → GHz"
+      expectOutput env2 "499.654 GHz" "ν = c/λ → GHz"
