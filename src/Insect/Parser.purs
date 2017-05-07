@@ -16,15 +16,8 @@ import Prelude hiding (degree)
 import Control.Alt ((<|>))
 import Control.Lazy (fix)
 
-import Quantities (DerivedUnit, atto, bit, byte, centi, cup, day, deci, degree,
-                   exa, femto, foot, giga, gram, gallon, hecto, hertz, hour,
-                   inch, joule, kilo, mega, meter, micro, mile, milli, minute,
-                   nano, newton, ounce, peta, pico, pint, pound, radian, second,
-                   tera, watt, week, yard, (./), pascal, coulomb, volt, farad,
-                   ohm, siemens, weber, tesla, henry, lumen, lux, becquerel,
-                   gray, sievert, katal, hectare, liter, tablespoon, teaspoon,
-                   tonne, electronvolt, ampere, mole, kelvin, candela, month,
-                   year)
+import Quantities (DerivedUnit, (./))
+import Quantities as Q
 
 import Data.Array (some, fromFoldable)
 import Data.Either (Either(..))
@@ -154,28 +147,28 @@ buildDictParser (Dictionary dict) = F.oneOf $ entryParser <$> dict
 
 siPrefixDict ∷ Dictionary (DerivedUnit → DerivedUnit)
 siPrefixDict = Dictionary
-  [ atto ==> ["atto", "a"]
-  , femto ==> ["femto", "f"]
+  [ Q.atto ==> ["atto", "a"]
+  , Q.femto ==> ["femto", "f"]
   -- peta and mega have to be up here (before pico and milli) in order for the
   -- prefixes ('p' and 'm') not to be parsed as 'pico' or 'milli'.
-  , peta ==> ["peta"]
-  , mega ==> ["mega"]
-  , pico ==> ["pico", "p"]
-  , nano ==> ["nano", "n"]
-  , micro ==> [ "micro"
-              , "µ" -- Micro sign U+00B5
-              , "μ" -- Greek small letter mu U+039C
-              ]
-  , milli ==> ["milli", "m"]
-  , centi ==> ["centi", "c"]
-  , deci ==> ["deci", "d"]
-  , hecto ==> ["hecto", "h"]
-  , kilo ==> ["kilo", "k"]
-  , mega ==> ["M"]
-  , giga ==> ["giga", "G"]
-  , tera ==> ["tera", "T"]
-  , peta ==> ["P"]
-  , exa ==> ["exa", "E"]
+  , Q.peta ==> ["peta"]
+  , Q.mega ==> ["mega"]
+  , Q.pico ==> ["pico", "p"]
+  , Q.nano ==> ["nano", "n"]
+  , Q.micro ==> [ "micro"
+                , "µ" -- Micro sign U+00B5
+                , "μ" -- Greek small letter mu U+039C
+                ]
+  , Q.milli ==> ["milli", "m"]
+  , Q.centi ==> ["centi", "c"]
+  , Q.deci ==> ["deci", "d"]
+  , Q.hecto ==> ["hecto", "h"]
+  , Q.kilo ==> ["kilo", "k"]
+  , Q.mega ==> ["M"]
+  , Q.giga ==> ["giga", "G"]
+  , Q.tera ==> ["tera", "T"]
+  , Q.peta ==> ["P"]
+  , Q.exa ==> ["exa", "E"]
   ]
 
 -- | Parse a SI prefix like `µ` or `G`.
@@ -185,48 +178,48 @@ siPrefix = buildDictParser siPrefixDict <|> pure id
 -- | Normal (SI-conform, non-imperial) units
 normalUnitDict ∷ Dictionary DerivedUnit
 normalUnitDict = Dictionary
-  [ radian ==> ["radians", "radian", "rad"]
-  , degree ==> ["degrees", "degree", "deg", "°"]
-  , hertz ==> ["hertz", "Hz"]
-  , newton ==> ["newton", "N"]
-  , joule ==> ["joules", "joule", "J"]
-  , pascal ==> ["pascal", "Pa"]
-  , volt ==> ["volts", "volt", "V"]
-  , farad ==> ["farad", "F"]
-  , ohm ==> ["ohms", "ohm", "Ω"]
-  , sievert ==> ["sievert", "Sv"]
-  , weber ==> ["weber", "Wb"]
-  , tesla ==> ["tesla", "T"]
-  , henry ==> ["henry", "H"]
-  , coulomb ==> ["coulomb", "C"]
-  , siemens ==> ["siemens", "S"]
-  , lumen ==> ["lumen", "lm"]
-  , lux ==> ["lux", "lx"]
-  , becquerel ==> ["becquerel", "Bq"]
-  , gray ==> ["gray", "Gy"]
-  , katal ==> ["katal", "kat"]
-  , hectare ==> ["hectare", "ha"]
-  , liter ==> ["liters", "liter", "L"]
-  , tonne ==> ["tonnes", "tonne", "tons", "ton"]
-  , electronvolt ==> ["electronvolt", "eV"]
-  , ampere ==> ["amperes", "ampere", "A"]
-  , mole ==> ["mole", "mol"]
-  , kelvin ==> ["kelvin", "K"]
-  , candela ==> ["candela", "cd"]
-  , watt <> hour ==> ["Wh"]
-  , watt ==> ["watts", "watt", "W"]
-  , byte ==> ["Bytes", "bytes", "Byte", "byte", "B"]
-  , bit ==> ["bits", "bit"]
-  , bit ./ second ==> ["bps"]
-  , second ==> ["seconds", "second", "sec", "s"]
-  , minute ==> ["minutes", "minute", "min"]
-  , hour ==> ["hours", "hour", "h"]
-  , day ==> ["days", "day"]
-  , week ==> ["weeks", "week"]
-  , month ==> ["months", "month"]
-  , year ==> ["years", "year"]
-  , gram ==> ["grams", "gram", "g"]
-  , meter ==> ["meters", "meter", "m"]
+  [ Q.radian ==> ["radians", "radian", "rad"]
+  , Q.degree ==> ["degrees", "degree", "deg", "°"]
+  , Q.hertz ==> ["hertz", "Hz"]
+  , Q.newton ==> ["newton", "N"]
+  , Q.joule ==> ["joules", "joule", "J"]
+  , Q.pascal ==> ["pascal", "Pa"]
+  , Q.volt ==> ["volts", "volt", "V"]
+  , Q.farad ==> ["farad", "F"]
+  , Q.ohm ==> ["ohms", "ohm", "Ω"]
+  , Q.sievert ==> ["sievert", "Sv"]
+  , Q.weber ==> ["weber", "Wb"]
+  , Q.tesla ==> ["tesla", "T"]
+  , Q.henry ==> ["henry", "H"]
+  , Q.coulomb ==> ["coulomb", "C"]
+  , Q.siemens ==> ["siemens", "S"]
+  , Q.lumen ==> ["lumen", "lm"]
+  , Q.lux ==> ["lux", "lx"]
+  , Q.becquerel ==> ["becquerel", "Bq"]
+  , Q.gray ==> ["gray", "Gy"]
+  , Q.katal ==> ["katal", "kat"]
+  , Q.hectare ==> ["hectare", "ha"]
+  , Q.liter ==> ["liters", "liter", "L"]
+  , Q.tonne ==> ["tonnes", "tonne", "tons", "ton"]
+  , Q.electronvolt ==> ["electronvolt", "eV"]
+  , Q.ampere ==> ["amperes", "ampere", "A"]
+  , Q.mole ==> ["mole", "mol"]
+  , Q.kelvin ==> ["kelvin", "K"]
+  , Q.candela ==> ["candela", "cd"]
+  , Q.watt <> Q.hour ==> ["Wh"]
+  , Q.watt ==> ["watts", "watt", "W"]
+  , Q.byte ==> ["Bytes", "bytes", "Byte", "byte", "B"]
+  , Q.bit ==> ["bits", "bit"]
+  , Q.bit ./ Q.second ==> ["bps"]
+  , Q.second ==> ["seconds", "second", "sec", "s"]
+  , Q.minute ==> ["minutes", "minute", "min"]
+  , Q.hour ==> ["hours", "hour", "h"]
+  , Q.day ==> ["days", "day"]
+  , Q.week ==> ["weeks", "week"]
+  , Q.month ==> ["months", "month"]
+  , Q.year ==> ["years", "year"]
+  , Q.gram ==> ["grams", "gram", "g"]
+  , Q.meter ==> ["meters", "meter", "m"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
@@ -236,18 +229,18 @@ normalUnit = buildDictParser normalUnitDict <?> "normal unit"
 -- | Imperial units
 imperialUnitDict ∷ Dictionary DerivedUnit
 imperialUnitDict = Dictionary
-  [ mile ==> ["miles", "mile"]
-  , mile ./ hour ==> ["mph"]
-  , inch ==> ["inches", "inch", "in"]
-  , yard ==> ["yards", "yard", "yd"]
-  , foot ==> ["feet", "foot", "ft"]
-  , ounce ==> ["ounces", "ounce", "oz"]
-  , pound ==> ["pounds", "pound", "lb"]
-  , gallon ==> ["gallons", "gallon", "gal"]
-  , pint ==> ["pints", "pint"]
-  , cup ==> ["cups", "cup"]
-  , tablespoon ==> ["tablespoons", "tablespoon", "tbsp"]
-  , teaspoon ==> ["teaspoons", "teaspoon", "tsp"]
+  [ Q.mile ==> ["miles", "mile"]
+  , Q.mile ./ Q.hour ==> ["mph"]
+  , Q.inch ==> ["inches", "inch", "in"]
+  , Q.yard ==> ["yards", "yard", "yd"]
+  , Q.foot ==> ["feet", "foot", "ft"]
+  , Q.ounce ==> ["ounces", "ounce", "oz"]
+  , Q.pound ==> ["pounds", "pound", "lb"]
+  , Q.gallon ==> ["gallons", "gallon", "gal"]
+  , Q.pint ==> ["pints", "pint"]
+  , Q.cup ==> ["cups", "cup"]
+  , Q.tablespoon ==> ["tablespoons", "tablespoon", "tbsp"]
+  , Q.teaspoon ==> ["teaspoons", "teaspoon", "tsp"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
@@ -265,10 +258,10 @@ specialCases ∷ P DerivedUnit
 specialCases =
   -- The abbreviation 'd' for 'day' needs to be treated separately. Otherwise,
   -- 'cd' will be parsed as 'centi day' instead of 'candela'.
-      string "d" *> pure day
+      string "d" *> pure Q.day
   -- Similarly, the abbreviation 't' for 'tonne' needs special treatment.
   -- Otherwise, 'ft' will be parsed as 'femto tonne' instead of 'feet'.
-  <|> string "t" *> pure tonne
+  <|> string "t" *> pure Q.tonne
 
 -- | Parse a derived unit, like `km`, `ft`, or `s`.
 derivedUnit ∷ P DerivedUnit

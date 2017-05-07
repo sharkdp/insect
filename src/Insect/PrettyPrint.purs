@@ -39,7 +39,7 @@ prettyUnit u = [ F.unit (Q.toString u) ]
 prettyQuantity ∷ Q.Quantity → Markup
 prettyQuantity q =
   case Q.prettyPrint' q of
-    Tuple v u → [ F.val v, F.unit u ]
+    { number, space, unit } → [ F.val number, F.unit unit ]
 
 -- | Construct and pretty-print a physical quantity
 prettyQuantity' ∷ D.Decimal → Q.DerivedUnit → Markup

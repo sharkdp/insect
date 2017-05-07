@@ -222,7 +222,7 @@ runInsect env (Command List) =
   { msg: Message Info list
   , newEnv: env }
   where
-    envTuples = sortBy (comparing (fst <<< prettyPrint' <<< snd)) $ toUnfoldable env
+    envTuples = sortBy (comparing (_.number <<< prettyPrint' <<< snd)) $ toUnfoldable env
     envGrouped = groupBy (\x y → snd x == snd y) envTuples
     envSorted = sortBy (comparing (toLower <<< fst <<< head)) envGrouped
     list = [ F.text "List of variables:", F.nl ] <> foldMap toLine envSorted
