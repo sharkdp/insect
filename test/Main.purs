@@ -149,6 +149,8 @@ main = runTest do
         , "      m "
         , "meter"
         , "meters"
+        , "metre"
+        , "metres"
         ]
 
       allParseAs (Expression (Unit inch))
@@ -212,6 +214,8 @@ main = runTest do
         , "2.3meter"
         , "2.3 meter"
         , "2.3meters"
+        , "2.3 metre"
+        , "2.3metres"
         ]
 
       allParseAs (Expression (q 5.0 second))
@@ -263,6 +267,8 @@ main = runTest do
         , "  2.3 km "
         , "  2.3 kmeter "
         , "  2.3 kmeters "
+        , "  2.3 kmetre "
+        , "  2.3 kmetres "
         ]
 
       allParseAs (Expression (q 2.3 (milli meter)))
@@ -270,6 +276,8 @@ main = runTest do
         , "  2.3 mm "
         , "  2.3 mmeter "
         , "  2.3 mmeters "
+        , "  2.3 mmetre "
+        , "  2.3 mmetres "
         ]
 
       allParseAs (Expression (q 2.3 (nano gram)))
@@ -298,6 +306,7 @@ main = runTest do
         , "2.30km/h"
         , "2.30km÷h"
         , "2.30 kilometer per hour"
+        , "2.30 kilometre per hour"
         , "2.30km per h"
         ]
 
@@ -491,6 +500,8 @@ main = runTest do
         [ "3m/s"
         , "3 meter / second"
         , "3 meter per second"
+        , "3 metre / second"
+        , "3 metre per second"
         , "(3m)/s"
         ]
 
@@ -498,12 +509,15 @@ main = runTest do
         [ "3·m/s"
         , "3*meter / second"
         , "3*meter / sec"
+        , "3*metre / second"
+        , "3*metre / sec"
         ]
 
       allParseAs (Expression (BinOp Pow (Unit meter) (Negate $ scalar 1.0))) $
         [ "m^(-1)"
         , "m^(-1.0)"
         , "meter^(-1.0)"
+        , "metre^(-1.0)"
         ]
 
   suite "Parser - Conversions" do
@@ -616,6 +630,7 @@ main = runTest do
     test "Reserved names" do
       shouldFail "m=2" -- 'm' is reserved unit
       shouldFail "meter=2" -- 'meter' is a reserved unit
+      shouldFail "metre=2" -- 'meter' is a reserved unit
       shouldFail "list=4" -- 'list' is a reserved keyword
       shouldFail "sin=3" -- 'sin is a reserved keyword
 
