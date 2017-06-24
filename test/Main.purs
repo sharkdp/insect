@@ -706,6 +706,7 @@ main = runTest do
       expectOutput' "12.5664" "2²pi"
       expectOutput' "12.5664" "2² pi"
       expectOutput' "12.5664" "2²·pi"
+      expectOutput' "500 cm·m" "5m² to cm·m"
 
     test "Conversions" do
       expectOutput' "5.08 cm" "2in to cm"
