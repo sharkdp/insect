@@ -156,6 +156,7 @@ siPrefixDict = Dictionary
   , Q.pico ==> ["pico", "p"]
   , Q.nano ==> ["nano", "n"]
   , Q.micro ==> [ "micro"
+                , "u" -- u for micro
                 , "µ" -- Micro sign U+00B5
                 , "μ" -- Greek small letter mu U+039C
                 ]
