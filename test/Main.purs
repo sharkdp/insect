@@ -695,7 +695,7 @@ main = runTest do
       equalPretty "2 + 3 + 4" "2+3+4"
       equalPretty "2 + 3 + 4" "2+(3+4)"
       equalPretty "atan(30 cm / 2 m)" "atan(30cm / 2m)"
-      equalPretty "1 mrad ➞ °" "1mrad ➞ °"
+      equalPretty "1 mrad -> °" "1mrad -> °"
       equalPretty "2 km + 2 cm -> in" "2km+2cm -> in"
       equalPretty "2^3 + 4^5" "2^3 + 4^5"
       equalPretty "2^3 - 4^5" "2^3 - 4^5"
@@ -798,7 +798,7 @@ main = runTest do
           env3 = (repl fmtPlain env2 "vol = 4/3 * pi * r^3").newEnv
           env4 = (repl fmtPlain env3 "density = 5g/cm^3").newEnv
 
-      expectOutput env4 "4.52389e+24 kg" "vol * density ➞ kg"
+      expectOutput env4 "4.52389e+24 kg" "vol * density -> kg"
 
     test "Pendulum" do
       let env1 = initialEnvironment
