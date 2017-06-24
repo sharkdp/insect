@@ -199,7 +199,7 @@ normalUnitDict = Dictionary
   , Q.gray ==> ["gray", "Gy"]
   , Q.katal ==> ["katal", "kat"]
   , Q.hectare ==> ["hectare", "ha"]
-  , Q.liter ==> ["liters", "liter", "litres", "litre", "L"]
+  , Q.liter ==> ["litres", "litre", "liters", "liter", "L"]
   , Q.tonne ==> ["tonnes", "tonne", "tons", "ton"]
   , Q.electronvolt ==> ["electronvolt", "eV"]
   , Q.bel ==> ["bel"]
@@ -224,8 +224,8 @@ normalUnitDict = Dictionary
   , Q.week ==> ["weeks", "week"]
   , Q.month ==> ["months", "month"]
   , Q.year ==> ["years", "year"]
-  , Q.gram ==> ["grams", "gram", "grammes", "gramme", "g"]
-  , Q.meter ==> ["meters", "meter", "metres", "metre", "m"]
+  , Q.gram ==> ["grammes", "gramme", "grams", "gram", "g"]
+  , Q.meter ==> ["metres", "metre" "meters", "meter", "m"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
