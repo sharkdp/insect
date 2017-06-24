@@ -225,7 +225,7 @@ normalUnitDict = Dictionary
   , Q.month ==> ["months", "month"]
   , Q.year ==> ["years", "year"]
   , Q.gram ==> ["grammes", "gramme", "grams", "gram", "g"]
-  , Q.meter ==> ["metres", "metre" "meters", "meter", "m"]
+  , Q.meter ==> ["metres", "metre", "meters", "meter", "m"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
