@@ -18,7 +18,7 @@ import Data.String (toLower)
 import Data.StrMap (lookup, insert, toUnfoldable)
 import Data.Tuple (fst, snd)
 
-import Quantities (Quantity, UnificationError(..), pow, scalar', qNegate, qAdd,
+import Quantities (Quantity, ConversionError(..), pow, scalar', qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
                    convertTo, prettyPrint', fullSimplify, derivedUnit, acos,
                    asin, atan, sin, cos, tan, exp, ln, sinh, cosh, tanh, asinh,
@@ -35,7 +35,7 @@ import Insect.PrettyPrint (pretty, prettyQuantity)
 
 -- | Types of errors that may appear during evaluation.
 data EvalError
-  = QUnificationError UnificationError
+  = QConversionError ConversionError
   | LookupError String
   | NumericalError
 
@@ -57,7 +57,7 @@ checkFinite q | isFinite q = pure q
 
 -- | Apply a mathematical function to a physical quantity.
 applyFunction ∷ Func → Quantity → Expect Quantity
-applyFunction fn q = lmap QUnificationError $ (run fn) q
+applyFunction fn q = lmap QConversionError $ (run fn) q
   where
     run Acos  = acos
     run Acosh = acosh
@@ -88,7 +88,7 @@ eval env (Variable name) =
   case lookup name env of
     Just q → pure q
     Nothing → Left (LookupError name)
-eval env (Factorial x)   = eval env x >>= factorial >>> lmap QUnificationError
+eval env (Factorial x)   = eval env x >>= factorial >>> lmap QConversionError
 eval env (Negate x)      = qNegate <$> eval env x
 eval env (Apply fn x)    = eval env x >>= applyFunction fn >>= checkFinite
 eval env (BinOp op x y)  = do
@@ -104,8 +104,8 @@ eval env (BinOp op x y)  = do
     run Pow       a b = pow a <$> toScalar'' b
     run ConvertTo a b = convertTo' a b
 
-    wrap ∷ ∀ a. Either UnificationError a → Either EvalError a
-    wrap = lmap QUnificationError
+    wrap ∷ ∀ a. Either ConversionError a → Either EvalError a
+    wrap = lmap QConversionError
 
     qSubtract' q1 q2 = wrap (qSubtract q1 q2)
     qAdd' q1 q2 = wrap (qAdd q1 q2)
@@ -118,24 +118,24 @@ evalAndSimplify ∷ Environment → Expression → Expect Quantity
 evalAndSimplify env e@(BinOp ConvertTo _ _) = eval env e
 evalAndSimplify env e = fullSimplify <$> eval env e
 
--- | Render the error message for a unification error.
-unificationErrorMessage ∷ UnificationError → Markup
-unificationErrorMessage (UnificationError u1 u2) =
+-- | Render the error message for a conversion error.
+conversionErrorMessage ∷ ConversionError → Markup
+conversionErrorMessage (ConversionError u1 u2) =
   if u1 == unity
     then scalarErr u2
     else
       if u2 == unity
         then scalarErr u1
         else
-            [ F.error "  Unification error:", F.nl, F.nl
-            , F.text "    Cannot unify unit ", F.unit (toString u1)
+            [ F.error "  Conversion error:", F.nl, F.nl
+            , F.text "    Cannot convert unit ", F.unit (toString u1)
             ] <> baseRep u1 <>
             [ F.nl
-            , F.text "            with unit ", F.unit (toString u2)
+            , F.text "                to unit ", F.unit (toString u2)
             ] <> baseRep u2
   where
     scalarErr u =
-      [ F.error "  Unification error:", F.nl, F.nl
+      [ F.error "  Conversion error:", F.nl, F.nl
       , F.text "    Cannot convert quantity of unit "
       , F.unit (toString u)
       , F.text " to a ", F.unit "scalar"
@@ -157,8 +157,8 @@ unificationErrorMessage (UnificationError u1 u2) =
 
 -- | Get the error message for an evaluation error.
 evalErrorMessage ∷ EvalError → Markup
-evalErrorMessage (QUnificationError ue) =
-  unificationErrorMessage ue
+evalErrorMessage (QConversionError ue) =
+  conversionErrorMessage ue
 evalErrorMessage (LookupError name) =
   [ F.optional (F.text "  ")
   , F.error "Unknown identifier: "

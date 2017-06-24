@@ -41,8 +41,8 @@ Documentation
     > 2 watts + 4 newton meter
 
     Unification error:
-      Cannot unify unit N·m (base units: kg·m²·s⁻²)
-              with unit W (base units: kg·m²·s⁻³)
+      Cannot convert unit N·m (base units: kg·m²·s⁻²)
+                  to unit W (base units: kg·m²·s⁻³)
     ```
 
 - **Explicit unit conversions**: the `->` conversion operator (aliases: `→`, `to`):
