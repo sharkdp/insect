@@ -24,7 +24,7 @@ prettyOp op = [ F.text (opToStr op) ]
     opToStr Mul       = " × "
     opToStr Div       = " / "
     opToStr Pow       = "^"
-    opToStr ConvertTo = " -> "
+    opToStr ConvertTo = " ➞ "
 
 -- | Pretty print a scalar value.
 prettyScalar ∷ D.Decimal → Markup
