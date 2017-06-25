@@ -45,7 +45,7 @@ Documentation
                   to unit W (base units: kg·m²·s⁻³)
     ```
 
-- **Explicit unit conversions**: the `->` conversion operator (aliases: `→`, `to`):
+- **Explicit unit conversions**: the `->` conversion operator (aliases: `→`, `➞`, `to`):
   ```
   60 mph -> m/s
   500 km/day -> km/h
@@ -88,18 +88,18 @@ Reference
 ---------
 - Operators (ordered by precedence: high to low)
 
-  | Operator                  | Syntax          |
-  | ------------------------- | --------------- |
-  | factorial                 | `!`             |
-  | square/cube               | `²`/`³`         |
-  | exponentiation            | `^`, `**`       |
-  | multiplication (implicit) | *whitespace*    |
-  | division                  | `/`, `÷`, `per` |
-  | multiplication (explicit) | `*`, `·`, `×`   |
-  | subtraction               | `-`             |
-  | addition                  | `+`             |
-  | unit conversion           | `->`, `→`, `to` |
-  | assignment                | `=`             |
+  | Operator                  | Syntax               |
+  | ------------------------- | -------------------- |
+  | factorial                 | `!`                  |
+  | square/cube               | `²`/`³`              |
+  | exponentiation            | `^`, `**`            |
+  | multiplication (implicit) | *whitespace*         |
+  | division                  | `/`, `÷`, `per`      |
+  | multiplication (explicit) | `*`, `·`, `×`        |
+  | subtraction               | `-`                  |
+  | addition                  | `+`                  |
+  | unit conversion           | `->`, `→`, `➞`, `to` |
+  | assignment                | `=`                  |
 
   Note that *implicit* multiplication has a higher precedence than division, i.e. `50 cm / 2 m` will be parsed as `50 cm / (2 m)`.
 
