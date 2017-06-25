@@ -191,6 +191,11 @@ For Arch Linux, there is a [package on AUR](https://aur.archlinux.org/packages/i
 yaourt -S insect
 ```
 
+For macOS, there is a [Homebrew package](http://braumeister.org/formula/insect):
+```sh
+brew install insect
+```
+
 Development
 -----------
 Insect is written in PureScript (see [Getting Started](https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md) guide). You can install all dependencies and build the whole project by running:
