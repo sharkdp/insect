@@ -153,7 +153,7 @@ Reference
   | [Katal](https://en.wikipedia.org/wiki/Katal) | `katal`, `kat` |
   | [Kelvin](https://en.wikipedia.org/wiki/Kelvin) | `kelvin`, `K` |
   | [Light-year](https://en.wikipedia.org/wiki/Light-year) | `lightyears`, `lightyear`, `ly` |
-  | [Liter](https://en.wikipedia.org/wiki/Liter) | `liters`, `liter`, `litres`, `litre`, `L` |
+  | [Liter](https://en.wikipedia.org/wiki/Liter) | `liters`, `liter`, `litres`, `litre`, `L`, `l` |
   | [Lumen](https://en.wikipedia.org/wiki/Lumen_(unit)) | `lumen`, `lm` |
   | [Lux](https://en.wikipedia.org/wiki/Lux) | `lux`, `lx` |
   | [Meter](https://en.wikipedia.org/wiki/Meter) | `meters`, `meter`, `metres`, `metre`, `m` |
