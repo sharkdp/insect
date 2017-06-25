@@ -6,7 +6,7 @@ module Insect.Environment
 import Data.StrMap (StrMap, fromFoldable)
 import Data.Tuple (Tuple(..))
 
-import Quantities (Quantity, e, pi, speedOfLight, gravitationalConstant,
+import Quantities (Quantity, e, pi, tau, speedOfLight, gravitationalConstant,
                    planckConstant, ℏ, electronMass, electronCharge, µ0, ε0, µB,
                    α, protonMass, avogadroConstant, kB, g0)
 
@@ -43,6 +43,8 @@ initialEnvironment = fromFoldable
   , Tuple "N_A"                avogadroConstant
   , Tuple "pi"                 pi
   , Tuple "π"                  pi
+  , Tuple "tau"                tau
+  , Tuple "τ"                  tau
   , Tuple "planckConstant"     planckConstant
   , Tuple "protonMass"         protonMass
   , Tuple "speedOfLight"       speedOfLight
