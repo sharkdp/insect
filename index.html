@@ -26,6 +26,7 @@
     <link rel="icon" type="image/png" href="media/insect-196x196.png" sizes="196x196">
     <link rel="icon" type="image/png" href="media/insect-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="media/insect-16x16.png" sizes="16x16">
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="Insect.sh Scientific Calculator">
     <script src="insect.js" type="text/javascript"></script>
     <script src="bower_components/keyboardevent-key-polyfill/index.js" type="text/javascript"></script>
     <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
@@ -81,7 +82,7 @@
       }
 
       $(document).ready(function() {
-        $('#terminal').terminal(interpret, {
+        var term = $('#terminal').terminal(interpret, {
           greetings: greeting,
           name: "terminal",
           height: 550,
@@ -104,6 +105,18 @@
             cb(keywords.sort());
           }
         });
+
+        // evaluate expression in query string if supplied (via opensearch)
+        if (location.search) {
+          var queryParams = {};
+          location.search.replace(/\?([^=&]+)=([^&]*)/g, function(match, paramName, paramValue) {
+            queryParams[paramName] = paramValue;
+          });
+          if (queryParams.q) {
+            var cmd = decodeURIComponent(queryParams.q.replace(/\+/g, " "));
+            term.exec(cmd);
+          }
+        }
       });
     </script>
   </head>
