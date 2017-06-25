@@ -128,6 +128,7 @@ Reference
   | [Bits per second](https://en.wikipedia.org/wiki/Data_rate_units) | `bps` |
   | [Bit](https://en.wikipedia.org/wiki/Bit) | `bits`, `bit` |
   | [Byte](https://en.wikipedia.org/wiki/Byte) | `Bytes`, `bytes`, `Byte`, `byte`, `B` |
+  | [Calorie](https://en.wikipedia.org/wiki/Calorie) | `calories`, `calorie`, `cal` |
   | [Candela](https://en.wikipedia.org/wiki/Candela) | `candela`, `cd` |
   | [Coulomb](https://en.wikipedia.org/wiki/Coulomb) | `coulomb`, `C` |
   | [Cup](https://en.wikipedia.org/wiki/Cup_(unit)) | `cups`, `cup` |
@@ -135,10 +136,13 @@ Reference
   | [Degree](https://en.wikipedia.org/wiki/Degree_(angle)) | `degrees`, `degree`, `deg`, `°` |
   | [Electronvolt](https://en.wikipedia.org/wiki/Electronvolt) | `electronvolt`, `eV` |
   | [Farad](https://en.wikipedia.org/wiki/Farad) | `farad`, `F` |
+  | [Fortnight](https://en.wikipedia.org/wiki/Fortnight) | `fortnights`, `fortnight` |
+  | [Fluid ounce](https://en.wikipedia.org/wiki/Fluid_ounce) | `fluidounces`, `fluidounce`, `floz` |
+  | [Furlong](https://en.wikipedia.org/wiki/Furlong) | `furlongs`, `furlong` |
   | [Foot](https://en.wikipedia.org/wiki/Foot_(unit)) | `feet`, `foot`, `ft` |
   | [Gallon](https://en.wikipedia.org/wiki/Gallon) | `gallons`, `gallon`, `gal` |
   | [Gauss](https://en.wikipedia.org/wiki/Gauss_(unit)) | `gauss` |
-  | [Gram](https://en.wikipedia.org/wiki/Gram) | `grams`, `gram`, `g` |
+  | [Gram](https://en.wikipedia.org/wiki/Gram) | `grams`, `gram`, `grammes`, `gramme`, `g` |
   | [Gray](https://en.wikipedia.org/wiki/Gray_(unit)) | `gray`, `Gy` |
   | [Hectare](https://en.wikipedia.org/wiki/Hectare) | `hectare`, `ha` |
   | [Henry](https://en.wikipedia.org/wiki/Henry_(unit)) | `henry`, `H` |
@@ -148,10 +152,11 @@ Reference
   | [Joule](https://en.wikipedia.org/wiki/Joule) | `joules`, `joule`, `J` |
   | [Katal](https://en.wikipedia.org/wiki/Katal) | `katal`, `kat` |
   | [Kelvin](https://en.wikipedia.org/wiki/Kelvin) | `kelvin`, `K` |
-  | [Liter](https://en.wikipedia.org/wiki/Liter) | `liters`, `liter`, `L` |
+  | [Light-year](https://en.wikipedia.org/wiki/Light-year) | `lightyears`, `lightyear`, `ly` |
+  | [Liter](https://en.wikipedia.org/wiki/Liter) | `liters`, `liter`, `litres`, `litre`, `L` |
   | [Lumen](https://en.wikipedia.org/wiki/Lumen_(unit)) | `lumen`, `lm` |
   | [Lux](https://en.wikipedia.org/wiki/Lux) | `lux`, `lx` |
-  | [Meter](https://en.wikipedia.org/wiki/Meter) | `meters`, `meter`, `m` |
+  | [Meter](https://en.wikipedia.org/wiki/Meter) | `meters`, `meter`, `metres`, `metre`, `m` |
   | [Miles per hour](https://en.wikipedia.org/wiki/Miles_per_hour) | `mph` |
   | [Mile](https://en.wikipedia.org/wiki/Mile) | `miles`, `mile` |
   | [Minute](https://en.wikipedia.org/wiki/Minute) | `minutes`, `minute`, `min` |
@@ -160,9 +165,11 @@ Reference
   | [Newton](https://en.wikipedia.org/wiki/Newton_(unit)) | `newton`, `N` |
   | [Ohm](https://en.wikipedia.org/wiki/Ohm) | `ohms`, `ohm`, `Ω` |
   | [Ounce](https://en.wikipedia.org/wiki/Ounce) | `ounces`, `ounce`, `oz` |
+  | [Parsec](https://en.wikipedia.org/wiki/Parsec) | `parsecs`, `parsec`, `pc` |
   | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit)) | `pascal`, `Pa` |
   | [Pint](https://en.wikipedia.org/wiki/Pint) | `pints`, `pint` |
   | [Pound](https://en.wikipedia.org/wiki/Pound_(mass)) | `pounds`, `pound`, `lb` |
+  | [RPM](https://en.wikipedia.org/wiki/RPM) | `RPM`, `rpm` |
   | [Radian](https://en.wikipedia.org/wiki/Radian) | `radians`, `radian`, `rad` |
   | [Second](https://en.wikipedia.org/wiki/Second) | `seconds`, `second`, `sec`, `s` |
   | [Siemens](https://en.wikipedia.org/wiki/Siemens_(unit)) | `siemens`, `S` |
