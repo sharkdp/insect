@@ -193,7 +193,7 @@ yaourt -S insect
 
 Development
 -----------
-Insect is written in PureScript (see [Getting Started](http://www.purescript.org/learn/getting-started/) guide). You can install all dependencies and build the whole project by running:
+Insect is written in PureScript (see [Getting Started](https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md) guide). You can install all dependencies and build the whole project by running:
 ```
 bower install
 npm install
