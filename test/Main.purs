@@ -560,6 +560,7 @@ main = runTest do
       shouldParseAs (Expression (Variable "x")) "x"
       shouldParseAs (Expression (Variable "µ")) "µ"
       shouldParseAs (Expression (Variable "pi")) "pi"
+      shouldParseAs (Expression (Variable "tau")) "tau"
       shouldParseAs (Expression (Variable "x_2")) "x_2"
       shouldParseAs (Expression (Variable "länge")) "länge"
       shouldParseAs (Expression (Variable "_prefixed")) "_prefixed"
