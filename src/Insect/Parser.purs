@@ -218,7 +218,7 @@ normalUnitDict = Dictionary
   , Q.candela ==> ["candela", "cd"]
   , Q.watt <> Q.hour ==> ["Wh"]
   , Q.watt ==> ["watts", "watt", "W"]
-  , Q.byte ==> ["Bytes", "bytes", "Byte", "byte", "B"]
+  , Q.byte ==> ["Bytes", "bytes", "Byte", "byte", "B", "Octets", "octets", "Octet", "octet"]
   , Q.bit ==> ["bits", "bit"]
   , Q.bit ./ Q.second ==> ["bps"]
   , Q.second ==> ["seconds", "second", "sec", "s"]
