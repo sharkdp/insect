@@ -127,7 +127,7 @@ Reference
   | [Bel](https://en.wikipedia.org/wiki/Decibel) | `bel` |
   | [Bits per second](https://en.wikipedia.org/wiki/Data_rate_units) | `bps` |
   | [Bit](https://en.wikipedia.org/wiki/Bit) | `bits`, `bit` |
-  | [Byte](https://en.wikipedia.org/wiki/Byte) | `Bytes`, `bytes`, `Byte`, `byte`, `B` |
+  | [Byte](https://en.wikipedia.org/wiki/Byte) | `Bytes`, `bytes`, `Byte`, `byte`, `B`, `Octets`, `octets`, `Octet`, `octet`|
   | [Calorie](https://en.wikipedia.org/wiki/Calorie) | `calories`, `calorie`, `cal` |
   | [Candela](https://en.wikipedia.org/wiki/Candela) | `candela`, `cd` |
   | [Coulomb](https://en.wikipedia.org/wiki/Coulomb) | `coulomb`, `C` |
