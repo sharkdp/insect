@@ -21,8 +21,8 @@ Documentation
     `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `gamma`, `ln`, `log`,
     `log10`, `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`.
 
-  * **Arbitrary-precision numeric type** that can handle *very* large (or
-    small) exponents like *10^(10^10)*.
+  * **High-precision numeric type** with *30* significant digits that can handle
+    *very* large (or small) exponents like *10^(10^10)*.
 
   * **Exponential notation**: `6.022e23`.
 
