@@ -755,6 +755,16 @@ main = runTest do
       expectOutput' "0.1234" "atanh(tanh(0.1234))"
       expectOutput' "0.1234" "exp(log(0.1234))"
 
+    test "Temperature conversions" do
+      expectOutput' "284.65 K" "fromCelsius(11.5)"
+      expectOutput' "304.983 K" "fromFahrenheit(89.3)"
+      expectOutput' "-273.15" "toCelsius(0 K)"
+      expectOutput' "-405.67" "toFahrenheit(30 K)"
+      expectOutput' "100" "toCelsius(fromCelsius(100))"
+      expectOutput' "100" "toFahrenheit(fromFahrenheit(100))"
+      expectOutput' "123 K" "fromCelsius(toCelsius(123 K))"
+      expectOutput' "123 K" "fromFahrenheit(toFahrenheit(123 K))"
+
     test "Other functions" do
       expectOutput' "2" "sqrt(4)"
       expectOutput' "5" "log10(100000)"

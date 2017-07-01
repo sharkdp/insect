@@ -307,6 +307,8 @@ funcNameDict = Dictionary
   , Cos ==> ["cos"]
   , Exp ==> ["exp"]
   , Floor ==> ["floor"]
+  , FromCelsius ==> ["fromCelsius"]
+  , FromFahrenheit ==> ["fromFahrenheit"]
   , Gamma ==> ["gamma"]
   , Log10 ==> ["log10"]
   , Ln ==> ["log", "ln"]
@@ -316,6 +318,8 @@ funcNameDict = Dictionary
   , Sqrt ==> ["sqrt"]
   , Tanh ==> ["tanh"]
   , Tan ==> ["tan"]
+  , ToCelsius ==> ["toCelsius"]
+  , ToFahrenheit ==> ["toFahrenheit"]
   ]
 
 -- | A list of all mathematical function names (for tab-completion).

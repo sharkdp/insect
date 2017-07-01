@@ -30,6 +30,8 @@ data Func
   | Cosh
   | Exp
   | Floor
+  | FromCelsius
+  | FromFahrenheit
   | Gamma
   | Ln
   | Log10
@@ -39,6 +41,8 @@ data Func
   | Sqrt
   | Tan
   | Tanh
+  | ToCelsius
+  | ToFahrenheit
 
 derive instance eqFunc ∷ Eq Func
 derive instance genericFunc ∷ Generic Func

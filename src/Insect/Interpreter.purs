@@ -29,6 +29,7 @@ import Quantities (Quantity, ConversionError(..), pow, scalar', qNegate, qAdd,
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
                         Statement(..))
 import Insect.Environment (Environment, initialEnvironment)
+import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
 import Insect.Format (Markup)
 import Insect.Format as F
 import Insect.PrettyPrint (pretty, prettyQuantity)
@@ -59,26 +60,30 @@ checkFinite q | isFinite q = pure q
 applyFunction ∷ Func → Quantity → Expect Quantity
 applyFunction fn q = lmap QConversionError $ (run fn) q
   where
-    run Acos  = acos
-    run Acosh = acosh
-    run Asin  = asin
-    run Asinh = asinh
-    run Atan  = atan
-    run Atanh = atanh
-    run Ceil  = ceil
-    run Cos   = cos
-    run Cosh  = cosh
-    run Exp   = exp
-    run Floor = floor
-    run Gamma = gamma
-    run Ln    = ln
-    run Log10 = log10
-    run Round = round
-    run Sin   = sin
-    run Sinh  = sinh
-    run Sqrt  = sqrt >>> pure
-    run Tan   = tan
-    run Tanh  = tanh
+    run Acos           = acos
+    run Acosh          = acosh
+    run Asin           = asin
+    run Asinh          = asinh
+    run Atan           = atan
+    run Atanh          = atanh
+    run Ceil           = ceil
+    run Cos            = cos
+    run Cosh           = cosh
+    run Exp            = exp
+    run Floor          = floor
+    run FromCelsius    = fromCelsius
+    run FromFahrenheit = fromFahrenheit
+    run Gamma          = gamma
+    run Ln             = ln
+    run Log10          = log10
+    run Round          = round
+    run Sin            = sin
+    run Sinh           = sinh
+    run Sqrt           = sqrt >>> pure
+    run Tan            = tan
+    run Tanh           = tanh
+    run ToCelsius      = toCelsius
+    run ToFahrenheit   = toFahrenheit
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
@@ -122,10 +127,19 @@ evalAndSimplify env e = fullSimplify <$> eval env e
 conversionErrorMessage ∷ ConversionError → Markup
 conversionErrorMessage (ConversionError u1 u2) =
   if u1 == unity
-    then scalarErr u2
+    then
+      [ F.error "  Conversion error:", F.nl, F.nl
+      , F.text "    Cannot convert a ", F.unit "scalar"
+      , F.text " to a quantity of unit ", F.unit (toString u2)
+      ]
     else
       if u2 == unity
-        then scalarErr u1
+        then
+          [ F.error "  Conversion error:", F.nl, F.nl
+          , F.text "    Cannot convert quantity of unit "
+          , F.unit (toString u1)
+          , F.text " to a ", F.unit "scalar"
+          ]
         else
             [ F.error "  Conversion error:", F.nl, F.nl
             , F.text "    Cannot convert unit ", F.unit (toString u1)
@@ -134,12 +148,6 @@ conversionErrorMessage (ConversionError u1 u2) =
             , F.text "                to unit ", F.unit (toString u2)
             ] <> baseRep u2
   where
-    scalarErr u =
-      [ F.error "  Conversion error:", F.nl, F.nl
-      , F.text "    Cannot convert quantity of unit "
-      , F.unit (toString u)
-      , F.text " to a ", F.unit "scalar"
-      ]
     baseRep u =
       if fst (toStandardUnit u) == unity
         then []
