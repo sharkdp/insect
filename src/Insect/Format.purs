@@ -20,10 +20,10 @@ module Insect.Format
   , fmtConsole
   ) where
 
+import Prelude
+
 import Data.Array ((:))
 import Data.Foldable (foldMap)
-
-import Prelude ((<>), id)
 
 data FormatType
   = FTText
@@ -97,6 +97,7 @@ fmtPlain Normal   _ s = s
 fmtPlain Optional _ _ = "" -- ignore optional output
 
 jtClass ∷ String → String → String
+jtClass _ "" = ""  -- do not emit formatting code for empty strings
 jtClass name str = "[[;;;hl-" <> name <> "]" <> str <> "]"
 
 -- | Formatter for rich text output on jquery.terminal.

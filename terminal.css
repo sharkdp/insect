@@ -12,7 +12,7 @@
  * Copyright (c) 2011-2017 Jakub Jankiewicz <http://jcubic.pl>
  * Released under the MIT license
  *
- * Date: Sat, 04 Mar 2017 10:48:35 +0000
+ * Date: Sun, 18 Jun 2017 06:22:28 +0000
  */
 .terminal .terminal-output .format, .cmd .format,
 .cmd .prompt, .cmd .prompt div, .terminal .terminal-output div div{
@@ -24,12 +24,29 @@
 .terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6 {
     line-height: 1.2em;
 }
+/*
+.cmd .mask {
+    width: 10px;
+    height: 11px;
+    background: black;
+    z-index: 100;
+}
+*/
 .cmd .clipboard {
     position: absolute;
     left: -16px;
     top: 0;
     width: 20px;
     height: 16px;
+    /* this seems to work after all on Android */
+    /*left: -99999px;
+    clip: rect(1px,1px,1px,1px);
+    /* on desktop textarea appear when paste */
+    /*
+    opacity: 0.01;
+    filter: alpha(opacity = 0.01);
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.01);
+    */
     background: transparent;
     border: none;
     color: transparent;
@@ -44,21 +61,33 @@
 }
 .terminal {
     position: relative;
+    /*overflow: hidden;*/
     overflow-y: auto;
     overflow-x: hidden;
 }
 .terminal > div {
     height: 100%;
 }
-.terminal-output > div {
+.cmd {
     padding: 0;
+    height: 1.3em;
+    position: relative;
+    /*margin-top: 3px; */
+}
+.terminal .inverted, .cmd .inverted {
+    background-color: #aaa;
+    color: #000;
+}
+.cmd .cursor {
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+    background-clip: content-box;
+}
+.terminal-output > div {
     padding-bottom: 1em;
 }
 .terminal-output > div.command {
     padding-bottom: 0.1em;
-}
-.cmd {
-    position: relative;
 }
 .cmd .cursor.blink {
     -webkit-animation: terminal-blink 1s infinite steps(1, start);
@@ -66,9 +95,11 @@
         -ms-animation: terminal-blink 1s infinite steps(1, start);
             animation: terminal-blink 1s infinite steps(1, start);
     border-left: 1px solid transparent;
-    border-bottom: 3px solid transparent;
     margin-left: -1px;
-    background-clip: content-box;
+    /*margin-top: 1px;*/
+}
+.bar.terminal .inverted, .bar.cmd .inverted {
+    border-left-color: #aaa;
 }
 @-webkit-keyframes terminal-blink {
   0%, 100% {
@@ -146,70 +177,63 @@
 }
 @-webkit-keyframes terminal-underline {
   0%, 100% {
-      border-bottom-color: #F8F8F2;
+      border-bottom-color: #aaa;
       position: relative;
-      top: 2px;
+      line-height: 12px;
       border-left: none;
-      margin: 0;
   }
   50% {
-      border-bottom-color: #272822;
+      border-bottom-color: #000;
       position: relative;
-      top: 2px;
+      line-height: 12px;
       border-left: none;
-      margin: 0;
   }
 }
 @-ms-keyframes terminal-underline {
   0%, 100% {
-      border-bottom-color: #F8F8F2;
+      border-bottom-color: #aaa;
       position: relative;
-      top: 2px;
+      line-height: 12px;
       border-left: none;
-      margin: 0;
   }
   50% {
-      border-bottom-color: #272822;
+      border-bottom-color: #000;
       position: relative;
-      top: 2px;
+      line-height: 12px;
       border-left: none;
-      margin: 0;
   }
 }
 @-moz-keyframes terminal-underline {
   0%, 100% {
-      border-bottom-color: #F8F8F2;
+      border-bottom-color: #aaa;
       position: relative;
-      top: 2px;
+      line-height: 12px;
       border-left: none;
-      margin: 0;
   }
   50% {
-      border-bottom-color: #272822;
+      border-bottom-color: #000;
       position: relative;
-      top: 2px;
+      line-height: 11px;
       border-left: none;
-      margin: 0;
   }
 }
 @keyframes terminal-underline {
   0%, 100% {
-      border-bottom-color: #F8F8F2;
+      border-bottom-color: #aaa;
       position: relative;
-      top: 2px;
+      line-height: 11px;
       border-left: none;
-      margin: 0;
   }
   50% {
-      border-bottom-color: #272822;
+      border-bottom-color: #000;
       position: relative;
-      top: 2px;
+      line-height: 11px;
       border-left: none;
-      margin: 0;
   }
 }
 .terminal .terminal-output div div, .cmd .prompt {
     display: block;
+    /*line-height: 14px;*/
     height: auto;
 }
 .cmd .prompt {
@@ -217,8 +241,11 @@
 }
 .terminal, .cmd {
     font-family: 'Fira Mono', monospace;
+    /*font-family: FreeMono, monospace; this don't work on Android */
     color: #F8F8F2;
     background-color: #272822;
+    /*font-size: 12px;*/
+    /*line-height: 14px;*/
     box-sizing: border-box;
 }
 .cmd div {
@@ -232,6 +259,7 @@
     clear: right;
 }
 .terminal-output > div {
+    /*padding-top: 3px;*/
     min-height: 14px;
 }
 .terminal-output > div > div * {
@@ -300,6 +328,14 @@
     background-color: #F8F8F2;
     color: #272822;
 }
+/* this don't work in Chrome
+.terminal tr td::-moz-selection {
+    border-color: #000;
+}
+.terminal tr td::selection {
+    border-color: #000;
+}
+*/
 .terminal h1::selection,
 .terminal h2::selection,
 .terminal h3::selection,
@@ -343,7 +379,7 @@
 .terminal a:hover {
     color: #F8F8F2;
 }
-.terminal iframe {
+.terminal .terminal-fill {
     position: absolute;
     left: 0;
     top: -100%;
@@ -355,6 +391,6 @@
     pointer-events: none;
     box-sizing: border-box;
 }
-.terminal, .terminal iframe {
-    padding: 1.2em; /* we get width of the terminal from iframe so it need to have the same padding */
+.terminal, .terminal .terminal-fill {
+    padding: 1.2em;
 }

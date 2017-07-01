@@ -209,7 +209,7 @@ runInsect env (Command Help) = { msg: Message Info
   , F.emph "  > ", F.function "sin", F.text "(", F.val "30", F.text " ", F.unit "deg", F.text ")", F.nl
   , F.text "", F.nl
   , F.emph "  > ", F.val "2", F.text " ", F.unit "min", F.text " + ", F.val "30", F.text " ", F.unit "s", F.text "          "
-  , F.emph "  > ", F.val "6", F.text " ", F.unit "Mbit/s", F.text " * ", F.val "1.5", F.text " ", F.unit "h", F.text " -> ", F.unit "GB", F.val "", F.nl
+  , F.emph "  > ", F.val "6", F.text " ", F.unit "Mbit/s", F.text " * ", F.val "1.5", F.text " ", F.unit "h", F.text " -> ", F.unit "GB", F.nl
   , F.text "", F.nl
   , F.emph "  > ", F.text "list", F.text "                  "
   , F.emph "  > ", F.ident "r", F.text " = ", F.val "80", F.text " ", F.unit "cm", F.nl
