@@ -35,6 +35,13 @@ p.desc {
     box-shadow: 0px 3px 8px #1a1a1a;
 }
 
+/* jQuery Terminal */
+.prompt {
+    font-weight: bold;
+    /* workaround for https://github.com/sharkdp/insect/issues/78 */
+    letter-spacing: 1px;
+}
+
 /* syntax highlighting */
 
 .hl-emphasized {
