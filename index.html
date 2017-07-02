@@ -103,7 +103,8 @@
                        .concat(Insect.commands);
 
             cb(keywords.sort());
-          }
+          },
+          completionEscape: false
         });
 
         // evaluate expression in query string if supplied (via opensearch)
