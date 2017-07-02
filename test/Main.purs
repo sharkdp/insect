@@ -25,7 +25,7 @@ import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    day, tonne)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
-import Insect.Parser (Dictionary(..), DictEntry, (==>), siPrefixDict,
+import Insect.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
                       normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Environment (Environment, initialEnvironment)
 import Insect.Format (format, fmtPlain)
@@ -182,14 +182,14 @@ main = runTest do
         allParseAs (Expression (Unit  unit))
                    unitStrs
 
-    for_ (unp siPrefixDict) $ \(siPrefix ==> prefixStrs) → do
+    for_ (unp prefixDict) $ \(prefix ==> prefixStrs) → do
       test ("Testing all units with prefix: " <> intercalate ", " prefixStrs) do
         for_ (unp normalUnitDict) $ \(unit ==> unitStrs) → do
           let allCombinations = do
                 p <- prefixStrs
                 u <- unitStrs
                 pure (p <> u)
-          allParseAs (Expression (Unit (siPrefix unit)))
+          allParseAs (Expression (Unit (prefix unit)))
                      allCombinations
 
     test "Special cases" do

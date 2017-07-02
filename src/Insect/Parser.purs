@@ -5,7 +5,7 @@ module Insect.Parser
   , Dictionary(..)
   , commands
   , functions
-  , siPrefixDict
+  , prefixDict
   , normalUnitDict
   , imperialUnitDict
   , parseInsect
@@ -145,9 +145,17 @@ buildDictParser (Dictionary dict) = F.oneOf $ entryParser <$> dict
     entryParser (x ==> abbrevs) = F.oneOf $ abbrevParser x <$> abbrevs
     abbrevParser x abbrev = string abbrev *> pure x
 
-siPrefixDict ∷ Dictionary (DerivedUnit → DerivedUnit)
-siPrefixDict = Dictionary
-  [ Q.atto ==> ["atto", "a"]
+prefixDict ∷ Dictionary (DerivedUnit → DerivedUnit)
+prefixDict = Dictionary
+  [ Q.kibi ==> ["kibi", "Ki"]
+  , Q.mebi ==> ["mebi", "Mi"]
+  , Q.gibi ==> ["gibi", "Gi"]
+  , Q.tebi ==> ["tebi", "Ti"]
+  , Q.pebi ==> ["pebi", "Pi"]
+  , Q.exbi ==> ["exbi", "Ei"]
+  , Q.zebi ==> ["zebi", "Zi"]
+  , Q.yobi ==> ["yobi", "Yi"]
+  , Q.atto ==> ["atto", "a"]
   , Q.femto ==> ["femto", "f"]
   -- peta and mega have to be up here (before pico and milli) in order for the
   -- prefixes ('p' and 'm') not to be parsed as 'pico' or 'milli'.
@@ -172,9 +180,9 @@ siPrefixDict = Dictionary
   , Q.exa ==> ["exa", "E"]
   ]
 
--- | Parse a SI prefix like `µ` or `G`.
-siPrefix ∷ P (DerivedUnit → DerivedUnit)
-siPrefix = buildDictParser siPrefixDict <|> pure id
+-- | Parse a SI or IEC prefix like `µ`, `G`, `pico` or `Ki`.
+prefix ∷ P (DerivedUnit → DerivedUnit)
+prefix = buildDictParser prefixDict <|> pure id
 
 -- | Normal (SI-conform, non-imperial) units
 normalUnitDict ∷ Dictionary DerivedUnit
@@ -264,7 +272,7 @@ imperialUnit = buildDictParser imperialUnitDict <?> "imperial unit"
 -- | Parse a 'normal' unit with SI prefix, like `km` or `Gb`.
 unitWithSIPrefix ∷ P DerivedUnit
 unitWithSIPrefix = do
-  p ← siPrefix
+  p ← prefix
   u ← normalUnit
   pure $ p u
 
