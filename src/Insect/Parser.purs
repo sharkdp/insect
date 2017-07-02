@@ -240,6 +240,7 @@ normalUnitDict = Dictionary
   , Q.gram ==> ["grammes", "gramme", "grams", "gram", "g"]
   , Q.meter ==> ["metres", "metre", "meters", "meter", "m"]
   , Q.liter ==> ["liters", "liter", "litres", "litre", "L", "l"]
+  , Q.atm ==> ["atm"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
@@ -263,6 +264,9 @@ imperialUnitDict = Dictionary
   , Q.teaspoon ==> ["teaspoons", "teaspoon", "tsp"]
   , Q.fluidounce ==> ["fluidounces", "fluidounce", "floz"]
   , Q.furlong ==> ["furlong"]
+  , Q.btu ==> ["BTU"]
+  , Q.psi ==> ["psi"]
+  , Q.mmHg ==> ["mmHg"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
