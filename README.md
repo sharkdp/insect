@@ -92,7 +92,7 @@ Reference
   | Operator                  | Syntax               |
   | ------------------------- | -------------------- |
   | factorial                 | `!`                  |
-  | square/cube               | `²`/`³`              |
+  | square, cube, ...         | `²`, `³`, `⁻¹`, ...  |
   | exponentiation            | `^`, `**`            |
   | multiplication (implicit) | *whitespace*         |
   | division                  | `/`, `÷`, `per`      |
@@ -115,19 +115,23 @@ Reference
   | quit (CLI)        | `quit`, `exit`     |
 
 - Supported units (remember that you can use tab completion).
+
   All SI-accepted units support metric prefixes.
+  In addition, [binary prefixes](https://en.wikipedia.org/wiki/Binary_prefix) (`MiB`, `GiB`, ...) are also supported.
 
   | Unit | Syntax |
   | ---- | ------ |
   | [Ampere](https://en.wikipedia.org/wiki/Ampere) | `amperes`, `ampere`, `A` |
   | [Ångström](https://en.wikipedia.org/wiki/Ångström) | `angstrom`, `Å` |
   | [Astronomical unit](https://en.wikipedia.org/wiki/Astronomical_unit) | `AU` |
+  | [Atmosphere](https://en.wikipedia.org/wiki/Atmosphere_(unit)) | `atm` |
   | [Bar](https://en.wikipedia.org/wiki/Bar_(unit)) | `bar` |
   | [Barn](https://en.wikipedia.org/wiki/Barn_(unit)) | `barn` |
   | [Becquerel](https://en.wikipedia.org/wiki/Becquerel) | `becquerel`, `Bq` |
   | [Bel](https://en.wikipedia.org/wiki/Decibel) | `bel` |
   | [Bits per second](https://en.wikipedia.org/wiki/Data_rate_units) | `bps` |
   | [Bit](https://en.wikipedia.org/wiki/Bit) | `bits`, `bit` |
+  | [British thermal unit](https://en.wikipedia.org/wiki/British_thermal_unit) | `BTU` |
   | [Byte](https://en.wikipedia.org/wiki/Byte) | `Bytes`, `bytes`, `Byte`, `byte`, `B`, `Octets`, `octets`, `Octet`, `octet`|
   | [Calorie](https://en.wikipedia.org/wiki/Calorie) | `calories`, `calorie`, `cal` |
   | [Candela](https://en.wikipedia.org/wiki/Candela) | `candela`, `cd` |
@@ -160,6 +164,7 @@ Reference
   | [Meter](https://en.wikipedia.org/wiki/Meter) | `meters`, `meter`, `metres`, `metre`, `m` |
   | [Miles per hour](https://en.wikipedia.org/wiki/Miles_per_hour) | `mph` |
   | [Mile](https://en.wikipedia.org/wiki/Mile) | `miles`, `mile` |
+  | [Millimeter of mercury](https://en.wikipedia.org/wiki/Millimeter_of_mercury) | `mmHg` |
   | [Minute](https://en.wikipedia.org/wiki/Minute) | `minutes`, `minute`, `min` |
   | [Mole](https://en.wikipedia.org/wiki/Mole_(unit)) | `mole`, `mol` |
   | [Month](https://en.wikipedia.org/wiki/Month) | `months`, `month` |
@@ -170,6 +175,7 @@ Reference
   | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit)) | `pascal`, `Pa` |
   | [Pint](https://en.wikipedia.org/wiki/Pint) | `pints`, `pint` |
   | [Pound](https://en.wikipedia.org/wiki/Pound_(mass)) | `pounds`, `pound`, `lb` |
+  | [Psi](https://en.wikipedia.org/wiki/Pounds_per_square_inch) | `psi` |
   | [RPM](https://en.wikipedia.org/wiki/RPM) | `RPM`, `rpm` |
   | [Radian](https://en.wikipedia.org/wiki/Radian) | `radians`, `radian`, `rad` |
   | [Second](https://en.wikipedia.org/wiki/Second) | `seconds`, `second`, `sec`, `s` |
