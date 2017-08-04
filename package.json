@@ -16,7 +16,7 @@
     "test": "test"
   },
   "scripts": {
-    "compile": "pulp build -m Insect -O",
+    "build": "pulp build -m Insect",
     "test": "pulp test"
   },
   "bugs": {
