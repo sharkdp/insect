@@ -712,7 +712,7 @@ main = runTest do
       expectOutput' "3 m" "3m"
       expectOutput' "3 m" " 3.0 meter  "
 
-    test "Square and cube operators" do
+    test "Square, cube and other exponentation operators" do
       expectOutput' "18" "3²*2"
       expectOutput' "18" "3² 2"
       expectOutput' "18" "3²·2"
@@ -723,6 +723,13 @@ main = runTest do
       expectOutput' "12.5664" "2² pi"
       expectOutput' "12.5664" "2²·pi"
       expectOutput' "500 cm·m" "5m² to cm·m"
+      expectOutput' "32" "2⁵"
+      expectOutput' "-4" "-4¹"
+      expectOutput' "0.5" "2⁻¹"
+      expectOutput' "0.25" "2⁻²"
+      expectOutput' "0.00001" "10⁻⁵"
+
+      shouldFail "32⁻"
 
     test "Conversions" do
       expectOutput' "5.08 cm" "2in to cm"

@@ -66,7 +66,7 @@ insectLanguage = LanguageDef
   , identLetter: identLetter
   , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '!', '→', '➞', '=']
   , opLetter: oneOf []
-  , reservedNames: commands <> ["²", "³", "to", "per"]
+  , reservedNames: commands <> ["¹", "²", "³", "⁴", "⁵", "⁻¹", "⁻²", "⁻³", "⁻⁴", "⁻⁵", "to", "per"]
   , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "!",
                       "**", "="]
   , caseSensitive: true
@@ -383,7 +383,17 @@ expression =
       suffixPow ∷ P Expression
       suffixPow = do
         x ← suffixFac
-        mFn ← optionMaybe ((sqrOp *> pure square) <|> (cubOp *> pure cube))
+        mFn ← optionMaybe (     reservedOp "¹" *>  pure (powPos 1.0)
+                            <|> reservedOp "²" *>  pure (powPos 2.0)
+                            <|> reservedOp "³" *>  pure (powPos 3.0)
+                            <|> reservedOp "⁴" *>  pure (powPos 4.0)
+                            <|> reservedOp "⁵" *>  pure (powPos 5.0)
+                            <|> reservedOp "⁻¹" *> pure (powNeg 1.0)
+                            <|> reservedOp "⁻²" *> pure (powNeg 2.0)
+                            <|> reservedOp "⁻³" *> pure (powNeg 3.0)
+                            <|> reservedOp "⁻⁴" *> pure (powNeg 4.0)
+                            <|> reservedOp "⁻⁵" *> pure (powNeg 5.0)
+                          )
         case mFn of
           Just fn → pure $ fn x
           Nothing → pure x
@@ -420,8 +430,6 @@ expression =
 
     facOp = reservedOp "!"
     powOp = reservedOp "^" <|> reservedOp "**"
-    sqrOp = reservedOp "²"
-    cubOp = reservedOp "³"
     divOp = reservedOp "/" <|> reservedOp "÷" <|> reserved "per"
     mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "⋅"
                            <|> reservedOp "×"
@@ -429,8 +437,9 @@ expression =
     addOp = reservedOp "+"
     arrOp = reservedOp "->" <|> reservedOp "→" <|> reservedOp "➞" <|> reserved "to"
 
-    square q = BinOp Pow q (Scalar $ fromNumber 2.0)
-    cube q = BinOp Pow q (Scalar $ fromNumber 3.0)
+    powPos s q | s == 1.0  = q
+               | otherwise = BinOp Pow q (Scalar $ fromNumber s)
+    powNeg s q = BinOp Pow q (Negate $ Scalar $ fromNumber s)
 
 -- | Parse a mathematical expression (or conversion) like `3m+2in -> cm`.
 fullExpression ∷ P Expression
