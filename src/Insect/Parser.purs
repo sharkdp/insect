@@ -64,10 +64,10 @@ insectLanguage = LanguageDef
   , nestedComments: false
   , identStart: identStart
   , identLetter: identLetter
-  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '^', '!', '→', '➞', '=']
+  , opStart: oneOf ['+', '-', '*', '·', '⋅', '×', '/', '÷', '%', '^', '!', '→', '➞', '=']
   , opLetter: oneOf []
   , reservedNames: commands <> ["¹", "²", "³", "⁴", "⁵", "⁻¹", "⁻²", "⁻³", "⁻⁴", "⁻⁵", "to", "per"]
-  , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "^", "!",
+  , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "%", "^", "!",
                       "**", "="]
   , caseSensitive: true
 }
@@ -404,8 +404,11 @@ expression =
       sepByMulImplicit ∷ P Expression
       sepByMulImplicit = foldl1 (BinOp Mul) <$> sepByPow `sepBy1` pure unit
 
+      sepByMod ∷ P Expression
+      sepByMod = foldl1 (BinOp Mod) <$> sepByMulImplicit `sepBy1` modOp
+
       sepByDiv ∷ P Expression
-      sepByDiv = foldl1 (BinOp Div) <$> sepByMulImplicit `sepBy1` divOp
+      sepByDiv = foldl1 (BinOp Div) <$> sepByMod `sepBy1` divOp
 
       sepByMul ∷ P Expression
       sepByMul = foldl1 (BinOp Mul) <$> sepByDiv `sepBy1` mulOp
@@ -430,6 +433,7 @@ expression =
 
     facOp = reservedOp "!"
     powOp = reservedOp "^" <|> reservedOp "**"
+    modOp = reservedOp "%"
     divOp = reservedOp "/" <|> reservedOp "÷" <|> reserved "per"
     mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "⋅"
                            <|> reservedOp "×"

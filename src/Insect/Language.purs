@@ -55,6 +55,7 @@ data BinOp
  | Mul
  | Div
  | Pow
+ | Mod
  | ConvertTo
 
 derive instance eqBinOp ∷ Eq BinOp

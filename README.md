@@ -95,6 +95,7 @@ Reference
   | square, cube, ...         | `²`, `³`, `⁻¹`, ...  |
   | exponentiation            | `^`, `**`            |
   | multiplication (implicit) | *whitespace*         |
+  | modulo                    | `%`                  |
   | division                  | `/`, `÷`, `per`      |
   | multiplication (explicit) | `*`, `·`, `×`        |
   | subtraction               | `-`                  |

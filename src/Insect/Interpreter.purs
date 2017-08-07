@@ -24,7 +24,7 @@ import Quantities (Quantity, ConversionError(..), pow, scalar', qNegate, qAdd,
                    asin, atan, sin, cos, tan, exp, ln, sinh, cosh, tanh, asinh,
                    acosh, atanh, ceil, floor, gamma, log10, round, isFinite,
                    toStandardUnit, unity, toString, baseRepresentation,
-                   factorial)
+                   factorial, modulo)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
                         Statement(..))
@@ -107,6 +107,7 @@ eval env (BinOp op x y)  = do
     run Mul       a b = pure (qMultiply a b)
     run Div       a b = pure (qDivide a b)
     run Pow       a b = pow a <$> toScalar'' b
+    run Mod       a b = modulo' a b
     run ConvertTo a b = convertTo' a b
 
     wrap ∷ ∀ a. Either ConversionError a → Either EvalError a
@@ -115,6 +116,7 @@ eval env (BinOp op x y)  = do
     qSubtract' q1 q2 = wrap (qSubtract q1 q2)
     qAdd' q1 q2 = wrap (qAdd q1 q2)
     toScalar'' q = wrap (toScalar' q)
+    modulo' q1 q2 = wrap (modulo q1 q2)
     convertTo' source target = wrap (convertTo source (derivedUnit target))
 
 -- | Like `eval`, but calls `fullSimplify` on the result if the user did not

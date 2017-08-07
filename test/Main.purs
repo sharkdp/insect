@@ -419,6 +419,18 @@ main = runTest do
       shouldFail "5/"
       shouldFail "5 per"
 
+    test "Modulo" do
+      allParseAs (Expression (BinOp Mod (scalar 5.0) (scalar 3.0))) $
+        [ "5%3"
+        , "5 % 3"
+        , " ( 5 ) % ( 3 ) "
+        , " ( ( 5 ) % ( 3 ) ) "
+        , " ( 5 % 3 ) "
+        ]
+
+      shouldFail "5%"
+      shouldFail "%2"
+
     test "Addition" do
       allParseAs (Expression (BinOp Add (scalar 5.0) (scalar 3.0))) $
         [ "5+3"
