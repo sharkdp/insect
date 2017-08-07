@@ -153,6 +153,7 @@ Reference
   | [Hectare](https://en.wikipedia.org/wiki/Hectare) | `hectare`, `ha` |
   | [Henry](https://en.wikipedia.org/wiki/Henry_(unit)) | `henry`, `H` |
   | [Hertz](https://en.wikipedia.org/wiki/Hertz) | `hertz`, `Hz` |
+  | [Hogshead](https://en.wikipedia.org/wiki/Hogshead) | `hogsheads`, `hogshead` |
   | [Hour](https://en.wikipedia.org/wiki/Hour) | `hours`, `hour`, `h` |
   | [Inch](https://en.wikipedia.org/wiki/Inch) | `inches`, `inch`, `in` |
   | [Joule](https://en.wikipedia.org/wiki/Joule) | `joules`, `joule`, `J` |
@@ -179,6 +180,7 @@ Reference
   | [Psi](https://en.wikipedia.org/wiki/Pounds_per_square_inch) | `psi` |
   | [RPM](https://en.wikipedia.org/wiki/RPM) | `RPM`, `rpm` |
   | [Radian](https://en.wikipedia.org/wiki/Radian) | `radians`, `radian`, `rad` |
+  | [Rod](https://en.wikipedia.org/wiki/Rod_(unit)) | `rods`, `rod` |
   | [Second](https://en.wikipedia.org/wiki/Second) | `seconds`, `second`, `sec`, `s` |
   | [Siemens](https://en.wikipedia.org/wiki/Siemens_(unit)) | `siemens`, `S` |
   | [Sievert](https://en.wikipedia.org/wiki/Sievert) | `sievert`, `Sv` |

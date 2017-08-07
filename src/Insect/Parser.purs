@@ -267,6 +267,8 @@ imperialUnitDict = Dictionary
   , Q.btu ==> ["BTU"]
   , Q.psi ==> ["psi"]
   , Q.mmHg ==> ["mmHg"]
+  , Q.hogshead ==> ["hogsheads", "hogshead"]
+  , Q.rod ==> ["rods", "rod"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
