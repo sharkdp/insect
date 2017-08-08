@@ -56,12 +56,12 @@ if (interactive) {
     output: process.stdout,
     path: path.join(xdgBasedir.config, "insect-history"),
     completer: function(line) {
-      var variables = Object.keys(insectEnv);
+      var identifiers = Object.keys(insectEnv.values);
 
       var keywords =
-        variables.concat(Insect.functions)
-        .concat(Insect.supportedUnits)
-        .concat(Insect.commands);
+        identifiers.concat(Insect.functions)
+                   .concat(Insect.supportedUnits)
+                   .concat(Insect.commands);
 
       var lastWord = line;
       if (line.trim() !== "") {

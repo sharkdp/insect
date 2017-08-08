@@ -27,7 +27,8 @@ import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
                       normalUnitDict, imperialUnitDict, parseInsect)
-import Insect.Environment (Environment, initialEnvironment)
+import Insect.Environment (StorageType(..), StoredValue(..), Environment,
+                           initialEnvironment)
 import Insect.Format (format, fmtPlain)
 import Insect.PrettyPrint (pretty)
 import Insect (repl)
@@ -603,7 +604,7 @@ main = runTest do
         ]
 
     test "Initial environment" do
-      for_ (keys initialEnvironment) \ident →
+      for_ (keys initialEnvironment.values) \ident →
         shouldParseAs (Expression (Variable ident)) ident
 
   suite "Parser - Functions" do
@@ -749,7 +750,9 @@ main = runTest do
       expectOutput' "500 cm·m" "5m^2 -> cm*m"
 
     test "Implicit multiplication" do
-      let myEnv = insert "x" (5.0 .* meter) initialEnvironment
+      let myEnv = {
+            values: insert "x" (StoredValue UserDefined (5.0 .* meter)) initialEnvironment.values
+          }
       expectOutput myEnv "5 m" "x"
       expectOutput myEnv "10 m" "2x"
       expectOutput myEnv "10 m" "2 x"

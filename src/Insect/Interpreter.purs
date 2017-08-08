@@ -11,7 +11,7 @@ import Data.Array ((:), fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate)
-import Data.List (sortBy, groupBy)
+import Data.List (sortBy, filter, groupBy)
 import Data.List.NonEmpty (head)
 import Data.Maybe (Maybe(..))
 import Data.String (toLower)
@@ -27,8 +27,8 @@ import Quantities (Quantity, ConversionError(..), pow, scalar', qNegate, qAdd,
                    factorial, modulo)
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
-                        Statement(..))
-import Insect.Environment (Environment, initialEnvironment)
+                        Statement(..), Identifier)
+import Insect.Environment (Environment, StorageType(..), StoredValue(..), initialEnvironment)
 import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
 import Insect.Format (Markup)
 import Insect.Format as F
@@ -39,6 +39,7 @@ data EvalError
   = QConversionError ConversionError
   | LookupError String
   | NumericalError
+  | RedefinedConstantError Identifier
 
 -- | A type synonym for error handling. A value of type `Expect Number` is
 -- | expected to be a number but might also result in an evaluation error.
@@ -90,8 +91,8 @@ eval ∷ Environment → Expression → Expect Quantity
 eval env (Scalar n)      = pure $ scalar' n
 eval env (Unit u)        = pure $ quantity 1.0 u
 eval env (Variable name) =
-  case lookup name env of
-    Just q → pure q
+  case lookup name env.values of
+    Just (StoredValue _ q) → pure q
     Nothing → Left (LookupError name)
 eval env (Factorial x)   = eval env x >>= factorial >>> lmap QConversionError
 eval env (Negate x)      = qNegate <$> eval env x
@@ -177,6 +178,10 @@ evalErrorMessage NumericalError =
   [ F.optional (F.text "  ")
   , F.error "Numerical error: "
   , F.text "division by zero or out-of-bounds error" ]
+evalErrorMessage (RedefinedConstantError name) =
+  [ F.optional (F.text "  ")
+  , F.error "Assignment error: "
+  , F.text "The constant ", F.ident name, F.text " cannot be redefined." ]
 
 -- | Interpreter return type.
 type Response = { msg ∷ Message, newEnv ∷ Environment }
@@ -199,17 +204,25 @@ runInsect env (Expression e) =
       { msg: Message Value $    (F.optional <$> F.text "  " : pretty e)
                              <> (F.optional <$> [ F.nl, F.nl , F.text "   = " ])
                              <> prettyQuantity value
-      , newEnv: insert "ans" value env
+      , newEnv: env { values = insert "ans" (StoredValue UserDefined value) env.values }
       }
 runInsect env (Assignment n v) =
   case evalAndSimplify env v of
     Left evalErr → errorWithInput [ F.ident n, F.text " = " ] v env evalErr
     Right value →
-      { msg: Message ValueSet $
-                  (F.optional <$> [ F.text "  ", F.ident n, F.text " = " ])
-               <> prettyQuantity value
-      , newEnv: insert n value env
-      }
+      let response =
+            { msg: Message ValueSet $
+                        (F.optional <$> [ F.text "  ", F.ident n, F.text " = " ])
+                     <> prettyQuantity value
+            , newEnv: env { values = insert n (StoredValue UserDefined value) env.values }
+          }
+      in
+        case lookup n env.values of
+          Just (StoredValue t _) →
+            if t == Constant || t == HiddenConstant
+              then errorWithInput [ F.ident n, F.text " = " ] v env (RedefinedConstantError n)
+              else response
+          _ → response
 runInsect env (Command Help) = { msg: Message Info
   [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl
@@ -232,8 +245,11 @@ runInsect env (Command List) =
   { msg: Message Info list
   , newEnv: env }
   where
-    envTuples = sortBy (comparing (_.number <<< prettyPrint' <<< snd)) $ toUnfoldable env
-    envGrouped = groupBy (\x y → snd x == snd y) envTuples
+    storedValue (StoredValue _ value) = value
+    storageType (StoredValue t _) = t
+    visibleValues = filter (\e → storageType (snd e) /= HiddenConstant) (toUnfoldable env.values)
+    envTuples = sortBy (comparing (_.number <<< prettyPrint' <<< storedValue <<< snd)) visibleValues
+    envGrouped = groupBy (\x y → storedValue (snd x) == storedValue (snd y)) envTuples
     envSorted = sortBy (comparing (toLower <<< fst <<< head)) envGrouped
     list = [ F.text "List of variables:", F.nl ] <> foldMap toLine envSorted
     toLine kvPairs =
@@ -244,7 +260,7 @@ runInsect env (Command List) =
         where
           identifiers = fromFoldable $ intercalate [ F.text " = " ] $
                           (singleton <<< F.ident <<< fst) <$> kvPairs
-          val = snd (head kvPairs)
+          val = storedValue (snd (head kvPairs))
 runInsect env (Command Reset) =
   { msg: Message Info [F.text "Environment has been reset."]
   , newEnv: initialEnvironment }

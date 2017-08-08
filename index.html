@@ -95,12 +95,12 @@
             return line.trim() !== "";
           },
           completion: function(inp, cb) {
-            var variables = Object.keys(insectEnv);
+            var identifiers = Object.keys(insectEnv.values);
 
             var keywords =
-              variables.concat(Insect.functions)
-                       .concat(Insect.supportedUnits)
-                       .concat(Insect.commands);
+              identifiers.concat(Insect.functions)
+                         .concat(Insect.supportedUnits)
+                         .concat(Insect.commands);
 
             cb(keywords.sort());
           },
