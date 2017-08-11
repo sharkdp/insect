@@ -1,0 +1,18 @@
+![insect](media/insect.png "insect - scientific calculator")
+
+A high precision scientific calculator with full support for physical units.
+
+**Try the web version here**: https://insect.sh
+
+Contents
+--------
+
+$if(toc)$
+$toc$
+
+$endif$
+$body$
+$for(include-after)$
+
+$include-after$
+$endfor$

@@ -2,8 +2,15 @@
 
 A high precision scientific calculator with full support for physical units.
 
--   [**Web version**](https://insect.sh/)
--   [Terminal version](#install-terminal-version)
+**Try the web version here**: https://insect.sh
+
+Contents
+--------
+
+-   [Documentation](#documentation)
+-   [Reference](#reference)
+-   [Terminal version](#terminal-version)
+-   [Development](#development)
 
 Documentation
 -------------

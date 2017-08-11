@@ -5,7 +5,8 @@ pandoc --from="$input_format" \
        --to=markdown_github-raw_html \
        --output=../README.md \
        --standalone \
-       readme-header.md \
+       --template=README.template \
+       --toc \
        features.md \
        reference-syntax.md \
        reference-units.md \
