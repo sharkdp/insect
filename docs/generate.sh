@@ -5,12 +5,13 @@ pandoc --from="$input_format" \
        --to=markdown_github-raw_html \
        --output=../README.md \
        --standalone \
-       --template=README.template \
+       --template=template.readme \
        --toc \
        features.md \
        reference-syntax.md \
        reference-units.md \
        terminal-version.md \
+       pros-and-cons.md \
        development.md
 
 # Generate manpage
