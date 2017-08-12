@@ -10,34 +10,26 @@ import Prelude hiding (degree)
 import Data.Array ((:), fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
-import Data.Foldable (foldMap, intercalate)
-import Data.List (List, sortBy, filter, groupBy)
-import Data.List.NonEmpty (head)
+import Data.Foldable (foldMap, intercalate, foldl)
+import Data.List (sortBy, filter, groupBy)
+import Data.List.NonEmpty (NonEmptyList(..), head, length, zip)
 import Data.Maybe (Maybe(..))
-import Data.NonEmpty (NonEmpty)
+import Data.StrMap (lookup, insert, delete, toUnfoldable)
 import Data.String (toLower)
-import Data.StrMap (lookup, insert, toUnfoldable)
-import Data.Tuple (fst, snd)
 import Data.Traversable (traverse)
+import Data.Tuple (Tuple(..), fst, snd)
 
 import Quantities (Quantity, ConversionError(..))
 import Quantities as Q
 
 import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
-                        Statement(..), Identifier)
+                        Statement(..), EvalError(..), MathFunction,
+                        Identifier)
 import Insect.Environment (Environment, StorageType(..), StoredValue(..),
-                           initialEnvironment, EvalFunctionError(..))
+                           StoredFunction(..), initialEnvironment)
 import Insect.Format (Markup)
 import Insect.Format as F
 import Insect.PrettyPrint (pretty, prettyQuantity)
-
--- | Types of errors that may appear during evaluation.
-data EvalError
-  = QConversionError ConversionError
-  | WrongArityError Identifier Int Int
-  | LookupError String
-  | NumericalError
-  | RedefinedConstantError Identifier
 
 -- | A type synonym for error handling. A value of type `Expect Number` is
 -- | expected to be a number but might also result in an evaluation error.
@@ -55,27 +47,17 @@ checkFinite ∷ Quantity → Expect Quantity
 checkFinite q | Q.isFinite q = pure q
               | otherwise    = Left NumericalError
 
--- | Apply a mathematical function to its arguments, a list of physical
--- | quantities.
-applyFunction ∷ Func → NonEmpty List Quantity → Expect Quantity
-applyFunction (Func name fn) qs = lmap toEvalError (fn qs)
-  where
-    toEvalError ∷ EvalFunctionError → EvalError
-    toEvalError (EFWrongArity expected given) = WrongArityError name expected given
-    toEvalError (EFConversionError ce) = QConversionError ce
-
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
-eval env (Scalar n)      = pure $ Q.scalar' n
-eval env (Unit u)        = pure $ Q.quantity 1.0 u
-eval env (Variable name) =
-  case lookup name env.values of
-    Just (StoredValue _ q) → pure q
-    Nothing → Left (LookupError name)
-eval env (Factorial x)   = eval env x >>= Q.factorial >>> lmap QConversionError
-eval env (Negate x)      = Q.qNegate <$> eval env x
-eval env (Apply fn xs)   = traverse (eval env) xs >>= applyFunction fn >>= checkFinite
-eval env (BinOp op x y)  = do
+eval env (Scalar n)             = pure $ Q.scalar' n
+eval env (Unit u)               = pure $ Q.quantity 1.0 u
+eval env (Variable name)        = case lookup name env.values of
+                                    Just (StoredValue _ q) → pure q
+                                    Nothing → Left (LookupError name)
+eval env (Factorial x)          = eval env x >>= Q.factorial >>> lmap QConversionError
+eval env (Negate x)             = Q.qNegate <$> eval env x
+eval env (Apply (Func _ fn) xs) = traverse (eval env) xs >>= fn >>= checkFinite
+eval env (BinOp op x y)         = do
   x' <- eval env x
   y' <- eval env y
   (run op) x' y' >>= checkFinite
@@ -166,8 +148,8 @@ evalErrorMessage NumericalError =
   , F.text "division by zero or out-of-bounds error" ]
 evalErrorMessage (RedefinedConstantError name) =
   [ F.optional (F.text "  ")
-  , F.error "Assignment error: "
-  , F.text "The constant ", F.ident name, F.text " cannot be redefined." ]
+  , F.error "Assignment error: ", F.text "'", F.emph name
+  , F.text "' cannot be redefined." ]
 
 -- | Interpreter return type.
 type Response = { msg ∷ Message, newEnv ∷ Environment }
@@ -181,6 +163,21 @@ errorWithInput prefix expr env err =
   , newEnv: env
   }
 
+-- | Check whether a given identifier is the name of a constant value/function.
+isConstant ∷ Environment → Identifier → Boolean
+isConstant env name = isConstantValue || isConstantFunction
+  where
+    isConstantValue =
+      case lookup name env.values of
+        Just (StoredValue Constant _)       → true
+        Just (StoredValue HiddenConstant _) → true
+        _ → false
+    isConstantFunction =
+      case lookup name env.functions of
+        Just (StoredFunction Constant _)       → true
+        Just (StoredFunction HiddenConstant _) → true
+        _ → false
+
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → Response
 runInsect env (Expression e) =
@@ -192,23 +189,54 @@ runInsect env (Expression e) =
                              <> prettyQuantity value
       , newEnv: env { values = insert "ans" (StoredValue UserDefined value) env.values }
       }
-runInsect env (Assignment n v) =
-  case evalAndSimplify env v of
-    Left evalErr → errorWithInput [ F.ident n, F.text " = " ] v env evalErr
+
+runInsect env (VariableAssignment name val) =
+  case evalAndSimplify env val of
+    Left evalErr → errorWithInput [ F.ident name, F.text " = " ] val env evalErr
     Right value →
-      let response =
-            { msg: Message ValueSet $
-                        (F.optional <$> [ F.text "  ", F.ident n, F.text " = " ])
-                     <> prettyQuantity value
-            , newEnv: env { values = insert n (StoredValue UserDefined value) env.values }
+      if isConstant env name
+        then
+          errorWithInput [ F.ident name, F.text " = " ] val env (RedefinedConstantError name)
+        else
+          { msg: Message ValueSet $
+                      (F.optional <$> [ F.text "  ", F.ident name, F.text " = " ])
+                   <> prettyQuantity value
+          , newEnv: env { values = insert name (StoredValue UserDefined value) env.values
+                        , functions = delete name env.functions }
           }
-      in
-        case lookup n env.values of
-          Just (StoredValue t _) →
-            if t == Constant || t == HiddenConstant
-              then errorWithInput [ F.ident n, F.text " = " ] v env (RedefinedConstantError n)
-              else response
-          _ → response
+
+runInsect env (FunctionAssignment name argNames expr) =
+  if isConstant env name
+    then
+      errorWithInput fAssign expr env (RedefinedConstantError name)
+    else
+      { msg: Message ValueSet $ F.optional <$> fAssign <> pretty expr
+      , newEnv: env { functions = insert name (StoredFunction UserDefined userFunc) env.functions
+                    , values = delete name env.values
+                    }
+      }
+  where
+    argNames' = NonEmptyList argNames
+    expected = length argNames'
+
+    fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
+    fAssign = [ F.text "  ", F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
+
+    userFunc ∷ MathFunction
+    userFunc argValues =
+      if given == expected
+        then evalAndSimplify functionEnv expr
+        else Left (WrongArityError name expected given)
+      where
+        argValues' = NonEmptyList argValues
+        given = length argValues'
+        args = zip argNames' argValues'
+
+        insertArg map (Tuple argName val) = insert argName (StoredValue UserDefined val) map
+        functionEnv = env { values = foldl insertArg env.values args
+                          , functions = delete name env.functions
+                          }
+
 runInsect env (Command Help) = { msg: Message Info
   [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
   , F.text "involve physical quantities. You can start by trying", F.nl
@@ -227,6 +255,7 @@ runInsect env (Command Help) = { msg: Message Info
   , F.text "", F.nl
   , F.text "Full documentation: https://github.com/sharkdp/insect"
   ], newEnv : env }
+
 runInsect env (Command List) =
   { msg: Message Info list
   , newEnv: env }
@@ -247,8 +276,11 @@ runInsect env (Command List) =
           identifiers = fromFoldable $ intercalate [ F.text " = " ] $
                           (singleton <<< F.ident <<< fst) <$> kvPairs
           val = storedValue (snd (head kvPairs))
+
 runInsect env (Command Reset) =
   { msg: Message Info [F.text "Environment has been reset."]
   , newEnv: initialEnvironment }
+
 runInsect env (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
+
 runInsect env (Command Clear) = { msg: MClear, newEnv: env }

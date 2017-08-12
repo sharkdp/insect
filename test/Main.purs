@@ -653,9 +653,9 @@ main = runTest do
       shouldFail "exp(1,)"
       shouldFail "exp()"
 
-  suite "Parser - Assignments" do
+  suite "Parser - Variable Assignments" do
     test "Simple" do
-      allParseAs (Assignment "xyz_123" (scalar 1.0)) $
+      allParseAs (VariableAssignment "xyz_123" (scalar 1.0)) $
         [ "xyz_123 = 1"
         , "xyz_123=1"
         , "  xyz_123  =  1  "
@@ -859,8 +859,14 @@ main = runTest do
                     "3kg+"
       expectOutput' "Parse error at position 5: 'kg' is reserved for a physical unit"
                     "kg=2"
-      expectOutput' "Assignment error: The constant pi cannot be redefined."
+      expectOutput' "Assignment error: 'pi' cannot be redefined."
                     "pi=3"
+      expectOutput' "Assignment error: 'sin' cannot be redefined."
+                    "sin=3"
+      expectOutput' "Assignment error: 'pi' cannot be redefined."
+                    "pi(x)=3"
+      expectOutput' "Assignment error: 'sin' cannot be redefined."
+                    "sin(x)=3"
       expectOutput' "Parse error at position 5: reserved word \"help\""
                     "help=3"
       expectOutput' "Wrong number of arguments:\n\n    The function 'sin' takes 1 argument (got 3)"

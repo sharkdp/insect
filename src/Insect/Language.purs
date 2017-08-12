@@ -1,6 +1,8 @@
 -- | This module defines the AST for Insect.
 module Insect.Language
-  ( Identifier
+  ( MathFunction
+  , EvalError(..)
+  , Identifier
   , BinOp(..)
   , Func(..)
   , Expression(..)
@@ -11,12 +13,13 @@ module Insect.Language
 import Prelude hiding (Unit)
 
 import Data.Decimal (Decimal)
+import Data.Either (Either)
 import Data.Generic (class Generic, gShow)
 import Data.List (List)
 import Data.NonEmpty (NonEmpty)
 import Data.Units (DerivedUnit)
 
-import Insect.Environment (MathFunction)
+import Quantities (Quantity, ConversionError)
 
 -- | Type synonym for identifiers (variable names).
 type Identifier = String
@@ -34,6 +37,17 @@ data BinOp
 derive instance eqBinOp ∷ Eq BinOp
 derive instance genericBinOp ∷ Generic BinOp
 instance showBinOp ∷ Show BinOp where show = gShow
+
+-- | Types of errors that may appear during evaluation.
+data EvalError
+  = QConversionError ConversionError
+  | WrongArityError Identifier Int Int
+  | LookupError String
+  | NumericalError
+  | RedefinedConstantError Identifier
+
+-- | Mathematical functions on physical quantities.
+type MathFunction = NonEmpty List Quantity → Either EvalError Quantity
 
 -- | A mathematical function.
 data Func = Func Identifier MathFunction
@@ -79,11 +93,13 @@ instance showCommand ∷ Show Command where show = gShow
 -- | A statement in Insect.
 data Statement
  = Expression Expression
- | Assignment Identifier Expression
+ | VariableAssignment Identifier Expression
+ | FunctionAssignment Identifier (NonEmpty List Identifier) Expression
  | Command Command
 
 derive instance eqStatement ∷ Eq Statement
 instance showStatement ∷ Show Statement where
-  show (Expression e)   = "(Expression " <> show e <> ")"
-  show (Assignment i e) = "(Assignment " <> show i <> " " <> show e <> ")"
-  show (Command c)      = "(Command " <> show c <> ")"
+  show (Expression e)              = "(Expression " <> show e <> ")"
+  show (VariableAssignment i e)    = "(VariableAssignment " <> show i <> " " <> show e <> ")"
+  show (FunctionAssignment f xs e) = "(FunctionAssignment " <> show f <> " " <> show xs <> " " <> show e <> ")"
+  show (Command c)                 = "(Command " <> show c <> ")"

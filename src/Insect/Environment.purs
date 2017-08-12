@@ -1,8 +1,6 @@
 module Insect.Environment
   ( StorageType(..)
   , StoredValue(..)
-  , EvalFunctionError(..)
-  , MathFunction
   , StoredFunction(..)
   , Environment
   , initialEnvironment
@@ -12,9 +10,7 @@ import Prelude
 
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
-import Data.List (List)
 import Data.List.NonEmpty (NonEmptyList(..), head, length)
-import Data.NonEmpty (NonEmpty)
 import Data.StrMap (StrMap, fromFoldable)
 import Data.Tuple (Tuple(..))
 
@@ -22,6 +18,7 @@ import Quantities (Quantity, ConversionError)
 import Quantities as Q
 
 import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
+import Insect.Language (EvalError(..), MathFunction, Identifier)
 
 -- | Values can be stored as constants, as constants that are not
 -- | displayed when calling `list`, and as user-defined quantities.
@@ -31,15 +28,6 @@ derive instance eqStorageType ∷ Eq StorageType
 
 -- | A quantity with a given `StorageType`.
 data StoredValue = StoredValue StorageType Quantity
-
--- | Errors that may appear when applying a function to a list of
--- | arguments.
-data EvalFunctionError
-  = EFWrongArity Int Int
-  | EFConversionError ConversionError
-
--- | Mathematical functions on physical quantities.
-type MathFunction = NonEmpty List Quantity → Either EvalFunctionError Quantity
 
 -- | A mathematical function with a given `StorageType`.
 data StoredFunction = StoredFunction StorageType MathFunction
@@ -134,13 +122,13 @@ initialEnvironment =
   where
     constVal identifier value = Tuple identifier (StoredValue Constant value)
     hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
-    constFunc identifier func = Tuple identifier (StoredFunction Constant (wrapSimple func))
+    constFunc identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func))
 
-    wrapSimple ∷ (Quantity → Either ConversionError Quantity) → MathFunction
-    wrapSimple func qs =
+    wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
+    wrapSimple name func qs =
       if numArgs == 1
-        then lmap EFConversionError $ func (head args)
-        else Left $ EFWrongArity 1 numArgs
+        then lmap QConversionError $ func (head args)
+        else Left $ WrongArityError name 1 numArgs
       where
         args = NonEmptyList qs
         numArgs = length args

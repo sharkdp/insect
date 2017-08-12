@@ -20,7 +20,7 @@ import Quantities as Q
 
 import Data.Array (some, fromFoldable)
 import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
-import Data.Either (Either(..))
+import Data.Either (Either, isRight)
 import Data.Foldable (foldr)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
@@ -28,7 +28,6 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Data.StrMap (lookup)
 import Data.String (fromCharArray, singleton)
-import Data.Tuple (Tuple(..))
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
 import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>),
@@ -38,8 +37,8 @@ import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
 
 import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
-                        Statement(..), Identifier)
-import Insect.Environment (Environment, MathFunction, StoredFunction(..))
+                        Statement(..))
+import Insect.Environment (Environment, StoredFunction(..))
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
@@ -437,30 +436,33 @@ command =
     <|> (reserved "quit" <|> reserved "exit") *> pure Quit
   ) <* eof
 
--- | Parse a variable assignment like `x = 3m*pi`
-assignment ∷ Environment → P (Tuple String Expression)
+-- | Parse a variable- or function assignment.
+assignment ∷ Environment → P Statement
 assignment env = do
-  whiteSpace
-  var ← token.identifier
-  reservedOp "="
-  value ← expression env
-  eof
-  pure $ Tuple var value
+  { name, args, expr } ←
+    try do
+      whiteSpace
+      name ← token.identifier
+      args ← optionMaybe (parens (sepBy1 token.identifier (reservedOp ",")))
+      reservedOp "="
+      expr ← expression env
+      eof
 
--- | Try to parse the identifier as a unit, and fail if it succeeds.
-checkIdentifier ∷ Tuple String Expression → P Statement
-checkIdentifier (Tuple var value) =
-  case runParser var (derivedUnit <* eof) of
-    Right _ →
-      fail $ "'" <> var <> "' is reserved for a physical unit"
-    Left _ →
-      pure $ Assignment var value
+      pure { name: name, args: args, expr: expr }
+
+  -- Fail if the name can be parsed as a physical unit
+  when (isRight $ runParser name (derivedUnit <* eof)) $
+    fail ("'" <> name <> "' is reserved for a physical unit")
+
+  case args of
+    Nothing → pure (VariableAssignment name expr)
+    Just xs → pure (FunctionAssignment name xs expr)
 
 -- | Parse a statement in the Insect language.
 statement ∷ Environment → P Statement
 statement env =
       (Command <$> command)
-  <|> (try (assignment env) >>= checkIdentifier)
+  <|> assignment env
   <|> (Expression <$> fullExpression env)
 
 -- | Run the Insect-parser on a `String` input.
