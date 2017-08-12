@@ -12,7 +12,7 @@ import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate)
 import Data.List (List, sortBy, filter, groupBy)
-import Data.List.NonEmpty (NonEmptyList(..), head)
+import Data.List.NonEmpty (head)
 import Data.Maybe (Maybe(..))
 import Data.NonEmpty (NonEmpty)
 import Data.String (toLower)
@@ -26,8 +26,7 @@ import Quantities as Q
 import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
                         Statement(..), Identifier)
 import Insect.Environment (Environment, StorageType(..), StoredValue(..),
-                           StoredFunction(..), initialEnvironment,
-                           MathFunction)
+                           initialEnvironment, EvalFunctionError(..))
 import Insect.Format (Markup)
 import Insect.Format as F
 import Insect.PrettyPrint (pretty, prettyQuantity)
@@ -35,6 +34,7 @@ import Insect.PrettyPrint (pretty, prettyQuantity)
 -- | Types of errors that may appear during evaluation.
 data EvalError
   = QConversionError ConversionError
+  | WrongArityError Identifier Int Int
   | LookupError String
   | NumericalError
   | RedefinedConstantError Identifier
@@ -58,7 +58,11 @@ checkFinite q | Q.isFinite q = pure q
 -- | Apply a mathematical function to its arguments, a list of physical
 -- | quantities.
 applyFunction ∷ Func → NonEmpty List Quantity → Expect Quantity
-applyFunction (Func _ fn) qs = lmap QConversionError (fn qs)
+applyFunction (Func name fn) qs = lmap toEvalError (fn qs)
+  where
+    toEvalError ∷ EvalFunctionError → EvalError
+    toEvalError (EFWrongArity expected given) = WrongArityError name expected given
+    toEvalError (EFConversionError ce) = QConversionError ce
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
@@ -144,6 +148,14 @@ conversionErrorMessage (ConversionError u1 u2) =
 evalErrorMessage ∷ EvalError → Markup
 evalErrorMessage (QConversionError ue) =
   conversionErrorMessage ue
+evalErrorMessage (WrongArityError fn expected given) =
+  [ F.optional (F.text "  ")
+  , F.error "Wrong number of arguments:", F.nl, F.nl
+  , F.text "    The function '", F.function fn, F.text "'"
+  , F.text " takes ", F.val (show expected)
+  , F.text (if expected == 1 then " argument" else " arguments")
+  , F.text " (got ", F.val (show given), F.text ")"
+  ]
 evalErrorMessage (LookupError name) =
   [ F.optional (F.text "  ")
   , F.error "Unknown identifier: "

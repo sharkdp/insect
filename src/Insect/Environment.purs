@@ -1,6 +1,7 @@
 module Insect.Environment
   ( StorageType(..)
   , StoredValue(..)
+  , EvalFunctionError(..)
   , MathFunction
   , StoredFunction(..)
   , Environment
@@ -9,9 +10,10 @@ module Insect.Environment
 
 import Prelude
 
-import Data.Either (Either)
+import Data.Bifunctor (lmap)
+import Data.Either (Either(..))
 import Data.List (List)
-import Data.List.NonEmpty (NonEmptyList(..), head)
+import Data.List.NonEmpty (NonEmptyList(..), head, length)
 import Data.NonEmpty (NonEmpty)
 import Data.StrMap (StrMap, fromFoldable)
 import Data.Tuple (Tuple(..))
@@ -30,8 +32,14 @@ derive instance eqStorageType ∷ Eq StorageType
 -- | A quantity with a given `StorageType`.
 data StoredValue = StoredValue StorageType Quantity
 
+-- | Errors that may appear when applying a function to a list of
+-- | arguments.
+data EvalFunctionError
+  = EFWrongArity Int Int
+  | EFConversionError ConversionError
+
 -- | Mathematical functions on physical quantities.
-type MathFunction = NonEmpty List Quantity → Either ConversionError Quantity
+type MathFunction = NonEmpty List Quantity → Either EvalFunctionError Quantity
 
 -- | A mathematical function with a given `StorageType`.
 data StoredFunction = StoredFunction StorageType MathFunction
@@ -126,7 +134,13 @@ initialEnvironment =
   where
     constVal identifier value = Tuple identifier (StoredValue Constant value)
     hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
-    constFunc identifier func = Tuple identifier (StoredFunction Constant (wrap func))
+    constFunc identifier func = Tuple identifier (StoredFunction Constant (wrapSimple func))
 
-    wrap ∷ (Quantity → Either ConversionError Quantity) → MathFunction
-    wrap func qs = func $ head (NonEmptyList qs)
+    wrapSimple ∷ (Quantity → Either ConversionError Quantity) → MathFunction
+    wrapSimple func qs =
+      if numArgs == 1
+        then lmap EFConversionError $ func (head args)
+        else Left $ EFWrongArity 1 numArgs
+      where
+        args = NonEmptyList qs
+        numArgs = length args

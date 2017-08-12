@@ -854,6 +854,22 @@ main = runTest do
       expectOutput' "4" "4/2*2"
       expectOutput' "0.5 s" "1/2 Hz -> s"
 
+    test "Error messages" do
+      expectOutput' "Parse error at position 4: Expected end of input"
+                    "3kg+"
+      expectOutput' "Parse error at position 5: 'kg' is reserved for a physical unit"
+                    "kg=2"
+      expectOutput' "Assignment error: The constant pi cannot be redefined."
+                    "pi=3"
+      expectOutput' "Parse error at position 5: reserved word \"help\""
+                    "help=3"
+      expectOutput' "Wrong number of arguments:\n\n    The function 'sin' takes 1 argument (got 3)"
+                    "sin(1,2,3)"
+      expectOutput' "Unknown identifier: foo"
+                    "foo"
+      expectOutput' "Numerical error: division by zero or out-of-bounds error"
+                    "1/0"
+
     test "Earth mass" do
       let env1 = initialEnvironment
           env2 = (repl fmtPlain env1 "r = 6000km").newEnv
