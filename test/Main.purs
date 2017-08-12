@@ -8,9 +8,11 @@ import Control.Monad.Aff (Aff)
 import Control.Monad.Aff.AVar (AVAR)
 
 import Data.Decimal (fromNumber)
-import Data.StrMap (insert, keys)
 import Data.Either(Either(..))
 import Data.Foldable (traverse_, for_, intercalate)
+import Data.List (List(..), (:))
+import Data.NonEmpty ((:|))
+import Data.StrMap (insert, keys)
 
 import Test.Unit (suite, test, failure)
 import Test.Unit.Assert (equal)
@@ -609,22 +611,37 @@ main = runTest do
 
   suite "Parser - Functions" do
     test "Simple" do
-      allParseAs (Expression (Apply Sin (q 30.0 degree)))
+      allParseAs (Expression (Apply Sin (q 30.0 degree :| Nil)))
         [ "sin(30°)"
         , "  sin( 30° )  "
         , "  sin( +30° )  "
         ]
 
-      allParseAs (Expression (Apply Sqrt (scalar 2.0)))
+      allParseAs (Expression (Apply Sqrt (scalar 2.0 :| Nil)))
         [ "sqrt(2)"
         , "  sqrt( 2.0 )  "
         , "  sqrt( +2.0 )  "
         ]
 
-      allParseAs (Expression (Apply Exp (Negate $ scalar 10.0)))
+      allParseAs (Expression (Apply Exp (Negate (scalar 10.0) :| Nil)))
         [ "exp(-10)"
         , "  exp( -10 )  "
         ]
+
+      allParseAs (Expression (Apply Exp (scalar 1.0 :| scalar 2.0 : scalar 3.0 : Nil)))
+        [ "exp(1,2,3)"
+        , "  exp(  1  ,  2  ,  3   )  "
+        ]
+
+      allParseAs (Expression (BinOp Mul (Apply Exp (scalar 1.0 :| Nil))
+                                        (Apply Exp (scalar 1.0 :| Nil))))
+        [ "exp(1)exp(1)"
+        , "  exp( 1 )  exp(  1  )  "
+        ]
+
+      shouldFail "exp(,)"
+      shouldFail "exp(1,)"
+      shouldFail "exp()"
 
   suite "Parser - Assignments" do
     test "Simple" do
@@ -697,6 +714,7 @@ main = runTest do
       prettyPrintCheck "2^3!"
       prettyPrintCheck "-3!"
       prettyPrintCheck "(-3)!"
+      prettyPrintCheck "sin(2,3,4)"
 
     test "Format" do
       equalPretty "2 + 3" "2+3"
@@ -717,6 +735,7 @@ main = runTest do
       equalPretty "2 × 3 + 4 × 5" "2 * 3 + 4 * 5"
       equalPretty "2 × (3 / 4)" "2 * 3 / 4"
       equalPretty "123.123 × km^2 / s^2" "123.123 km^2 / s^2"
+      equalPretty "sin(2, 3, 4)" " sin(  2  ,  3  ,  4   )  "
 
   let expectOutput' = expectOutput initialEnvironment
 

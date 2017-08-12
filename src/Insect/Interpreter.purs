@@ -11,12 +11,14 @@ import Data.Array ((:), fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate)
-import Data.List (sortBy, filter, groupBy)
-import Data.List.NonEmpty (head)
+import Data.List (List, sortBy, filter, groupBy)
+import Data.List.NonEmpty (NonEmptyList(..), head)
 import Data.Maybe (Maybe(..))
+import Data.NonEmpty (NonEmpty)
 import Data.String (toLower)
 import Data.StrMap (lookup, insert, toUnfoldable)
 import Data.Tuple (fst, snd)
+import Data.Traversable (traverse)
 
 import Quantities (Quantity, ConversionError(..), pow, scalar', qNegate, qAdd,
                    qDivide, qMultiply, qSubtract, quantity, toScalar', sqrt,
@@ -58,8 +60,8 @@ checkFinite q | isFinite q = pure q
               | otherwise  = Left NumericalError
 
 -- | Apply a mathematical function to a physical quantity.
-applyFunction ∷ Func → Quantity → Expect Quantity
-applyFunction fn q = lmap QConversionError $ (run fn) q
+applyFunction ∷ Func → NonEmpty List Quantity → Expect Quantity
+applyFunction fn qs = lmap QConversionError $ (run fn) (head (NonEmptyList qs))
   where
     run Acos           = acos
     run Acosh          = acosh
@@ -96,7 +98,7 @@ eval env (Variable name) =
     Nothing → Left (LookupError name)
 eval env (Factorial x)   = eval env x >>= factorial >>> lmap QConversionError
 eval env (Negate x)      = qNegate <$> eval env x
-eval env (Apply fn x)    = eval env x >>= applyFunction fn >>= checkFinite
+eval env (Apply fn xs)   = traverse (eval env) xs >>= applyFunction fn >>= checkFinite
 eval env (BinOp op x y)  = do
   x' <- eval env x
   y' <- eval env y

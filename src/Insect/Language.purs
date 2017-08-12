@@ -12,6 +12,8 @@ import Prelude hiding (Unit)
 
 import Data.Decimal (Decimal)
 import Data.Generic (class Generic, gShow)
+import Data.List (List)
+import Data.NonEmpty (NonEmpty)
 import Data.Units (DerivedUnit)
 
 -- | Type synonym for identifiers (variable names).
@@ -69,7 +71,7 @@ data Expression
  | Variable Identifier
  | Factorial Expression
  | Negate Expression
- | Apply Func Expression
+ | Apply Func (NonEmpty List Expression)
  | BinOp BinOp Expression Expression
 
 derive instance eqExpression ∷ Eq Expression

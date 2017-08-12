@@ -8,6 +8,9 @@ import Prelude
 
 import Data.Array ((:))
 import Data.Decimal as D
+import Data.Foldable (intercalate)
+import Data.List (List)
+import Data.NonEmpty (NonEmpty)
 
 import Quantities as Q
 
@@ -52,9 +55,10 @@ prettyVariable ∷ String → Markup
 prettyVariable name = [ F.ident name ]
 
 -- | Petty print a function application.
-prettyApply ∷ Func → Expression → Markup
-prettyApply fn x = [ F.function (funcToStr fn)
-                   , F.text "(" ] <> pretty x <> [ F.text ")" ]
+prettyApply ∷ Func → NonEmpty List Expression → Markup
+prettyApply fn xs = [ F.function (funcToStr fn), F.text "(" ]
+                    <> intercalate [ F.text ", " ] (map pretty xs)
+                    <> [ F.text ")" ]
   where
     funcToStr ∷ Func → String
     funcToStr Acos           = "acos"
@@ -107,7 +111,7 @@ pretty (Unit u)                        = prettyUnit u
 pretty (Variable name)                 = prettyVariable name
 pretty (Factorial x)                   = withParens x <> [F.text "!"]
 pretty (Negate x)                      = F.text "-" : withParens x
-pretty (Apply fn x)                    = prettyApply fn x
+pretty (Apply fn xs)                   = prettyApply fn xs
 -- ConvertTo (->) never needs parens, it has the lowest precedence:
 pretty (BinOp ConvertTo x y)           = pretty x <> prettyOp ConvertTo <> pretty y
 -- Fuse multiplication of a scalar and a unit to a quantity:

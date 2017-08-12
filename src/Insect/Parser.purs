@@ -68,7 +68,7 @@ insectLanguage = LanguageDef
   , opLetter: oneOf []
   , reservedNames: commands <> ["¹", "²", "³", "⁴", "⁵", "⁻¹", "⁻²", "⁻³", "⁻⁴", "⁻⁵", "to", "per"]
   , reservedOpNames: ["->", "+", "-", "*", "·", "⋅", "×", "/", "÷", "%", "^", "!",
-                      "**", "="]
+                      "**", "=", ","]
   , caseSensitive: true
 }
 
@@ -370,7 +370,7 @@ expression =
               parens p
           <|> (Scalar <$> number)
           <|> try (Unit <$> derivedUnit)
-          <|> try (Apply <$> funcName <*> (parens p <* whiteSpace))
+          <|> try (Apply <$> funcName <*> parens (sepBy1 p commaOp))
           <|> variable
           )
 
@@ -433,6 +433,7 @@ expression =
 
   where
 
+    commaOp = reservedOp ","
     facOp = reservedOp "!"
     powOp = reservedOp "^" <|> reservedOp "**"
     modOp = reservedOp "%"
