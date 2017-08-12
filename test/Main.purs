@@ -671,8 +671,31 @@ main = runTest do
     test "Reserved names" do
       shouldFail "m=2" -- 'm' is reserved unit
       shouldFail "meter=2" -- 'meter' is a reserved unit
-      shouldFail "metre=2" -- 'meter' is a reserved unit
       shouldFail "list=4" -- 'list' is a reserved keyword
+
+  suite "Parser - Function Assignments" do
+    test "Simple" do
+      allParseAs (FunctionAssignment "xyz_123" ("x" :| Nil) (scalar 1.0)) $
+        [ "xyz_123(x) = 1"
+        , "xyz_123(x)=1"
+        , "  xyz_123(x)  =  1  "
+        ]
+
+      shouldFail "f()=2"
+      shouldFail "f(x,)=3"
+      shouldFail "f(2)=3"
+      shouldFail "f(x)="
+
+    test "Multiple arguments" do
+      allParseAs (FunctionAssignment "f'" ("x" :| "y" : "z" : Nil) (Variable "x")) $
+        [ "f'(x,y,z)=x"
+        , " f'( x , y , z ) = x "
+        ]
+
+    test "Reserved names" do
+      shouldFail "m(x)=2" -- 'm' is reserved unit
+      shouldFail "meter(x)=2" -- 'meter' is a reserved unit
+      shouldFail "list(x)=4" -- 'list' is a reserved keyword
 
   let pretty' str =
         case parseInsect initialEnvironment str of

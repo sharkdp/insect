@@ -321,6 +321,7 @@ foldr1 f (a :| xs) =
     Just bs, Just b → f a (foldr f b bs)
     _, _ → a
 
+-- | Parse a function name and fail if it's not in the environment
 function ∷ Environment → P Func
 function env = do
   name ← token.identifier
