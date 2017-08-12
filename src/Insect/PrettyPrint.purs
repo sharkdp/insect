@@ -14,7 +14,7 @@ import Data.NonEmpty (NonEmpty)
 
 import Quantities as Q
 
-import Insect.Language (BinOp(..), Expression(..), Func(..))
+import Insect.Language (Identifier, Func(..), BinOp(..), Expression(..))
 import Insect.Format (Markup)
 import Insect.Format as F
 
@@ -55,36 +55,10 @@ prettyVariable ∷ String → Markup
 prettyVariable name = [ F.ident name ]
 
 -- | Petty print a function application.
-prettyApply ∷ Func → NonEmpty List Expression → Markup
-prettyApply fn xs = [ F.function (funcToStr fn), F.text "(" ]
+prettyApply ∷ Identifier → NonEmpty List Expression → Markup
+prettyApply fn xs = [ F.function fn, F.text "(" ]
                     <> intercalate [ F.text ", " ] (map pretty xs)
                     <> [ F.text ")" ]
-  where
-    funcToStr ∷ Func → String
-    funcToStr Acos           = "acos"
-    funcToStr Acosh          = "acosh"
-    funcToStr Asin           = "asin"
-    funcToStr Asinh          = "asinh"
-    funcToStr Atan           = "atan"
-    funcToStr Atanh          = "atanh"
-    funcToStr Ceil           = "ceil"
-    funcToStr Cos            = "cos"
-    funcToStr Cosh           = "cosh"
-    funcToStr Exp            = "exp"
-    funcToStr Floor          = "floor"
-    funcToStr FromCelsius    = "fromCelsius"
-    funcToStr FromFahrenheit = "fromFahrenheit"
-    funcToStr Gamma          = "gamma"
-    funcToStr Ln             = "ln"
-    funcToStr Log10          = "log10"
-    funcToStr Round          = "round"
-    funcToStr Sin            = "sin"
-    funcToStr Sinh           = "sinh"
-    funcToStr Sqrt           = "sqrt"
-    funcToStr Tan            = "tan"
-    funcToStr Tanh           = "tanh"
-    funcToStr ToCelsius      = "toCelsius"
-    funcToStr ToFahrenheit   = "toFahrenheit"
 
 -- | Add parenthesis.
 parens ∷ Markup → Markup
@@ -111,7 +85,7 @@ pretty (Unit u)                        = prettyUnit u
 pretty (Variable name)                 = prettyVariable name
 pretty (Factorial x)                   = withParens x <> [F.text "!"]
 pretty (Negate x)                      = F.text "-" : withParens x
-pretty (Apply fn xs)                   = prettyApply fn xs
+pretty (Apply (Func fnName _) xs)      = prettyApply fnName xs
 -- ConvertTo (->) never needs parens, it has the lowest precedence:
 pretty (BinOp ConvertTo x y)           = pretty x <> prettyOp ConvertTo <> pretty y
 -- Fuse multiplication of a scalar and a unit to a quantity:

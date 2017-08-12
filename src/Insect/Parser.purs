@@ -4,7 +4,6 @@ module Insect.Parser
   , (==>)
   , Dictionary(..)
   , commands
-  , functions
   , prefixDict
   , normalUnitDict
   , imperialUnitDict
@@ -20,13 +19,14 @@ import Quantities (DerivedUnit, (./))
 import Quantities as Q
 
 import Data.Array (some, fromFoldable)
-import Data.Either (Either(..))
 import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
-import Data.Foldable (foldr, foldMap)
+import Data.Either (Either(..))
+import Data.Foldable (foldr)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
+import Data.StrMap (lookup)
 import Data.String (fromCharArray, singleton)
 import Data.Tuple (Tuple(..))
 
@@ -37,8 +37,9 @@ import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
 
-import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
-                        Statement(..))
+import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
+                        Statement(..), Identifier)
+import Insect.Environment (Environment, MathFunction, StoredFunction(..))
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
@@ -307,45 +308,6 @@ derivedUnit =
 variable ∷ P Expression
 variable = Variable <$> token.identifier
 
--- | Possible names for the mathematical functions.
-funcNameDict ∷ Dictionary Func
-funcNameDict = Dictionary
-  [ Acosh ==> ["acosh"]
-  , Acos ==> ["acos"]
-  , Asinh ==> ["asinh"]
-  , Asin ==> ["asin"]
-  , Atanh ==> ["atanh"]
-  , Atan ==> ["atan"]
-  , Ceil ==> ["ceil"]
-  , Cosh ==> ["cosh"]
-  , Cos ==> ["cos"]
-  , Exp ==> ["exp"]
-  , Floor ==> ["floor"]
-  , FromCelsius ==> ["fromCelsius"]
-  , FromFahrenheit ==> ["fromFahrenheit"]
-  , Gamma ==> ["gamma"]
-  , Log10 ==> ["log10"]
-  , Ln ==> ["log", "ln"]
-  , Round ==> ["round"]
-  , Sinh ==> ["sinh"]
-  , Sin ==> ["sin"]
-  , Sqrt ==> ["sqrt"]
-  , Tanh ==> ["tanh"]
-  , Tan ==> ["tan"]
-  , ToCelsius ==> ["toCelsius"]
-  , ToFahrenheit ==> ["toFahrenheit"]
-  ]
-
--- | A list of all mathematical function names (for tab-completion).
-functions ∷ Array String
-functions =
-  case funcNameDict of
-    Dictionary dict → foldMap (\(_ ==> names) → names) dict
-
--- | Parse the name of a mathematical function.
-funcName ∷ P Func
-funcName = buildDictParser funcNameDict <?> "function name"
-
 -- | A version of `sepBy1` that returns a `NonEmpty List`.
 sepBy1 ∷ ∀ m s a sep. Monad m ⇒ ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
 sepBy1 p sep = do
@@ -360,9 +322,16 @@ foldr1 f (a :| xs) =
     Just bs, Just b → f a (foldr f b bs)
     _, _ → a
 
+function ∷ Environment → P Func
+function env = do
+  name ← token.identifier
+  case lookup name env.functions of
+    Just (StoredFunction _ fn) → pure (Func name fn)
+    Nothing → fail ("Unknown function '" <> name <> "'")
+
 -- | Parse a full mathematical expression.
-expression ∷ P Expression
-expression =
+expression ∷ Environment → P Expression
+expression env =
   fix \p →
     let
       atomic ∷ P Expression
@@ -370,7 +339,7 @@ expression =
               parens p
           <|> (Scalar <$> number)
           <|> try (Unit <$> derivedUnit)
-          <|> try (Apply <$> funcName <*> parens (sepBy1 p commaOp))
+          <|> try (Apply <$> function env <*> parens (sepBy1 p commaOp))
           <|> variable
           )
 
@@ -449,10 +418,10 @@ expression =
     powNeg s q = BinOp Pow q (Negate $ Scalar $ fromNumber s)
 
 -- | Parse a mathematical expression (or conversion) like `3m+2in -> cm`.
-fullExpression ∷ P Expression
-fullExpression = do
+fullExpression ∷ Environment → P Expression
+fullExpression env = do
   whiteSpace
-  expr ← expression
+  expr ← expression env
   eof <?> "end of input"
 
   pure $ expr
@@ -469,12 +438,12 @@ command =
   ) <* eof
 
 -- | Parse a variable assignment like `x = 3m*pi`
-assignment ∷ P (Tuple String Expression)
-assignment = do
+assignment ∷ Environment → P (Tuple String Expression)
+assignment env = do
   whiteSpace
   var ← token.identifier
   reservedOp "="
-  value ← expression
+  value ← expression env
   eof
   pure $ Tuple var value
 
@@ -485,19 +454,15 @@ checkIdentifier (Tuple var value) =
     Right _ →
       fail $ "'" <> var <> "' is reserved for a physical unit"
     Left _ →
-      case runParser var (funcName <* eof) of
-        Right _ →
-          fail $ "'" <> var <> "' is reserved for a math. function"
-        Left _ →
-          pure $ Assignment var value
+      pure $ Assignment var value
 
 -- | Parse a statement in the Insect language.
-statement ∷ P Statement
-statement =
+statement ∷ Environment → P Statement
+statement env =
       (Command <$> command)
-  <|> (try assignment >>= checkIdentifier)
-  <|> (Expression <$> fullExpression)
+  <|> (try (assignment env) >>= checkIdentifier)
+  <|> (Expression <$> fullExpression env)
 
 -- | Run the Insect-parser on a `String` input.
-parseInsect ∷ String → Either ParseError Statement
-parseInsect inp = runParser inp statement
+parseInsect ∷ Environment → String → Either ParseError Statement
+parseInsect env inp = runParser inp (statement env)

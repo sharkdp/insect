@@ -23,11 +23,11 @@ import Data.Traversable (traverse)
 import Quantities (Quantity, ConversionError(..))
 import Quantities as Q
 
-import Insect.Language (Func(..), BinOp(..), Expression(..), Command(..),
+import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
                         Statement(..), Identifier)
 import Insect.Environment (Environment, StorageType(..), StoredValue(..),
-                           initialEnvironment)
-import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
+                           StoredFunction(..), initialEnvironment,
+                           MathFunction)
 import Insect.Format (Markup)
 import Insect.Format as F
 import Insect.PrettyPrint (pretty, prettyQuantity)
@@ -55,34 +55,10 @@ checkFinite ∷ Quantity → Expect Quantity
 checkFinite q | Q.isFinite q = pure q
               | otherwise    = Left NumericalError
 
--- | Apply a mathematical function to a physical quantity.
+-- | Apply a mathematical function to its arguments, a list of physical
+-- | quantities.
 applyFunction ∷ Func → NonEmpty List Quantity → Expect Quantity
-applyFunction fn qs = lmap QConversionError $ (run fn) (head (NonEmptyList qs))
-  where
-    run Acos           = Q.acos
-    run Acosh          = Q.acosh
-    run Asin           = Q.asin
-    run Asinh          = Q.asinh
-    run Atan           = Q.atan
-    run Atanh          = Q.atanh
-    run Ceil           = Q.ceil
-    run Cos            = Q.cos
-    run Cosh           = Q.cosh
-    run Exp            = Q.exp
-    run Floor          = Q.floor
-    run FromCelsius    = fromCelsius
-    run FromFahrenheit = fromFahrenheit
-    run Gamma          = Q.gamma
-    run Ln             = Q.ln
-    run Log10          = Q.log10
-    run Round          = Q.round
-    run Sin            = Q.sin
-    run Sinh           = Q.sinh
-    run Sqrt           = Q.sqrt >>> pure
-    run Tan            = Q.tan
-    run Tanh           = Q.tanh
-    run ToCelsius      = toCelsius
-    run ToFahrenheit   = toFahrenheit
+applyFunction (Func _ fn) qs = lmap QConversionError (fn qs)
 
 -- | Evaluate a mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity

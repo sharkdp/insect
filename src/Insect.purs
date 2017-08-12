@@ -6,7 +6,6 @@ module Insect
   , fmtJqueryTerminal
   , fmtConsole
   , commands
-  , functions
   ) where
 
 import Prelude
@@ -47,7 +46,7 @@ repl ∷ Formatter → Environment → String → { msg ∷ String
                                           , newEnv ∷ Environment
                                           , msgType ∷ String     }
 repl fmt env userInput =
-  case parseInsect userInput of
+  case parseInsect env userInput of
     Left pErr →
       let pos = parseErrorPosition pErr
       in case pos of
@@ -95,7 +94,3 @@ fmtConsole = F.fmtConsole
 -- | Re-export the list of commands
 commands ∷ Array String
 commands = P.commands
-
--- | Re-export the list of function names
-functions ∷ Array String
-functions = P.functions

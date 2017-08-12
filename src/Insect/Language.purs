@@ -1,8 +1,8 @@
 -- | This module defines the AST for Insect.
 module Insect.Language
   ( Identifier
-  , Func(..)
   , BinOp(..)
+  , Func(..)
   , Expression(..)
   , Command(..)
   , Statement(..)
@@ -16,39 +16,10 @@ import Data.List (List)
 import Data.NonEmpty (NonEmpty)
 import Data.Units (DerivedUnit)
 
+import Insect.Environment (MathFunction)
+
 -- | Type synonym for identifiers (variable names).
 type Identifier = String
-
--- | All available mathematical functions.
-data Func
-  = Acos
-  | Acosh
-  | Asin
-  | Asinh
-  | Atan
-  | Atanh
-  | Ceil
-  | Cos
-  | Cosh
-  | Exp
-  | Floor
-  | FromCelsius
-  | FromFahrenheit
-  | Gamma
-  | Ln
-  | Log10
-  | Round
-  | Sin
-  | Sinh
-  | Sqrt
-  | Tan
-  | Tanh
-  | ToCelsius
-  | ToFahrenheit
-
-derive instance eqFunc ∷ Eq Func
-derive instance genericFunc ∷ Generic Func
-instance showFunc ∷ Show Func where show = gShow
 
 -- | Binary operators.
 data BinOp
@@ -64,6 +35,15 @@ derive instance eqBinOp ∷ Eq BinOp
 derive instance genericBinOp ∷ Generic BinOp
 instance showBinOp ∷ Show BinOp where show = gShow
 
+-- | A mathematical function.
+data Func = Func Identifier MathFunction
+
+instance eqFunc ∷ Eq Func where
+  eq (Func id1 _) (Func id2 _) = eq id1 id2
+
+instance showFunc ∷ Show Func where
+  show (Func name _) = "(Func " <> show name <> " <FUNC>)"
+
 -- | A mathematical expression.
 data Expression
  = Scalar Decimal
@@ -76,13 +56,13 @@ data Expression
 
 derive instance eqExpression ∷ Eq Expression
 instance showExpression ∷ Show Expression where
-  show (Scalar n)     = "(Scalar " <> show n <> ")"
-  show (Unit u)       = "(Unit " <> show u <> ")"
-  show (Variable n)   = "(Variable " <> show n <> ")"
-  show (Factorial x)  = "(Factorial " <> show x <> ")"
-  show (Negate x)     = "(Negate " <> show x <> ")"
-  show (Apply fn x)   = "(Apply " <> show fn <> " " <> show x <> ")"
-  show (BinOp op x y) = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
+  show (Scalar n)          = "(Scalar " <> show n <> ")"
+  show (Unit u)            = "(Unit " <> show u <> ")"
+  show (Variable n)        = "(Variable " <> show n <> ")"
+  show (Factorial x)       = "(Factorial " <> show x <> ")"
+  show (Negate x)          = "(Negate " <> show x <> ")"
+  show (Apply fn x)        = "(Apply " <> show fn <> " " <> show x <> ")"
+  show (BinOp op x y)      = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
 
 -- | A command in Insect.
 data Command

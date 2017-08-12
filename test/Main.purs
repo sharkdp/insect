@@ -25,6 +25,7 @@ import Text.Parsing.Parser.Pos (Position(..))
 import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian,
                    day, tonne)
+import Quantities as Q
 
 import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
@@ -37,7 +38,7 @@ import Insect (repl)
 
 shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
 shouldParseAs expected input =
-  case parseInsect input of
+  case parseInsect initialEnvironment input of
     Left err →
       case parseErrorPosition err of
         (Position pos) →
@@ -57,7 +58,7 @@ allParseAs expected = traverse_ (shouldParseAs expected)
 
 shouldFail ∷ ∀ eff. String → Aff eff Unit
 shouldFail input = do
-  case parseInsect input of
+  case parseInsect initialEnvironment input of
    Left _ → pure unit
    Right output → failure $ "input is expected to throw a parse error: '" <> input <> "'"
 
@@ -74,7 +75,7 @@ expectOutput env expected inp =
 
 prettyPrintCheck ∷ ∀ eff. String → Aff eff Unit
 prettyPrintCheck input =
-  case parseInsect input of
+  case parseInsect initialEnvironment input of
     Left err →
       case parseErrorPosition err of
         (Position pos) →
@@ -605,36 +606,45 @@ main = runTest do
         , "2 e"
         ]
 
+    test "Variables before parenthesis" do
+      allParseAs (Expression (BinOp Mul (Variable "pi") (scalar 2.0)))
+        [ "pi(2)"
+        , "pi*(2)"
+        , "(pi)(2)"
+        ]
+
     test "Initial environment" do
       for_ (keys initialEnvironment.values) \ident →
         shouldParseAs (Expression (Variable ident)) ident
 
   suite "Parser - Functions" do
     test "Simple" do
-      allParseAs (Expression (Apply Sin (q 30.0 degree :| Nil)))
+      let dummyFunc qs = Right (Q.scalar 2.0)
+
+      allParseAs (Expression (Apply (Func "sin" dummyFunc) (q 30.0 degree :| Nil)))
         [ "sin(30°)"
         , "  sin( 30° )  "
         , "  sin( +30° )  "
         ]
 
-      allParseAs (Expression (Apply Sqrt (scalar 2.0 :| Nil)))
+      allParseAs (Expression (Apply (Func "sqrt" dummyFunc) (scalar 2.0 :| Nil)))
         [ "sqrt(2)"
         , "  sqrt( 2.0 )  "
         , "  sqrt( +2.0 )  "
         ]
 
-      allParseAs (Expression (Apply Exp (Negate (scalar 10.0) :| Nil)))
+      allParseAs (Expression (Apply (Func "exp" dummyFunc) (Negate (scalar 10.0) :| Nil)))
         [ "exp(-10)"
         , "  exp( -10 )  "
         ]
 
-      allParseAs (Expression (Apply Exp (scalar 1.0 :| scalar 2.0 : scalar 3.0 : Nil)))
+      allParseAs (Expression (Apply (Func "exp" dummyFunc) (scalar 1.0 :| scalar 2.0 : scalar 3.0 : Nil)))
         [ "exp(1,2,3)"
         , "  exp(  1  ,  2  ,  3   )  "
         ]
 
-      allParseAs (Expression (BinOp Mul (Apply Exp (scalar 1.0 :| Nil))
-                                        (Apply Exp (scalar 1.0 :| Nil))))
+      allParseAs (Expression (BinOp Mul (Apply (Func "exp" dummyFunc) (scalar 1.0 :| Nil))
+                                        (Apply (Func "exp" dummyFunc) (scalar 1.0 :| Nil))))
         [ "exp(1)exp(1)"
         , "  exp( 1 )  exp(  1  )  "
         ]
@@ -663,10 +673,9 @@ main = runTest do
       shouldFail "meter=2" -- 'meter' is a reserved unit
       shouldFail "metre=2" -- 'meter' is a reserved unit
       shouldFail "list=4" -- 'list' is a reserved keyword
-      shouldFail "sin=3" -- 'sin is a reserved keyword
 
   let pretty' str =
-        case parseInsect str of
+        case parseInsect initialEnvironment str of
           Right (Expression expr) → format fmtPlain (pretty expr)
           _ → "Error"
 
@@ -769,9 +778,10 @@ main = runTest do
       expectOutput' "500 cm·m" "5m^2 -> cm*m"
 
     test "Implicit multiplication" do
-      let myEnv = {
-            values: insert "x" (StoredValue UserDefined (5.0 .* meter)) initialEnvironment.values
-          }
+      let myEnv =
+            { values: insert "x" (StoredValue UserDefined (5.0 .* meter)) initialEnvironment.values
+            , functions: initialEnvironment.functions
+            }
       expectOutput myEnv "5 m" "x"
       expectOutput myEnv "10 m" "2x"
       expectOutput myEnv "10 m" "2 x"

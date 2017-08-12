@@ -1,15 +1,25 @@
 module Insect.Environment
   ( StorageType(..)
   , StoredValue(..)
+  , MathFunction
+  , StoredFunction(..)
   , Environment
   , initialEnvironment
   ) where
 
 import Prelude
+
+import Data.Either (Either)
+import Data.List (List)
+import Data.List.NonEmpty (NonEmptyList(..), head)
+import Data.NonEmpty (NonEmpty)
 import Data.StrMap (StrMap, fromFoldable)
 import Data.Tuple (Tuple(..))
-import Quantities (Quantity)
+
+import Quantities (Quantity, ConversionError)
 import Quantities as Q
+
+import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
 
 -- | Values can be stored as constants, as constants that are not
 -- | displayed when calling `list`, and as user-defined quantities.
@@ -17,13 +27,20 @@ data StorageType = Constant | HiddenConstant | UserDefined
 
 derive instance eqStorageType ∷ Eq StorageType
 
--- | A stored value is a quantity with a given `StorageType`.
+-- | A quantity with a given `StorageType`.
 data StoredValue = StoredValue StorageType Quantity
+
+-- | Mathematical functions on physical quantities.
+type MathFunction = NonEmpty List Quantity → Either ConversionError Quantity
+
+-- | A mathematical function with a given `StorageType`.
+data StoredFunction = StoredFunction StorageType MathFunction
 
 -- | The environment consists of identifiers that are mapped to specific
 -- | quantities.
 type Environment =
-  { values ∷ StrMap StoredValue
+  { values    ∷ StrMap StoredValue
+  , functions ∷ StrMap StoredFunction
   }
 
 -- | The initial environment contains a few useful mathematical and physical
@@ -32,50 +49,84 @@ initialEnvironment ∷ Environment
 initialEnvironment =
   { values:
       fromFoldable
-        [ newConst "alpha"              Q.α
-        , newConst "avogadroConstant"   Q.avogadroConstant
-        , newConst "bohrMagneton"       Q.µB
-        , newConst "boltzmannConstant"  Q.kB
-        , newConst "c"                  Q.speedOfLight
-        , newConst "e"                  Q.e
-        , newConst "electricConstant"   Q.ε0
-        , newConst "eps0"               Q.ε0
-        , newConst "ε0"                 Q.ε0
-        , newConst "electronCharge"     Q.electronCharge
-        , newConst "electronMass"       Q.electronMass
-        , newConst "G"                  Q.gravitationalConstant
-        , newConst "g0"                 Q.g0
-        , newConst "gravity"            Q.g0
-        , newConst "h_bar"              Q.ℏ
-        , newConst "ℏ"                  Q.ℏ
-        , newConst "k_B"                Q.kB
-        , newConst "magneticConstant"   Q.µ0
-        , newConst "mu0"                Q.µ0
-        , newConst "µ0"                 Q.µ0
-        , newConst "muB"                Q.µB
-        , newConst "µ_B"                Q.µB
-        , newConst "N_A"                Q.avogadroConstant
-        , newConst "pi"                 Q.pi
-        , newConst "π"                  Q.pi
-        , newConst "planckConstant"     Q.planckConstant
-        , newConst "protonMass"         Q.protonMass
-        , newConst "speedOfLight"       Q.speedOfLight
+        [ constVal "alpha"              Q.α
+        , constVal "avogadroConstant"   Q.avogadroConstant
+        , constVal "bohrMagneton"       Q.µB
+        , constVal "boltzmannConstant"  Q.kB
+        , constVal "c"                  Q.speedOfLight
+        , constVal "e"                  Q.e
+        , constVal "electricConstant"   Q.ε0
+        , constVal "eps0"               Q.ε0
+        , constVal "ε0"                 Q.ε0
+        , constVal "electronCharge"     Q.electronCharge
+        , constVal "electronMass"       Q.electronMass
+        , constVal "G"                  Q.gravitationalConstant
+        , constVal "g0"                 Q.g0
+        , constVal "gravity"            Q.g0
+        , constVal "h_bar"              Q.ℏ
+        , constVal "ℏ"                  Q.ℏ
+        , constVal "k_B"                Q.kB
+        , constVal "magneticConstant"   Q.µ0
+        , constVal "mu0"                Q.µ0
+        , constVal "µ0"                 Q.µ0
+        , constVal "muB"                Q.µB
+        , constVal "µ_B"                Q.µB
+        , constVal "N_A"                Q.avogadroConstant
+        , constVal "pi"                 Q.pi
+        , constVal "π"                  Q.pi
+        , constVal "planckConstant"     Q.planckConstant
+        , constVal "protonMass"         Q.protonMass
+        , constVal "speedOfLight"       Q.speedOfLight
 
         -- Hidden constants
-        , hiddenConst "hundred"     (Q.scalar 1.0e2)
-        , hiddenConst "thousand"    (Q.scalar 1.0e3)
-        , hiddenConst "million"     (Q.scalar 1.0e6)
-        , hiddenConst "billion"     (Q.scalar 1.0e9)
-        , hiddenConst "trillion"    (Q.scalar 1.0e12)
-        , hiddenConst "quadrillion" (Q.scalar 1.0e15)
-        , hiddenConst "quintillion" (Q.scalar 1.0e18)
+        , hiddenVal "hundred"     (Q.scalar 1.0e2)
+        , hiddenVal "thousand"    (Q.scalar 1.0e3)
+        , hiddenVal "million"     (Q.scalar 1.0e6)
+        , hiddenVal "billion"     (Q.scalar 1.0e9)
+        , hiddenVal "trillion"    (Q.scalar 1.0e12)
+        , hiddenVal "quadrillion" (Q.scalar 1.0e15)
+        , hiddenVal "quintillion" (Q.scalar 1.0e18)
 
-        , hiddenConst "googol"      (Q.scalar 1.0e100)
+        , hiddenVal "googol"      (Q.scalar 1.0e100)
 
-        , hiddenConst "tau"         Q.tau
-        , hiddenConst "τ"           Q.tau
+        , hiddenVal "tau"         Q.tau
+        , hiddenVal "τ"           Q.tau
+        ],
+    functions:
+      fromFoldable
+        [ constFunc "acos" Q.acos
+        , constFunc "acosh" Q.acosh
+        , constFunc "acos" Q.acos
+        , constFunc "acosh" Q.acosh
+        , constFunc "asin" Q.asin
+        , constFunc "asinh" Q.asinh
+        , constFunc "atan" Q.atan
+        , constFunc "atanh" Q.atanh
+        , constFunc "ceil" Q.ceil
+        , constFunc "cos" Q.cos
+        , constFunc "cosh" Q.cosh
+        , constFunc "exp" Q.exp
+        , constFunc "floor" Q.floor
+        , constFunc "fromCelsius" fromCelsius
+        , constFunc "fromFahrenheit" fromFahrenheit
+        , constFunc "gamma" Q.gamma
+        , constFunc "ln" Q.ln
+        , constFunc "log" Q.ln
+        , constFunc "log10" Q.log10
+        , constFunc "round" Q.round
+        , constFunc "sin" Q.sin
+        , constFunc "sinh" Q.sinh
+        , constFunc "sqrt" (Q.sqrt >>> pure)
+        , constFunc "tan" Q.tan
+        , constFunc "tanh" Q.tanh
+        , constFunc "toCelsius" toCelsius
+        , constFunc "toFahrenheit" toFahrenheit
         ]
   }
   where
-    newConst identifier value = Tuple identifier (StoredValue Constant value)
-    hiddenConst identifier value = Tuple identifier (StoredValue HiddenConstant value)
+    constVal identifier value = Tuple identifier (StoredValue Constant value)
+    hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
+    constFunc identifier func = Tuple identifier (StoredFunction Constant (wrap func))
+
+    wrap ∷ (Quantity → Either ConversionError Quantity) → MathFunction
+    wrap func qs = func $ head (NonEmptyList qs)
