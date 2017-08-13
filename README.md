@@ -24,7 +24,7 @@ Documentation
 
     -   **Operators**: addition (`+`), subtraction (`-`), multiplication (`*`, `·`, `×`), division (`/`, `÷`, `per`), exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
-    -   **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `fromCelsius`, `fromFahrenheit`, `gamma`, `ln`, `log`, `log10`, `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `toCelsius`, `toFahrenheit`.
+    -   **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atan2`, `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `fromCelsius`, `fromFahrenheit`, `gamma`, `ln`, `log`, `log10`, `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `toCelsius`, `toFahrenheit`.
 
     -   **High-precision numeric type** with *30* significant digits that can handle *very* large (or small) exponents like *10^(10^10)*.
 

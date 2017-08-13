@@ -13,7 +13,7 @@ Documentation
       multiplication (`*`, `·`, `×`), division (`/`, `÷`, `per`),
       exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
-    * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`,
+    * **Mathematical functions**: `acos`, `acosh`, `asin`, `asinh`, `atan`, `atan2`,
       `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `fromCelsius`,
       `fromFahrenheit`, `gamma`, `ln`, `log`, `log10`, `round`, `sin`, `sinh`,
       `sqrt`, `tan`, `tanh`, `toCelsius`, `toFahrenheit`.

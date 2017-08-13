@@ -11,9 +11,9 @@ import Prelude
 
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
-import Data.List (List)
+import Data.List (List(..), (:))
 import Data.List.NonEmpty (NonEmptyList(..), head, length)
-import Data.NonEmpty (NonEmpty)
+import Data.NonEmpty (NonEmpty, (:|))
 import Data.StrMap (StrMap, fromFoldable)
 import Data.Tuple (Tuple(..))
 
@@ -103,6 +103,7 @@ initialEnvironment =
         , constFunc "asin" Q.asin
         , constFunc "asinh" Q.asinh
         , constFunc "atan" Q.atan
+        , constFunc2 "atan2" Q.atan2
         , constFunc "atanh" Q.atanh
         , constFunc "ceil" Q.ceil
         , constFunc "cos" Q.cos
@@ -128,13 +129,23 @@ initialEnvironment =
   where
     constVal identifier value = Tuple identifier (StoredValue Constant value)
     hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
-    constFunc identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func))
+    constFunc  identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func))
+    constFunc2 identifier func = Tuple identifier (StoredFunction Constant (wrapSimple2 identifier func))
 
     wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple name func qs =
       if numArgs == 1
         then lmap QConversionError $ func (head args)
         else Left $ WrongArityError name 1 numArgs
+      where
+        args = NonEmptyList qs
+        numArgs = length args
+
+    wrapSimple2 ∷ Identifier → (Quantity → Quantity → Either ConversionError Quantity) → MathFunction
+    wrapSimple2 name func qs =
+      case qs of
+        (x1 :| x2 : Nil) → lmap QConversionError $ func x1 x2
+        _                → Left $ WrongArityError name 2 numArgs
       where
         args = NonEmptyList qs
         numArgs = length args
