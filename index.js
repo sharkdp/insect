@@ -59,7 +59,7 @@ if (interactive) {
       var identifiers = Object.keys(insectEnv.values);
 
       var keywords =
-        identifiers.concat(Insect.functions)
+        identifiers.concat(Object.keys(insectEnv.functions))
                    .concat(Insect.supportedUnits)
                    .concat(Insect.commands);
 
