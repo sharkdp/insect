@@ -94,6 +94,21 @@ Documentation
 
         pressure(1500 m)
 
+-   **Sums and products**:
+
+    Syntax:
+
+        sum(<expression>, <index-variable>, <from>, <to>)
+        product(<expression>, <index-variable>, <from>, <to>)
+
+    Examples:
+
+        # sum of the first ten squares
+        sum(k^2, k, 1, 10)
+
+        # the factorial of n as the product 1 × 2 × ... × n
+        myFactorial(n) = product(k, k, 1, n)
+
 -   **Unicode support**:
 
         λ = 2 × 300 µm

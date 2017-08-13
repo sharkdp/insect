@@ -325,9 +325,13 @@ foldr1 f (a :| xs) =
 function ∷ Environment → P Identifier
 function env = do
   name ← token.identifier
-  case lookup name env.functions of
-    Just (StoredFunction _ fn) → pure name
-    Nothing → fail ("Unknown function '" <> name <> "'")
+  if name == "sum" || name == "product"
+    then
+      pure name
+    else
+      case lookup name env.functions of
+        Just (StoredFunction _ fn) → pure name
+        Nothing → fail ("Unknown function '" <> name <> "'")
 
 -- | Parse a full mathematical expression.
 expression ∷ Environment → P Expression

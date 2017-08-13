@@ -6,11 +6,13 @@ module Insect
   , fmtJqueryTerminal
   , fmtConsole
   , commands
+  , functions
   ) where
 
 import Prelude
 
 import Data.Either (Either(..))
+import Data.StrMap (keys)
 
 import Data.Array (sort)
 
@@ -94,3 +96,6 @@ fmtConsole = F.fmtConsole
 -- | Re-export the list of commands
 commands ∷ Array String
 commands = P.commands
+
+functions ∷ Environment → Array String
+functions env = keys env.functions <> ["sum", "product"]

@@ -11,9 +11,11 @@ import Data.Array ((:), fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate, foldl)
-import Data.List (sortBy, filter, groupBy)
+import Data.Int (round, toNumber)
+import Data.List (List(..), sortBy, filter, groupBy, (..))
 import Data.List.NonEmpty (NonEmptyList(..), head, length, zip)
 import Data.Maybe (Maybe(..))
+import Data.NonEmpty ((:|), foldl1)
 import Data.StrMap (lookup, insert, delete, toUnfoldable)
 import Data.String (toLower)
 import Data.Traversable (traverse)
@@ -47,7 +49,56 @@ checkFinite ∷ Quantity → Expect Quantity
 checkFinite q | Q.isFinite q = pure q
               | otherwise    = Left NumericalError
 
--- | Evaluate a mathematical expression involving physical quantities.
+-- | Evaluate a summation or product expression like
+-- | `sum(expr, var, low, high)`.
+evalSpecial ∷ String
+            → Environment
+            → Expression
+            → Expression
+            → Expression
+            → Expression
+            → Expect Quantity
+evalSpecial func env expr (Variable varname) lowExpr highExpr = do
+  -- Evaluate the expressions `low` and `high`
+  lowQuantity ← eval env lowExpr
+  highQuantity ← eval env highExpr
+
+  -- Try to cast to numbers (and round to integers)
+  low ← lmap QConversionError (round <$> Q.toScalar lowQuantity)
+  high ← lmap QConversionError (round <$> Q.toScalar highQuantity)
+
+  let
+    iteration n =
+      eval (env { values = insert varname
+                                  (StoredValue UserDefined (Q.scalar (toNumber n)))
+                                  env.values
+                }) expr
+
+    qs = if low > high
+           then Nil
+           else map iteration (low .. high)
+
+  if func == "sum"
+    then
+      case qs of
+        Cons q rest → foldl1 qAdd (q :| rest)
+        Nil         → pure (Q.scalar 0.0)
+    else -- product
+      foldl qMultiply (Right (Q.scalar 1.0)) qs
+
+  where
+    qMultiply q1' q2' = do
+      q1 ← q1'
+      q2 ← q2'
+      pure $ Q.qMultiply q1 q2
+
+    qAdd q1' q2' = do
+      q1 ← q1'
+      q2 ← q2'
+      lmap QConversionError (Q.qAdd q1 q2)
+evalSpecial func _ _ _ _ _ = Left (InvalidIdentifier func)
+
+-- | Evaluate Either.. mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
 eval env (Scalar n)             = pure $ Q.scalar' n
 eval env (Unit u)               = pure $ Q.quantity 1.0 u
@@ -56,10 +107,19 @@ eval env (Variable name)        = case lookup name env.values of
                                     Nothing → Left (LookupError name)
 eval env (Factorial x)          = eval env x >>= Q.factorial >>> lmap QConversionError
 eval env (Negate x)             = Q.qNegate <$> eval env x
-eval env (Apply name xs)        = case lookup name env.functions of
-                                    Just (StoredFunction _ fn) →
-                                      traverse (eval env) xs >>= fn >>= checkFinite
-                                    Nothing → Left (LookupError name)
+eval env (Apply name xs)        =
+  if name == "sum" || name == "product"
+    then
+      case xs of
+        expr :| (Cons var (Cons low (Cons high Nil))) →
+          evalSpecial name env expr var low high
+        _ →
+          Left (WrongArityError name 4 (length (NonEmptyList xs)))
+    else
+      case lookup name env.functions of
+        Just (StoredFunction _ fn) →
+          traverse (eval env) xs >>= fn >>= checkFinite
+        Nothing → Left (LookupError name)
 eval env (BinOp op x y)         = do
   x' <- eval env x
   y' <- eval env y
@@ -153,6 +213,11 @@ evalErrorMessage (RedefinedConstantError name) =
   [ F.optional (F.text "  ")
   , F.error "Assignment error: ", F.text "'", F.emph name
   , F.text "' cannot be redefined." ]
+evalErrorMessage (InvalidIdentifier func) =
+  [ F.optional (F.text "  ")
+  , F.error "Invalid identifier: ", F.text "second argument of '"
+  , F.function func, F.text "' must be a variable name."
+  ]
 
 -- | Interpreter return type.
 type Response = { msg ∷ Message, newEnv ∷ Environment }

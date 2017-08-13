@@ -42,6 +42,7 @@ data EvalError
   | LookupError String
   | NumericalError
   | RedefinedConstantError Identifier
+  | InvalidIdentifier String
 
 -- | A mathematical expression.
 data Expression
