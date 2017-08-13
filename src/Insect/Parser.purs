@@ -21,7 +21,7 @@ import Quantities as Q
 import Data.Array (some, fromFoldable)
 import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
 import Data.Either (Either, isRight)
-import Data.Foldable (foldr)
+import Data.Foldable (foldr, traverse_)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
@@ -452,12 +452,18 @@ assignment env = do
       pure { name: name, args: args, expr: expr }
 
   -- Fail if the name can be parsed as a physical unit
-  when (isRight $ runParser name (derivedUnit <* eof)) $
-    fail ("'" <> name <> "' is reserved for a physical unit")
+  failIfUnit name
 
   case args of
     Nothing → pure (VariableAssignment name expr)
-    Just xs → pure (FunctionAssignment name xs expr)
+    Just xs → do
+      traverse_ failIfUnit xs
+      pure (FunctionAssignment name xs expr)
+
+  where
+    failIfUnit n =
+      when (isRight $ runParser n (derivedUnit <* eof)) $
+        fail ("'" <> n <> "' is reserved for a physical unit")
 
 -- | Parse a statement in the Insect language.
 statement ∷ Environment → P Statement
