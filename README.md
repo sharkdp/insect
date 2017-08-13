@@ -76,6 +76,24 @@ Documentation
 
     -   **Last result**: you can use `ans` (answer) to refer to the result of the last calculation.
 
+-   **User-defined functions**:
+
+    Example: kinetic energy
+
+        kineticEnergy(mass, speed) = 0.5 * mass * speed^2 -> kJ
+
+        kineticEnergy(800 kg, 120 km/h)
+
+    Example: barometric formula
+
+        P0 = 1 atm
+        T0 = fromCelsius(15)
+        tempGradient = 0.65 K / 100 m
+
+        pressure(height) = P0 * (1 - tempGradient * height / T0)^5.255 -> hPa
+
+        pressure(1500 m)
+
 -   **Unicode support**:
 
         λ = 2 × 300 µm
