@@ -213,7 +213,7 @@ runInsect env (FunctionAssignment name argNames expr) =
     then
       errorWithInput fAssign expr env (RedefinedConstantError name)
     else
-      { msg: Message ValueSet $ F.optional <$> fAssign <> pretty expr
+      { msg: Message ValueSet $ (F.optional <$> (F.text "  " : fAssign)) <> pretty expr
       , newEnv: env { functions = insert name (StoredFunction UserDefined userFunc) env.functions
                     , values = delete name env.values
                     }
@@ -223,7 +223,7 @@ runInsect env (FunctionAssignment name argNames expr) =
     numExpected = length argNames'
 
     fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
-    fAssign = [ F.text "  ", F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
+    fAssign = [ F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
 
     userFunc ∷ MathFunction
     userFunc argValues =
