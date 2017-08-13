@@ -14,7 +14,7 @@ import Data.NonEmpty (NonEmpty)
 
 import Quantities as Q
 
-import Insect.Language (Identifier, Func(..), BinOp(..), Expression(..))
+import Insect.Language (Identifier, BinOp(..), Expression(..))
 import Insect.Format (Markup)
 import Insect.Format as F
 
@@ -85,7 +85,7 @@ pretty (Unit u)                        = prettyUnit u
 pretty (Variable name)                 = prettyVariable name
 pretty (Factorial x)                   = withParens x <> [F.text "!"]
 pretty (Negate x)                      = F.text "-" : withParens x
-pretty (Apply (Func fnName _) xs)      = prettyApply fnName xs
+pretty (Apply fnName xs)               = prettyApply fnName xs
 -- ConvertTo (->) never needs parens, it has the lowest precedence:
 pretty (BinOp ConvertTo x y)           = pretty x <> prettyOp ConvertTo <> pretty y
 -- Fuse multiplication of a scalar and a unit to a quantity:

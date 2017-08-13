@@ -25,9 +25,8 @@ import Text.Parsing.Parser.Pos (Position(..))
 import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian,
                    day, tonne)
-import Quantities as Q
 
-import Insect.Language (Func(..), BinOp(..), Expression(..), Statement(..))
+import Insect.Language (BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
                       normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Environment (StorageType(..), StoredValue(..), Environment,
@@ -619,32 +618,30 @@ main = runTest do
 
   suite "Parser - Functions" do
     test "Simple" do
-      let dummyFunc qs = Right (Q.scalar 2.0)
-
-      allParseAs (Expression (Apply (Func "sin" dummyFunc) (q 30.0 degree :| Nil)))
+      allParseAs (Expression (Apply "sin" (q 30.0 degree :| Nil)))
         [ "sin(30°)"
         , "  sin( 30° )  "
         , "  sin( +30° )  "
         ]
 
-      allParseAs (Expression (Apply (Func "sqrt" dummyFunc) (scalar 2.0 :| Nil)))
+      allParseAs (Expression (Apply "sqrt" (scalar 2.0 :| Nil)))
         [ "sqrt(2)"
         , "  sqrt( 2.0 )  "
         , "  sqrt( +2.0 )  "
         ]
 
-      allParseAs (Expression (Apply (Func "exp" dummyFunc) (Negate (scalar 10.0) :| Nil)))
+      allParseAs (Expression (Apply "exp" (Negate (scalar 10.0) :| Nil)))
         [ "exp(-10)"
         , "  exp( -10 )  "
         ]
 
-      allParseAs (Expression (Apply (Func "exp" dummyFunc) (scalar 1.0 :| scalar 2.0 : scalar 3.0 : Nil)))
+      allParseAs (Expression (Apply "exp" (scalar 1.0 :| scalar 2.0 : scalar 3.0 : Nil)))
         [ "exp(1,2,3)"
         , "  exp(  1  ,  2  ,  3   )  "
         ]
 
-      allParseAs (Expression (BinOp Mul (Apply (Func "exp" dummyFunc) (scalar 1.0 :| Nil))
-                                        (Apply (Func "exp" dummyFunc) (scalar 1.0 :| Nil))))
+      allParseAs (Expression (BinOp Mul (Apply "exp" (scalar 1.0 :| Nil))
+                                        (Apply "exp" (scalar 1.0 :| Nil))))
         [ "exp(1)exp(1)"
         , "  exp( 1 )  exp(  1  )  "
         ]

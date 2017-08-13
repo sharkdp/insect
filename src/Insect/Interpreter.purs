@@ -22,11 +22,11 @@ import Data.Tuple (Tuple(..), fst, snd)
 import Quantities (Quantity, ConversionError(..))
 import Quantities as Q
 
-import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
-                        Statement(..), EvalError(..), MathFunction,
-                        Identifier)
+import Insect.Language (BinOp(..), Expression(..), Command(..), Identifier,
+                        Statement(..), EvalError(..))
 import Insect.Environment (Environment, StorageType(..), StoredValue(..),
-                           StoredFunction(..), initialEnvironment)
+                           StoredFunction(..), initialEnvironment,
+                           MathFunction)
 import Insect.Format (Markup)
 import Insect.Format as F
 import Insect.PrettyPrint (pretty, prettyQuantity)
@@ -56,7 +56,10 @@ eval env (Variable name)        = case lookup name env.values of
                                     Nothing → Left (LookupError name)
 eval env (Factorial x)          = eval env x >>= Q.factorial >>> lmap QConversionError
 eval env (Negate x)             = Q.qNegate <$> eval env x
-eval env (Apply (Func _ fn) xs) = traverse (eval env) xs >>= fn >>= checkFinite
+eval env (Apply name xs)        = case lookup name env.functions of
+                                    Just (StoredFunction _ fn) →
+                                      traverse (eval env) xs >>= fn >>= checkFinite
+                                    Nothing → Left (LookupError name)
 eval env (BinOp op x y)         = do
   x' <- eval env x
   y' <- eval env y
@@ -217,19 +220,19 @@ runInsect env (FunctionAssignment name argNames expr) =
       }
   where
     argNames' = NonEmptyList argNames
-    expected = length argNames'
+    numExpected = length argNames'
 
     fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
     fAssign = [ F.text "  ", F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
 
     userFunc ∷ MathFunction
     userFunc argValues =
-      if given == expected
+      if numGiven == numExpected
         then evalAndSimplify functionEnv expr
-        else Left (WrongArityError name expected given)
+        else Left (WrongArityError name numExpected numGiven)
       where
         argValues' = NonEmptyList argValues
-        given = length argValues'
+        numGiven = length argValues'
         args = zip argNames' argValues'
 
         insertArg map (Tuple argName val) = insert argName (StoredValue UserDefined val) map

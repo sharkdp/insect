@@ -1,10 +1,8 @@
 -- | This module defines the AST for Insect.
 module Insect.Language
-  ( MathFunction
-  , EvalError(..)
+  ( EvalError(..)
   , Identifier
   , BinOp(..)
-  , Func(..)
   , Expression(..)
   , Command(..)
   , Statement(..)
@@ -13,13 +11,12 @@ module Insect.Language
 import Prelude hiding (Unit)
 
 import Data.Decimal (Decimal)
-import Data.Either (Either)
 import Data.Generic (class Generic, gShow)
 import Data.List (List)
 import Data.NonEmpty (NonEmpty)
 import Data.Units (DerivedUnit)
 
-import Quantities (Quantity, ConversionError)
+import Quantities (ConversionError)
 
 -- | Type synonym for identifiers (variable names).
 type Identifier = String
@@ -46,18 +43,6 @@ data EvalError
   | NumericalError
   | RedefinedConstantError Identifier
 
--- | Mathematical functions on physical quantities.
-type MathFunction = NonEmpty List Quantity → Either EvalError Quantity
-
--- | A mathematical function.
-data Func = Func Identifier MathFunction
-
-instance eqFunc ∷ Eq Func where
-  eq (Func id1 _) (Func id2 _) = eq id1 id2
-
-instance showFunc ∷ Show Func where
-  show (Func name _) = "(Func " <> show name <> " <FUNC>)"
-
 -- | A mathematical expression.
 data Expression
  = Scalar Decimal
@@ -65,7 +50,7 @@ data Expression
  | Variable Identifier
  | Factorial Expression
  | Negate Expression
- | Apply Func (NonEmpty List Expression)
+ | Apply Identifier (NonEmpty List Expression)
  | BinOp BinOp Expression Expression
 
 derive instance eqExpression ∷ Eq Expression
@@ -75,7 +60,7 @@ instance showExpression ∷ Show Expression where
   show (Variable n)        = "(Variable " <> show n <> ")"
   show (Factorial x)       = "(Factorial " <> show x <> ")"
   show (Negate x)          = "(Negate " <> show x <> ")"
-  show (Apply fn x)        = "(Apply " <> show fn <> " " <> show x <> ")"
+  show (Apply fn xs)       = "(Apply " <> show fn <> " " <> show xs <> ")"
   show (BinOp op x y)      = "(BinOp " <> show op <> " " <> show x <> " " <> show y <> ")"
 
 -- | A command in Insect.

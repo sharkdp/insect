@@ -36,8 +36,8 @@ import Text.Parsing.Parser.String (string, char, eof, oneOf)
 import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
                                   digit, letter, makeTokenParser)
 
-import Insect.Language (BinOp(..), Func(..), Expression(..), Command(..),
-                        Statement(..))
+import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..),
+                        Identifier)
 import Insect.Environment (Environment, StoredFunction(..))
 
 -- | A type synonym for the main Parser type with `String` as input.
@@ -322,11 +322,11 @@ foldr1 f (a :| xs) =
     _, _ → a
 
 -- | Parse a function name and fail if it's not in the environment
-function ∷ Environment → P Func
+function ∷ Environment → P Identifier
 function env = do
   name ← token.identifier
   case lookup name env.functions of
-    Just (StoredFunction _ fn) → pure (Func name fn)
+    Just (StoredFunction _ fn) → pure name
     Nothing → fail ("Unknown function '" <> name <> "'")
 
 -- | Parse a full mathematical expression.

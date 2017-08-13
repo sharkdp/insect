@@ -1,6 +1,7 @@
 module Insect.Environment
   ( StorageType(..)
   , StoredValue(..)
+  , MathFunction
   , StoredFunction(..)
   , Environment
   , initialEnvironment
@@ -10,7 +11,9 @@ import Prelude
 
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
+import Data.List (List)
 import Data.List.NonEmpty (NonEmptyList(..), head, length)
+import Data.NonEmpty (NonEmpty)
 import Data.StrMap (StrMap, fromFoldable)
 import Data.Tuple (Tuple(..))
 
@@ -18,7 +21,7 @@ import Quantities (Quantity, ConversionError)
 import Quantities as Q
 
 import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
-import Insect.Language (EvalError(..), MathFunction, Identifier)
+import Insect.Language (EvalError(..), Identifier)
 
 -- | Values can be stored as constants, as constants that are not
 -- | displayed when calling `list`, and as user-defined quantities.
@@ -28,6 +31,9 @@ derive instance eqStorageType ∷ Eq StorageType
 
 -- | A quantity with a given `StorageType`.
 data StoredValue = StoredValue StorageType Quantity
+
+-- | Mathematical functions on physical quantities.
+type MathFunction = NonEmpty List Quantity → Either EvalError Quantity
 
 -- | A mathematical function with a given `StorageType`.
 data StoredFunction = StoredFunction StorageType MathFunction
