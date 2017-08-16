@@ -373,17 +373,30 @@ expression env =
           Just fn → pure $ fn x
           Nothing → pure x
 
-      -- notice the 'foldr' for right-associativity
+      -- The power operator needs special treatment
+      -- 1) it is right-associative => use foldr1 instead of foldl1
+      -- 2) the unary minus on the *left* side of the power operator has
+      --    a lower precedence, i.e. -2^3 = -(2^3). However, unary minus
+      --    on the *right* side has a higher precedence: 2^-3 = 2^(-3).
       sepByPow ∷ P Expression
-      sepByPow = foldr1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
+      sepByPow = fix \e → foldr1 (BinOp Pow) <$> list e
+        where
+          list e = do
+            a ← suffixPow
+            as ← many do
+              powOp
+              func ← (subOp *> pure Negate) <|> pure id
+              expr ← e
+              pure (func expr)
+            pure (a :| as)
 
       sepByMulImplicit ∷ P Expression
       sepByMulImplicit = foldl1 (BinOp Mul) <$> sepByPow `sepBy1` pure unit
 
       prefixed ∷ P Expression
-      prefixed = fix \p →
-            (subOp *> (Negate <$> p))
-        <|> (addOp *> p)
+      prefixed = fix \e →
+            (subOp *> (Negate <$> e))
+        <|> (addOp *> e)
         <|> sepByMulImplicit
 
       sepByMod ∷ P Expression

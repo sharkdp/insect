@@ -151,6 +151,17 @@ main = runTest do
       shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
         "-2^3"
 
+      shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
+        "-2³"
+
+      shouldParseAs (Expression (BinOp Pow (scalar 2.0) (Negate $ scalar 3.0)))
+        "2^-3"
+
+      shouldParseAs (Expression (BinOp Pow (scalar 2.0)
+                                           (Negate (BinOp Pow (scalar 3.0)
+                                                              (Negate (scalar 4.0))))))
+        "2^-3^-4"
+
     test "Exponential notation" do
       shouldParseAs (Expression (Negate (scalar 1.3e13)))
         "-1.3e13"
