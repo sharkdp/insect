@@ -10,8 +10,9 @@ pandoc --from="$input_format" \
        features.md \
        reference-syntax.md \
        reference-units.md \
-       terminal-version.md \
        pros-and-cons.md \
+       faq.md \
+       terminal-version.md \
        development.md
 
 # Generate manpage
@@ -25,4 +26,5 @@ pandoc --from="$input_format" \
        manpage-header.md \
        features.md \
        reference-syntax.md \
+       faq.md \
        manpage-footer.md
