@@ -135,33 +135,6 @@ main = runTest do
       shouldParseAs (Expression (Negate (scalar 123.45)))
         "-123.45"
 
-    test "Unary minus" do
-      shouldParseAs (Expression (Negate (Variable "x")))
-        "-x"
-
-      shouldParseAs (Expression (Negate (Negate (Variable "x"))))
-        "--x"
-
-      shouldParseAs (Expression (BinOp Mul (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
-        "-1 * -2"
-
-      shouldParseAs (Expression (BinOp Sub (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
-        "-1 - -2"
-
-      shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
-        "-2^3"
-
-      shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
-        "-2³"
-
-      shouldParseAs (Expression (BinOp Pow (scalar 2.0) (Negate $ scalar 3.0)))
-        "2^-3"
-
-      shouldParseAs (Expression (BinOp Pow (scalar 2.0)
-                                           (Negate (BinOp Pow (scalar 3.0)
-                                                              (Negate (scalar 4.0))))))
-        "2^-3^-4"
-
     test "Exponential notation" do
       shouldParseAs (Expression (Negate (scalar 1.3e13)))
         "-1.3e13"
@@ -483,6 +456,48 @@ main = runTest do
         ]
 
       shouldFail "3 - "
+
+    test "Unary operators" do
+      shouldParseAs (Expression (Negate (Variable "x")))
+        "-x"
+
+      shouldParseAs (Expression (Variable "x"))
+        "+x"
+
+      shouldParseAs (Expression (Negate (Negate (Variable "x"))))
+        "--x"
+
+      shouldParseAs (Expression (Negate (Variable "x")))
+        "++-x"
+
+      shouldParseAs (Expression (BinOp Mul (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
+        "-1 * -2"
+
+      shouldParseAs (Expression (BinOp Mul (scalar 1.0) (scalar 2.0)))
+        "+1 * +2"
+
+      shouldParseAs (Expression (BinOp Sub (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
+        "-1 - -2"
+
+      shouldParseAs (Expression (BinOp Sub (scalar 1.0) (scalar 2.0)))
+        "+1 - +2"
+
+      shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
+        "-2^3"
+
+      shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
+        "-2³"
+
+      shouldParseAs (Expression (BinOp Pow (scalar 2.0) (Negate $ scalar 3.0)))
+        "2^-3"
+
+      shouldParseAs (Expression (BinOp Pow (scalar 2.0) (scalar 3.0)))
+        "2^+3"
+
+      shouldParseAs (Expression (BinOp Pow (scalar 2.0)
+                                           (Negate (BinOp Pow (scalar 3.0)
+                                                              (Negate (scalar 4.0))))))
+        "2^-3^-4"
 
     test "Precedence" do
       allParseAs (Expression (BinOp Add (q 5.0 meter) (BinOp Mul (q 3.0 inch) (scalar 7.0)))) $

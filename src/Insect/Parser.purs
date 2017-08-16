@@ -385,7 +385,7 @@ expression env =
             a ← suffixPow
             as ← many do
               powOp
-              func ← (subOp *> pure Negate) <|> pure id
+              func ← (subOp *> pure Negate) <|> (addOp *> pure id) <|> pure id
               expr ← e
               pure (func expr)
             pure (a :| as)
