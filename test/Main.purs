@@ -139,6 +139,9 @@ main = runTest do
       shouldParseAs (Expression (Negate (Variable "x")))
         "-x"
 
+      shouldParseAs (Expression (Negate (Negate (Variable "x"))))
+        "--x"
+
       shouldParseAs (Expression (BinOp Mul (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
         "-1 * -2"
 

@@ -373,6 +373,7 @@ expression env =
           Just fn → pure $ fn x
           Nothing → pure x
 
+      -- notice the 'foldr' for right-associativity
       sepByPow ∷ P Expression
       sepByPow = foldr1 (BinOp Pow) <$> suffixPow `sepBy1` powOp
 
@@ -380,9 +381,10 @@ expression env =
       sepByMulImplicit = foldl1 (BinOp Mul) <$> sepByPow `sepBy1` pure unit
 
       prefixed ∷ P Expression
-      prefixed = do
-        prefixFn ← ((subOp *> pure Negate) <|> (addOp *> pure id) <|> pure id)
-        prefixFn <$> sepByMulImplicit
+      prefixed = fix \p →
+            (subOp *> (Negate <$> p))
+        <|> (addOp *> p)
+        <|> sepByMulImplicit
 
       sepByMod ∷ P Expression
       sepByMod = foldl1 (BinOp Mod) <$> prefixed `sepBy1` modOp
