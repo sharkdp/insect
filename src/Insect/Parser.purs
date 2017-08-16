@@ -379,8 +379,13 @@ expression env =
       sepByMulImplicit ∷ P Expression
       sepByMulImplicit = foldl1 (BinOp Mul) <$> sepByPow `sepBy1` pure unit
 
+      prefixed ∷ P Expression
+      prefixed = do
+        prefixFn ← ((subOp *> pure Negate) <|> (addOp *> pure id) <|> pure id)
+        prefixFn <$> sepByMulImplicit
+
       sepByMod ∷ P Expression
-      sepByMod = foldl1 (BinOp Mod) <$> sepByMulImplicit `sepBy1` modOp
+      sepByMod = foldl1 (BinOp Mod) <$> prefixed `sepBy1` modOp
 
       sepByDiv ∷ P Expression
       sepByDiv = foldl1 (BinOp Div) <$> sepByMod `sepBy1` divOp
@@ -388,13 +393,8 @@ expression env =
       sepByMul ∷ P Expression
       sepByMul = foldl1 (BinOp Mul) <$> sepByDiv `sepBy1` mulOp
 
-      prefixed ∷ P Expression
-      prefixed = do
-        prefixFn ← ((subOp *> pure Negate) <|> (addOp *> pure id) <|> pure id)
-        prefixFn <$> sepByMul
-
       sepBySub ∷ P Expression
-      sepBySub = foldl1 (BinOp Sub) <$> prefixed `sepBy1` subOp
+      sepBySub = foldl1 (BinOp Sub) <$> sepByMul `sepBy1` subOp
 
       sepByAdd ∷ P Expression
       sepByAdd = foldl1 (BinOp Add) <$> sepBySub `sepBy1` addOp

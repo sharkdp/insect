@@ -135,6 +135,19 @@ main = runTest do
       shouldParseAs (Expression (Negate (scalar 123.45)))
         "-123.45"
 
+    test "Unary minus" do
+      shouldParseAs (Expression (Negate (Variable "x")))
+        "-x"
+
+      shouldParseAs (Expression (BinOp Mul (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
+        "-1 * -2"
+
+      shouldParseAs (Expression (BinOp Sub (Negate $ scalar 1.0) (Negate $ scalar 2.0)))
+        "-1 - -2"
+
+      shouldParseAs (Expression (Negate (BinOp Pow (scalar 2.0) (scalar 3.0))))
+        "-2^3"
+
     test "Exponential notation" do
       shouldParseAs (Expression (Negate (scalar 1.3e13)))
         "-1.3e13"
