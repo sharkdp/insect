@@ -14,29 +14,31 @@ FAQ
     Even though *°C* and *°F* are not supported as built-in units, there are helper functions to
     convert to and from Celsius (and Fahrenheit):
 
-    * `fromCelsius` takes a **scalar value** that represents a temperature in Celsius and returns a corresponding **temperature in Kelvin**:
+      - `fromCelsius` takes a **scalar value** that represents a temperature in Celsius and returns
+        a corresponding **temperature in Kelvin**:
 
-    ```
-    > fromCelsius(0)
+        ```
+        > fromCelsius(0)
 
-       = 273.15 K
+           = 273.15 K
 
-    > k_B * fromCelsius(23) to meV
+        > k_B * fromCelsius(23) to meV
 
-       = 25.5202 meV
-    ```
+           = 25.5202 meV
+        ```
 
-    * `toCelsius` takes a **temperature in Kelvin** and returns a **scalar value** that represents the corresponding temperature in Celsius:
+      - `toCelsius` takes a **temperature in Kelvin** and returns a **scalar value** that
+        represents the corresponding temperature in Celsius:
 
-    ```
-    > toCelsius(70 K)
+        ```
+        > toCelsius(70 K)
 
-       = -203.15
+           = -203.15
 
-    > toCelsius(25 meV / k_B)
+        > toCelsius(25 meV / k_B)
 
-       = 16.963
-    ```
+           = 16.963
+        ```
 
   - Why is `1/2 x` parsed as `1/(2x)`?
 
@@ -57,8 +59,18 @@ FAQ
     example:
 
     ```
-    > x1 = 50 km / h
+    # simple unit conversion:
+    > 120 km/h -> mph
 
+      = 74.5645 mi/h
+
+    # expression on the right hand side:
+    > 120 m^3 -> km * m^2
+
+      = 0.12 m²·km
+
+    # convert x1 to the same unit as x2:
+    > x1 = 50 km / h
     > x2 = 3 m/s -> x1
 
       x2 = 10.8 km/h
