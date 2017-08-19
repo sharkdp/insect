@@ -1,4 +1,4 @@
-![insect](media/insect.png "insect - scientific calculator")
+![insect](web/media/insect.png "insect - scientific calculator")
 
 A high precision scientific calculator with full support for physical units.
 
