@@ -61,6 +61,12 @@
           return "";
         }
 
+        if (res.msgType === "error") {
+          ga('send', 'event', 'user-input', 'error', line);
+        } else {
+          ga('send', 'event', 'user-input', 'success', line);
+        }
+
         return res.msg;
       }
 

@@ -6,3 +6,7 @@
 /.psa*
 /docs/insect.1
 insect.js
+/web/jquery.min.js
+/web/jquery.mousewheel-min.js
+/web/jquery.terminal.min.js
+/web/keyboardevent-key-polyfill.js
