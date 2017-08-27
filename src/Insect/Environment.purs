@@ -20,8 +20,8 @@ import Data.Tuple (Tuple(..))
 import Quantities (Quantity, ConversionError)
 import Quantities as Q
 
-import Insect.Functions (fromCelsius, fromFahrenheit, toCelsius, toFahrenheit)
 import Insect.Language (EvalError(..), Identifier)
+import Insect.Functions as F
 
 -- | Values can be stored as constants, as constants that are not
 -- | displayed when calling `list`, and as user-defined quantities.
@@ -96,34 +96,38 @@ initialEnvironment =
         ],
     functions:
       fromFoldable
-        [ constFunc "acos" Q.acos
-        , constFunc "acosh" Q.acosh
-        , constFunc "acos" Q.acos
-        , constFunc "acosh" Q.acosh
-        , constFunc "asin" Q.asin
-        , constFunc "asinh" Q.asinh
-        , constFunc "atan" Q.atan
+        [ constFunc  "abs" (Q.abs >>> pure)
+        , constFunc  "acos" Q.acos
+        , constFunc  "acosh" Q.acosh
+        , constFunc  "acos" Q.acos
+        , constFunc  "acosh" Q.acosh
+        , constFunc  "asin" Q.asin
+        , constFunc  "asinh" Q.asinh
+        , constFunc  "atan" Q.atan
         , constFunc2 "atan2" Q.atan2
-        , constFunc "atanh" Q.atanh
-        , constFunc "ceil" Q.ceil
-        , constFunc "cos" Q.cos
-        , constFunc "cosh" Q.cosh
-        , constFunc "exp" Q.exp
-        , constFunc "floor" Q.floor
-        , constFunc "fromCelsius" fromCelsius
-        , constFunc "fromFahrenheit" fromFahrenheit
-        , constFunc "gamma" Q.gamma
-        , constFunc "ln" Q.ln
-        , constFunc "log" Q.ln
-        , constFunc "log10" Q.log10
-        , constFunc "round" Q.round
-        , constFunc "sin" Q.sin
-        , constFunc "sinh" Q.sinh
-        , constFunc "sqrt" (Q.sqrt >>> pure)
-        , constFunc "tan" Q.tan
-        , constFunc "tanh" Q.tanh
-        , constFunc "toCelsius" toCelsius
-        , constFunc "toFahrenheit" toFahrenheit
+        , constFunc  "atanh" Q.atanh
+        , constFunc  "ceil" Q.ceil
+        , constFunc  "cos" Q.cos
+        , constFunc  "cosh" Q.cosh
+        , constFunc  "exp" Q.exp
+        , constFunc  "floor" Q.floor
+        , constFunc  "fromCelsius" F.fromCelsius
+        , constFunc  "fromFahrenheit" F.fromFahrenheit
+        , constFunc  "gamma" Q.gamma
+        , constFunc  "ln" Q.ln
+        , constFunc  "log" Q.ln
+        , constFunc  "log10" Q.log10
+        , constFuncN "minimum" (lmap QConversionError <<< Q.min <<< NonEmptyList)
+        , constFuncN "maximum" (lmap QConversionError <<< Q.max <<< NonEmptyList)
+        , constFuncN "mean" (lmap QConversionError <<< Q.mean <<< NonEmptyList)
+        , constFunc  "round" Q.round
+        , constFunc  "sin" Q.sin
+        , constFunc  "sinh" Q.sinh
+        , constFunc  "sqrt" (Q.sqrt >>> pure)
+        , constFunc  "tan" Q.tan
+        , constFunc  "tanh" Q.tanh
+        , constFunc  "toCelsius" F.toCelsius
+        , constFunc  "toFahrenheit" F.toFahrenheit
         ]
   }
   where
@@ -131,6 +135,7 @@ initialEnvironment =
     hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
     constFunc  identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func))
     constFunc2 identifier func = Tuple identifier (StoredFunction Constant (wrapSimple2 identifier func))
+    constFuncN identifier func = Tuple identifier (StoredFunction Constant func)
 
     wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple name func qs =
