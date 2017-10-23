@@ -90,7 +90,7 @@ if (interactive) {
           if (res.msgType == "quit") {
             process.exit(0);
           } else if (res.msgType == "clear") {
-            process.stdout.write('\033[2J\033[0f');
+            process.stdout.write('\x1Bc');
           } else {
             console.log(res.msg + "\n");
           }
