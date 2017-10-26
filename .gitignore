@@ -1,5 +1,7 @@
 /bower_components/
 /node_modules/
+/binaries/
+/.nexe/
 /.pulp-cache/
 /output/
 /.psc*
