@@ -60,6 +60,7 @@ initialEnvironment =
         , constVal "electricConstant"   Q.ε0
         , constVal "eps0"               Q.ε0
         , constVal "ε0"                 Q.ε0
+        , constVal "elementaryCharge"   Q.electronCharge
         , constVal "electronCharge"     Q.electronCharge
         , constVal "electronMass"       Q.electronMass
         , constVal "G"                  Q.gravitationalConstant
