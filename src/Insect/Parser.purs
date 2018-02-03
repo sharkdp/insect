@@ -241,6 +241,8 @@ normalUnitDict = Dictionary
   , Q.meter ==> ["metres", "metre", "meters", "meter", "m"]
   , Q.liter ==> ["liters", "liter", "litres", "litre", "L", "l"]
   , Q.atm ==> ["atm"]
+  , Q.pixel ==> ["pixels", "pixel", "px"]
+  , Q.dot ==> ["dots", "dot"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
@@ -270,6 +272,12 @@ imperialUnitDict = Dictionary
   , Q.mmHg ==> ["mmHg"]
   , Q.hogshead ==> ["hogsheads", "hogshead"]
   , Q.rod ==> ["rods", "rod"]
+  , Q.pixel ./ Q.inch ==> ["ppi"]
+  , Q.dot ./ Q.inch ==> ["dpi"]
+  , Q.piece ==> ["pieces", "piece"]
+  , Q.person ==> ["persons", "person", "people"]
+  , Q.dollar ==> ["dollars", "dollar", "USD", "$"]
+  , Q.euro ==> ["euros", "euro", "EUR", "€"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.

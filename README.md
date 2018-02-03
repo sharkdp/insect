@@ -172,7 +172,11 @@ Reference
     | [Cup](https://en.wikipedia.org/wiki/Cup_(unit))                              | `cups`, `cup`                                                               |
     | [Day](https://en.wikipedia.org/wiki/Day)                                     | `days`, `day`, `d`                                                          |
     | [Degree](https://en.wikipedia.org/wiki/Degree_(angle))                       | `degrees`, `degree`, `deg`, `°`                                             |
+    | [US Dollar](https://en.wikipedia.org/wiki/USD)                               | `dollars`, `dollar`, `USD`, `$`                                             |
+    | [Dot](https://en.wikipedia.org/wiki/Dots_per_inch)                           | `dots`, `dot`                                                               |
+    | [DPI](https://en.wikipedia.org/wiki/Dots_per_inch)                           | `dpi`                                                                       |
     | [Electronvolt](https://en.wikipedia.org/wiki/Electronvolt)                   | `electronvolt`, `eV`                                                        |
+    | [Euro](https://en.wikipedia.org/wiki/Euro)                                   | `euros`, `euro`, `EUR`, `€`                                                 |
     | [Farad](https://en.wikipedia.org/wiki/Farad)                                 | `farad`, `F`                                                                |
     | [Fortnight](https://en.wikipedia.org/wiki/Fortnight)                         | `fortnights`, `fortnight`                                                   |
     | [Fluid ounce](https://en.wikipedia.org/wiki/Fluid_ounce)                     | `fluidounces`, `fluidounce`, `floz`                                         |
@@ -207,8 +211,13 @@ Reference
     | [Ounce](https://en.wikipedia.org/wiki/Ounce)                                 | `ounces`, `ounce`, `oz`                                                     |
     | [Parsec](https://en.wikipedia.org/wiki/Parsec)                               | `parsecs`, `parsec`, `pc`                                                   |
     | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit))                        | `pascal`, `Pa`                                                              |
+    | [Person](https://en.wiktionary.org/wiki/person)                              | `persons`, `person`, `people`                                               |
+    | [Piece](https://en.wiktionary.org/wiki/piece)                                | `pieces`, `piece`                                                           |
     | [Pint](https://en.wikipedia.org/wiki/Pint)                                   | `pints`, `pint`                                                             |
+    | [Pixel](https://en.wikipedia.org/wiki/Pixel)                                 | `pixels`, `pixel`, `px`                                                     |
+    | [PPI](https://en.wikipedia.org/wiki/Pixels_per_inch)                         | `ppi`                                                                       |
     | [Pound](https://en.wikipedia.org/wiki/Pound_(mass))                          | `pounds`, `pound`, `lb`                                                     |
+    | [Pound-force](https://en.wikipedia.org/wiki/Pound_%28force%29)               | `pound_force`, `lbf`                                                        |
     | [Psi](https://en.wikipedia.org/wiki/Pounds_per_square_inch)                  | `psi`                                                                       |
     | [RPM](https://en.wikipedia.org/wiki/RPM)                                     | `RPM`, `rpm`                                                                |
     | [Radian](https://en.wikipedia.org/wiki/Radian)                               | `radians`, `radian`, `rad`                                                  |

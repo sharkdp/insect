@@ -626,7 +626,7 @@ main = runTest do
       shouldParseAs (Expression (Variable "to_")) "to_"
 
       shouldFail "xs,as"
-      shouldFail "hello$"
+      shouldFail "hello`"
 
     test "Variables which begin like units" do
       shouldParseAs (Expression (Variable "myVariable")) "myVariable"
