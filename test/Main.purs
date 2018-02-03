@@ -24,7 +24,7 @@ import Text.Parsing.Parser.Pos (Position(..))
 
 import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian,
-                   day, tonne)
+                   day, tonne, euro)
 
 import Insect.Language (BinOp(..), Expression(..), Statement(..))
 import Insect.Parser (Dictionary(..), DictEntry, (==>), prefixDict,
@@ -534,6 +534,13 @@ main = runTest do
         [ "42/7/3"
         , "(42/7)/3"
         , "42 per 7 per 3"
+        ]
+
+    test "Multiple division - per precedence" do
+      allParseAs (Expression (BinOp Div (Unit euro) (BinOp Div (Unit meter) (Unit second)))) $
+        [ "euro / (meter / second)"
+        , "euro / meter per second"
+        , "euro per (meter per second)"
         ]
 
     test "Involving units" do

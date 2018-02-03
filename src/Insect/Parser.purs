@@ -411,8 +411,11 @@ expression env =
       sepByMod ∷ P Expression
       sepByMod = foldl1 (BinOp Mod) <$> prefixed `sepBy1` modOp
 
+      sepByPer ∷ P Expression
+      sepByPer = foldl1 (BinOp Div) <$> sepByMod `sepBy1` perOp
+
       sepByDiv ∷ P Expression
-      sepByDiv = foldl1 (BinOp Div) <$> sepByMod `sepBy1` divOp
+      sepByDiv = foldl1 (BinOp Div) <$> sepByPer `sepBy1` divOp
 
       sepByMul ∷ P Expression
       sepByMul = foldl1 (BinOp Mul) <$> sepByDiv `sepBy1` mulOp
@@ -434,7 +437,8 @@ expression env =
     facOp = reservedOp "!"
     powOp = reservedOp "^" <|> reservedOp "**"
     modOp = reservedOp "%"
-    divOp = reservedOp "/" <|> reservedOp "÷" <|> reserved "per"
+    perOp = reserved "per"
+    divOp = reservedOp "/" <|> reservedOp "÷"
     mulOp = reservedOp "*" <|> reservedOp "·" <|> reservedOp "⋅"
                            <|> reservedOp "×"
     subOp = reservedOp "-"
