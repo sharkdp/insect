@@ -10,7 +10,8 @@ Reference
     | exponentiation            | `^`, `**`            |
     | multiplication (implicit) | *whitespace*         |
     | modulo                    | `%`                  |
-    | division                  | `/`, `÷`, `per`      |
+    | division                  | `per`                |
+    | division                  | `/`, `÷`             |
     | multiplication (explicit) | `*`, `·`, `×`        |
     | subtraction               | `-`                  |
     | addition                  | `+`                  |

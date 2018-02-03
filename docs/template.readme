@@ -1,3 +1,14 @@
+<!--
+
+    --- IMPORTANT --- IMPORTANT --- IMPORTANT ---
+
+     Do not edit this README file directly. Edit
+     the documents in the `docs` folder instead.
+
+    --- IMPORTANT --- IMPORTANT --- IMPORTANT ---
+
+-->
+
 ![insect](web/media/insect.png "insect - scientific calculator")
 
 A high precision scientific calculator with full support for physical units.
@@ -8,7 +19,7 @@ Contents
 --------
 
 $if(toc)$
-$toc$
+$table-of-contents$
 
 $endif$
 $body$

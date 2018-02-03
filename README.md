@@ -1,3 +1,14 @@
+<!--
+
+    --- IMPORTANT --- IMPORTANT --- IMPORTANT ---
+
+     Do not edit this README file directly. Edit
+     the documents in the `docs` folder instead.
+
+    --- IMPORTANT --- IMPORTANT --- IMPORTANT ---
+
+-->
+
 ![insect](web/media/insect.png "insect - scientific calculator")
 
 A high precision scientific calculator with full support for physical units.
@@ -23,11 +34,19 @@ Documentation
         2^32
         sqrt(1.4^2 + 1.5^2) * cos(pi/3)^2
 
-    -   **Operators**: addition (`+`), subtraction (`-`), multiplication (`*`, `·`, `×`), division (`/`, `÷`, `per`), exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
+    -   **Operators**: addition (`+`), subtraction (`-`), multiplication
+        (`*`, `·`, `×`), division (`/`, `÷`, `per`), exponentiation
+        (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
-    -   **Mathematical functions**: `abs`, `acos`, `acosh`, `asin`, `asinh`, `atan`, `atan2`, `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `fromCelsius`, `fromFahrenheit`, `gamma`, `ln`, `log`, `log10`, `maximum`, `minimum`, `mean`, `round`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`, `toCelsius`, `toFahrenheit`.
+    -   **Mathematical functions**: `abs`, `acos`, `acosh`, `asin`,
+        `asinh`, `atan`, `atan2`, `atanh`, `ceil`, `cos`, `cosh`, `exp`,
+        `floor`, `fromCelsius`, `fromFahrenheit`, `gamma`, `ln`, `log`,
+        `log10`, `maximum`, `minimum`, `mean`, `round`, `sin`, `sinh`,
+        `sqrt`, `tan`, `tanh`, `toCelsius`, `toFahrenheit`.
 
-    -   **High-precision numeric type** with *30* significant digits that can handle *very* large (or small) exponents like *10^(10^10)*.
+    -   **High-precision numeric type** with *30* significant digits
+        that can handle *very* large (or small) exponents like
+        *10^(10^10)*.
 
     -   **Exponential notation**: `6.022e23`.
 
@@ -37,9 +56,11 @@ Documentation
         40 kg * 9.8 m/s^2 * 150 cm
         sin(30°)
 
-    -   **Supported units**: see [*Reference*](#reference) section below.
+    -   **Supported units**: see [*Reference*](#reference) section
+        below.
 
-    -   **Implicit conversions**: `15 km/h * 30 min` evaluates to `7.5 km`.
+    -   **Implicit conversions**: `15 km/h * 30 min` evaluates to
+        `7.5 km`.
 
     -   **Useful error messages**:
 
@@ -49,7 +70,8 @@ Documentation
               Cannot convert unit N·m (base units: kg·m²·s⁻²)
                           to unit W (base units: kg·m²·s⁻³)
 
--   **Explicit unit conversions**: the `->` conversion operator (aliases: `→`, `➞`, `to`):
+-   **Explicit unit conversions**: the `->` conversion operator
+    (aliases: `→`, `➞`, `to`):
 
         60 mph -> m/s
         500 km/day -> km/h
@@ -73,9 +95,15 @@ Documentation
         len = 20 cm
         2pi*sqrt(len/g0) -> ms
 
-    -   **Predefined constants** (type `list` to see them all): speed of light (`c`), Planck's constant (`h_bar`), electron mass (`electronMass`), elementary charge (`elementaryCharge`), magnetic constant (`µ0`), electric constant (`eps0`), Bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant (`k_B`), gravitational acceleration (`g0`), ...
+    -   **Predefined constants** (type `list` to see them all): speed of
+        light (`c`), Planck's constant (`h_bar`), electron mass
+        (`electronMass`), elementary charge (`elementaryCharge`),
+        magnetic constant (`µ0`), electric constant (`eps0`), Bohr
+        magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann
+        constant (`k_B`), gravitational acceleration (`g0`), ...
 
-    -   **Last result**: you can use `ans` (answer) to refer to the result of the last calculation.
+    -   **Last result**: you can use `ans` (answer) to refer to the
+        result of the last calculation.
 
 -   **User-defined functions**:
 
@@ -115,7 +143,8 @@ Documentation
         λ = 2 × 300 µm
         ν = c/λ → GHz
 
--   **And more**: tab completion, command history (arrow keys, `Ctrl`+`R`), pretty printing, syntax highlighting, ...
+-   **And more**: tab completion, command history (arrow keys,
+    `Ctrl`+`R`), pretty printing, syntax highlighting, ...
 
 Reference
 ---------
@@ -137,7 +166,8 @@ Reference
     | unit conversion           | `->`, `→`, `➞`, `to` |
     | assignment                | `=`                  |
 
-    Note that *implicit* multiplication has a higher precedence than division, i.e. `50 cm / 2 m` will be parsed as `50 cm / (2 m)`.
+    Note that *implicit* multiplication has a higher precedence than
+    division, i.e. `50 cm / 2 m` will be parsed as `50 cm / (2 m)`.
 
 -   Commands
 
@@ -151,7 +181,9 @@ Reference
 
 -   Supported units (remember that you can use tab completion).
 
-    All SI-accepted units support metric prefixes. In addition, [binary prefixes](https://en.wikipedia.org/wiki/Binary_prefix) (`MiB`, `GiB`, ...) are also supported.
+    All SI-accepted units support metric prefixes. In addition, [binary
+    prefixes](https://en.wikipedia.org/wiki/Binary_prefix) (`MiB`,
+    `GiB`, ...) are also supported.
 
     | Unit                                                                         | Syntax                                                                      |
     |------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
@@ -244,32 +276,74 @@ Pros and cons
 **Reasons to use Insect**
 
 -   Insect is **open source**.
--   There is a [web version](https://Insect.sh/) that requires **no installation**.
--   With both browser and terminal versions available, insect is truly **cross-platform**.
--   Insect has *first-class* support for **physical units**, including metric and binary prefixes. While evaluating your calculation, Insect ensures that you did not accidentally make any mistakes in combining the physical quantities.
--   Insect supports an [**interactive**](https://en.wikipedia.org/wiki/REPL) style with its readline-based interface. There is a saved history that can be browsed by pressing up- and down keys. The history is also searchable via *Ctrl-R*.
--   The syntax of Insect is rather strict. The parser does not try to be "smart" on syntactically incorrect input, so there shouldn't be any surprises - and you can trust the result of your calculation. The parsed user input is always pretty-printed for a quick double-check.
--   Insect is written in a [PureScript](http://www.purescript.org/) and therefore benefits from all the safety-guarantees that a strictly-typed functional programming language gives you.
--   The source code of [purescript-quantities](https://github.com/sharkdp/purescript-quantities) (the underlying library for physical units) as well as the code of Insect itself is **extensively tested**.
+-   There is a [web version](https://Insect.sh/) that requires **no
+    installation**.
+-   With both browser and terminal versions available, insect is truly
+    **cross-platform**.
+-   Insect has *first-class* support for **physical units**, including
+    metric and binary prefixes. While evaluating your calculation,
+    Insect ensures that you did not accidentally make any mistakes in
+    combining the physical quantities.
+-   Insect supports an
+    [**interactive**](https://en.wikipedia.org/wiki/REPL) style with its
+    readline-based interface. There is a saved history that can be
+    browsed by pressing up- and down keys. The history is also
+    searchable via *Ctrl-R*.
+-   The syntax of Insect is rather strict. The parser does not try to be
+    "smart" on syntactically incorrect input, so there shouldn't be any
+    surprises - and you can trust the result of your calculation. The
+    parsed user input is always pretty-printed for a quick double-check.
+-   Insect is written in a [PureScript](http://www.purescript.org/) and
+    therefore benefits from all the safety-guarantees that a
+    strictly-typed functional programming language gives you.
+-   The source code of
+    [purescript-quantities](https://github.com/sharkdp/purescript-quantities)
+    (the underlying library for physical units) as well as the code of
+    Insect itself is **extensively tested**.
 
 **Reasons to choose an alternative**
 
--   Insect is a scientific calculator. It's not a computer algebra system that solves differential equations or computes integrals. Try *[WolframAlpha](http://www.wolframalpha.com/)* instead.
--   There is no graphical user interface with buttons for each action (*x²*, *1/x*, *DEG/RAD*, etc.). *[Qalculate!](http://qalculate.github.io/)* is a fantastic tool that supports both text- as well as graphical input.
--   Insect supports a huge range of physical units: all [SI units](https://en.wikipedia.org/wiki/International_System_of_Units), all units that are accepted by SI as well as most units of the imperial and US customary systems (and many more). However, if you need something even more comprehensive, try *[GNU units](https://www.gnu.org/software/units/)*.
--   Insect is not a general-purpose programming language. You could try *[Frink](https://frinklang.org/)*.
--   Insect does not have a special mode for hexadecimal or binary numbers (yet).
+-   Insect is a scientific calculator. It's not a computer algebra
+    system that solves differential equations or computes integrals. Try
+    *[WolframAlpha](http://www.wolframalpha.com/)* instead.
+-   There is no graphical user interface with buttons for each action
+    (*x²*, *1/x*, *DEG/RAD*, etc.).
+    *[Qalculate!](http://qalculate.github.io/)* is a fantastic tool that
+    supports both text- as well as graphical input.
+-   Insect supports a huge range of physical units: all [SI
+    units](https://en.wikipedia.org/wiki/International_System_of_Units),
+    all units that are accepted by SI as well as most units of the
+    imperial and US customary systems (and many more). However, if you
+    need something even more comprehensive, try *[GNU
+    units](https://www.gnu.org/software/units/)*.
+-   Insect is not a general-purpose programming language. You could try
+    *[Frink](https://frinklang.org/)*.
+-   Insect does not have a special mode for hexadecimal or binary
+    numbers (yet).
 
 FAQ
 ---
 
 -   Why are Celsius and Fahrenheit not supported?
 
-    Compared to the SI unit [Kelvin](https://en.wikipedia.org/wiki/Kelvin) and in contrast to all other units, Celsius and Fahrenheit require an additive offset when converting into and from other temperature units. This additive offset leads to all kinds of ambiguities when performing calculations in these units. Adding two temperatures in Celsius, for example, is only meaningful if one of them is seen as an offset value (rather than an absolute temperature). Insect is primarily a scientific calculator (as opposed to a unit conversion tool) and therefore focuses on getting physical calculations right.
+    Compared to the SI unit
+    [Kelvin](https://en.wikipedia.org/wiki/Kelvin) and in contrast to
+    all other units, Celsius and Fahrenheit require an additive offset
+    when converting into and from other temperature units. This additive
+    offset leads to all kinds of ambiguities when performing
+    calculations in these units. Adding two temperatures in Celsius, for
+    example, is only meaningful if one of them is seen as an offset
+    value (rather than an absolute temperature). Insect is primarily a
+    scientific calculator (as opposed to a unit conversion tool) and
+    therefore focuses on getting physical calculations right.
 
-    Even though *°C* and *°F* are not supported as built-in units, there are helper functions to convert to and from Celsius (and Fahrenheit):
+    Even though *°C* and *°F* are not supported as built-in units, there
+    are helper functions to convert to and from Celsius (and
+    Fahrenheit):
 
-    -   `fromCelsius` takes a **scalar value** that represents a temperature in Celsius and returns a corresponding **temperature in Kelvin**:
+    -   `fromCelsius` takes a **scalar value** that represents a
+        temperature in Celsius and returns a corresponding **temperature
+        in Kelvin**:
 
             > fromCelsius(0)
 
@@ -279,7 +353,9 @@ FAQ
 
                = 25.5202 meV
 
-    -   `toCelsius` takes a **temperature in Kelvin** and returns a **scalar value** that represents the corresponding temperature in Celsius:
+    -   `toCelsius` takes a **temperature in Kelvin** and returns a
+        **scalar value** that represents the corresponding temperature
+        in Celsius:
 
             > toCelsius(70 K)
 
@@ -291,15 +367,25 @@ FAQ
 
 -   Why is `1/2 x` parsed as `1/(2x)`?
 
-    *Implicit* multiplication (without an explicit multiplication sign) has a higher precedence than division (see [operator precedence rules](#reference)). This is by design, in order to parse inputs like `50 cm / 2 m` as `(50 cm) / (2 m)`. If you meant *½ · x*, write `1/2 * x`.
+    *Implicit* multiplication (without an explicit multiplication sign)
+    has a higher precedence than division (see [operator precedence
+    rules](#reference)). This is by design, in order to parse inputs
+    like `50 cm / 2 m` as `(50 cm) / (2 m)`. If you meant *½ · x*, write
+    `1/2 * x`.
 
 -   What is the internal numerical precision?
 
-    By default, Insect shows 6 significant digits in the result of the calculation. However, the internal numerical precision is much higher (30 digits).
+    By default, Insect shows 6 significant digits in the result of the
+    calculation. However, the internal numerical precision is much
+    higher (30 digits).
 
 -   How does the conversion operator work?
 
-    The conversion operator `->` attempts to convert the physical quantity on its left hand side to the *unit of the expression* on its right hand side. This means that you can write an arbitrary expression on the right hand side (but only the unit part will be extracted). For example:
+    The conversion operator `->` attempts to convert the physical
+    quantity on its left hand side to the *unit of the expression* on
+    its right hand side. This means that you can write an arbitrary
+    expression on the right hand side (but only the unit part will be
+    extracted). For example:
 
         # simple unit conversion:
         > 120 km/h -> mph
@@ -320,36 +406,47 @@ FAQ
 Terminal version
 ----------------
 
-In addition to the web interface, there is also a command line version which can by installed via [npm](https://www.npmjs.com/package/insect):
+In addition to the web interface, there is also a command line version
+which can by installed via [npm](https://www.npmjs.com/package/insect):
 
     npm install -g insect
 
-If you prefer not to install nodejs and npm, you can use one of the standalone binaries on the [release page](https://github.com/sharkdp/insect/releases).
+If you prefer not to install nodejs and npm, you can use one of the
+standalone binaries on the [release
+page](https://github.com/sharkdp/insect/releases).
 
-For Arch Linux, there is a [package on AUR](https://aur.archlinux.org/packages/insect/):
+For Arch Linux, there is a [package on
+AUR](https://aur.archlinux.org/packages/insect/):
 
     yaourt -S insect
 
-For Fedora, there is a [copr repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
+For Fedora, there is a [copr
+repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
 
     sudo dnf copr enable fnux/insect
     sudo dnf install insect
 
-For macOS, there is a [Homebrew package](http://braumeister.org/formula/insect):
+For macOS, there is a [Homebrew
+package](http://braumeister.org/formula/insect):
 
     brew install insect
 
 Development
 -----------
 
-[![Build Status](https://api.travis-ci.org/sharkdp/insect.svg?branch=master)](https://travis-ci.org/sharkdp/insect)
+[![Build
+Status](https://api.travis-ci.org/sharkdp/insect.svg?branch=master)](https://travis-ci.org/sharkdp/insect)
 
-Insect is written in PureScript (see [Getting Started](https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md) guide). You can install all dependencies and build the whole project by running:
+Insect is written in PureScript (see [Getting
+Started](https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md)
+guide). You can install all dependencies and build the whole project by
+running:
 
     bower install
     npm install
     pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js
 
-Insect comes with a comprehensive set of [unit tests](test/Main.purs). You can run them by calling
+Insect comes with a comprehensive set of [unit tests](test/Main.purs).
+You can run them by calling
 
     pulp test
