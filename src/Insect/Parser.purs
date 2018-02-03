@@ -256,6 +256,7 @@ imperialUnitDict = Dictionary
   , Q.yard ==> ["yards", "yard", "yd"]
   , Q.foot ==> ["feet", "foot", "ft"]
   , Q.ounce ==> ["ounces", "ounce", "oz"]
+  , Q.lbf ==> ["pound_force", "lbf"]
   , Q.pound ==> ["pounds", "pound", "lb"]
   , Q.gallon ==> ["gallons", "gallon", "gal"]
   , Q.pint ==> ["pints", "pint"]
