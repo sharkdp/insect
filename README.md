@@ -420,11 +420,14 @@ AUR](https://aur.archlinux.org/packages/insect/):
 
     yaourt -S insect
 
-For Fedora, there is a [copr
+On Fedora 28+, you can install `insect` from the official sources:
+
+    sudo dnf install insect
+
+For Fedora versions 26 and 27, you need to enable this [copr
 repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
 
     sudo dnf copr enable fnux/insect
-    sudo dnf install insect
 
 For macOS, there is a [Homebrew
 package](http://braumeister.org/formula/insect):
