@@ -14,28 +14,27 @@
     | [Barn](https://en.wikipedia.org/wiki/Barn_(unit)) | `barn` |
     | [Becquerel](https://en.wikipedia.org/wiki/Becquerel) | `becquerel`, `Bq` |
     | [Bel](https://en.wikipedia.org/wiki/Decibel) | `bel` |
-    | [Bits per second](https://en.wikipedia.org/wiki/Data_rate_units) | `bps` |
     | [Bit](https://en.wikipedia.org/wiki/Bit) | `bits`, `bit` |
+    | [Bits per second](https://en.wikipedia.org/wiki/Data_rate_units) | `bps` |
     | [British thermal unit](https://en.wikipedia.org/wiki/British_thermal_unit) | `BTU` |
     | [Byte](https://en.wikipedia.org/wiki/Byte) | `Bytes`, `bytes`, `Byte`, `byte`, `B`, `Octets`, `octets`, `Octet`, `octet`|
     | [Calorie](https://en.wikipedia.org/wiki/Calorie) | `calories`, `calorie`, `cal` |
     | [Candela](https://en.wikipedia.org/wiki/Candela) | `candela`, `cd` |
     | [Coulomb](https://en.wikipedia.org/wiki/Coulomb) | `coulomb`, `C` |
     | [Cup](https://en.wikipedia.org/wiki/Cup_(unit)) | `cups`, `cup` |
+    | [DPI](https://en.wikipedia.org/wiki/Dots_per_inch) | `dpi` |
     | [Day](https://en.wikipedia.org/wiki/Day) | `days`, `day`, `d` |
     | [Degree](https://en.wikipedia.org/wiki/Degree_(angle)) | `degrees`, `degree`, `deg`, `°` |
-    | [US Dollar](https://en.wikipedia.org/wiki/USD) | `dollars`, `dollar`, `USD`, `$` |
     | [Dot](https://en.wikipedia.org/wiki/Dots_per_inch) | `dots`, `dot` |
-    | [DPI](https://en.wikipedia.org/wiki/Dots_per_inch) | `dpi` |
     | [Electronvolt](https://en.wikipedia.org/wiki/Electronvolt) | `electronvolt`, `eV` |
     | [Euro](https://en.wikipedia.org/wiki/Euro) | `euros`, `euro`, `EUR`, `€` |
     | [Farad](https://en.wikipedia.org/wiki/Farad) | `farad`, `F` |
-    | [Fortnight](https://en.wikipedia.org/wiki/Fortnight) | `fortnights`, `fortnight` |
     | [Fluid ounce](https://en.wikipedia.org/wiki/Fluid_ounce) | `fluidounces`, `fluidounce`, `floz` |
+    | [Foot](https://en.wikipedia.org/wiki/Foot_(unit)) | `feet`, `foot`, `ft` |
+    | [Fortnight](https://en.wikipedia.org/wiki/Fortnight) | `fortnights`, `fortnight` |
     | [Frame](https://en.wikipedia.org/wiki/Film_frame) | `frames`, `frame` |
     | [Frames per second](https://en.wikipedia.org/wiki/Frame_rate) | `fps` |
     | [Furlong](https://en.wikipedia.org/wiki/Furlong) | `furlongs`, `furlong` |
-    | [Foot](https://en.wikipedia.org/wiki/Foot_(unit)) | `feet`, `foot`, `ft` |
     | [Gallon](https://en.wikipedia.org/wiki/Gallon) | `gallons`, `gallon`, `gal` |
     | [Gauss](https://en.wikipedia.org/wiki/Gauss_(unit)) | `gauss` |
     | [Gram](https://en.wikipedia.org/wiki/Gram) | `grams`, `gram`, `grammes`, `gramme`, `g` |
@@ -54,8 +53,8 @@
     | [Lumen](https://en.wikipedia.org/wiki/Lumen_(unit)) | `lumen`, `lm` |
     | [Lux](https://en.wikipedia.org/wiki/Lux) | `lux`, `lx` |
     | [Meter](https://en.wikipedia.org/wiki/Meter) | `meters`, `meter`, `metres`, `metre`, `m` |
-    | [Miles per hour](https://en.wikipedia.org/wiki/Miles_per_hour) | `mph` |
     | [Mile](https://en.wikipedia.org/wiki/Mile) | `miles`, `mile` |
+    | [Miles per hour](https://en.wikipedia.org/wiki/Miles_per_hour) | `mph` |
     | [Millimeter of mercury](https://en.wikipedia.org/wiki/Millimeter_of_mercury) | `mmHg` |
     | [Minute](https://en.wikipedia.org/wiki/Minute) | `minutes`, `minute`, `min` |
     | [Mole](https://en.wikipedia.org/wiki/Mole_(unit)) | `mole`, `mol` |
@@ -63,15 +62,15 @@
     | [Newton](https://en.wikipedia.org/wiki/Newton_(unit)) | `newton`, `N` |
     | [Ohm](https://en.wikipedia.org/wiki/Ohm) | `ohms`, `ohm`, `Ω` |
     | [Ounce](https://en.wikipedia.org/wiki/Ounce) | `ounces`, `ounce`, `oz` |
+    | [PPI](https://en.wikipedia.org/wiki/Pixels_per_inch) | `ppi` |
     | [Parsec](https://en.wikipedia.org/wiki/Parsec) | `parsecs`, `parsec`, `pc` |
     | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit)) | `pascal`, `Pa` |
     | [Person](https://en.wiktionary.org/wiki/person) | `persons`, `person`, `people` |
     | [Piece](https://en.wiktionary.org/wiki/piece) | `pieces`, `piece` |
     | [Pint](https://en.wikipedia.org/wiki/Pint) | `pints`, `pint` |
     | [Pixel](https://en.wikipedia.org/wiki/Pixel) | `pixels`, `pixel`, `px` |
-    | [PPI](https://en.wikipedia.org/wiki/Pixels_per_inch) | `ppi` |
-    | [Pound](https://en.wikipedia.org/wiki/Pound_(mass)) | `pounds`, `pound`, `lb` |
     | [Pound-force](https://en.wikipedia.org/wiki/Pound_%28force%29) | `pound_force`, `lbf` |
+    | [Pound](https://en.wikipedia.org/wiki/Pound_(mass)) | `pounds`, `pound`, `lb` |
     | [Psi](https://en.wikipedia.org/wiki/Pounds_per_square_inch) | `psi` |
     | [RPM](https://en.wikipedia.org/wiki/RPM) | `RPM`, `rpm` |
     | [Radian](https://en.wikipedia.org/wiki/Radian) | `radians`, `radian`, `rad` |
@@ -83,9 +82,10 @@
     | [Teaspoon](https://en.wikipedia.org/wiki/Teaspoon) | `teaspoons`, `teaspoon`, `tsp` |
     | [Tesla](https://en.wikipedia.org/wiki/Tesla_(unit)) | `tesla`, `T` |
     | [Tonne](https://en.wikipedia.org/wiki/Tonne) | `tonnes`, `tonne`, `tons`, `ton`, `t` |
+    | [US Dollar](https://en.wikipedia.org/wiki/USD) | `dollars`, `dollar`, `USD`, `$` |
     | [Volt](https://en.wikipedia.org/wiki/Volt) | `volts`, `volt`, `V` |
-    | [Watt](https://en.wikipedia.org/wiki/Watt) | `watts`, `watt`, `W` |
     | [Watt-hour](https://en.wikipedia.org/wiki/Kilowatt_hour) | `Wh` |
+    | [Watt](https://en.wikipedia.org/wiki/Watt) | `watts`, `watt`, `W` |
     | [Weber](https://en.wikipedia.org/wiki/Weber_(unit)) | `weber`, `Wb` |
     | [Week](https://en.wikipedia.org/wiki/Week) | `weeks`, `week` |
     | [Yard](https://en.wikipedia.org/wiki/Yard) | `yards`, `yard`, `yd` |
