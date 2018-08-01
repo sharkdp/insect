@@ -56,7 +56,7 @@ if (interactive) {
     output: process.stdout,
     path: path.join(xdgBasedir.config, "insect-history"),
     completer: function(line) {
-      var identifiers = Object.keys(insectEnv.values);
+      var identifiers = Insect.identifiers(insectEnv);
 
       var keywords =
         identifiers.concat(Insect.functions(insectEnv))
