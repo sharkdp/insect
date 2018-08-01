@@ -11,7 +11,8 @@ module Insect.Language
 import Prelude hiding (Unit)
 
 import Data.Decimal (Decimal)
-import Data.Generic (class Generic, gShow)
+import Data.Generic.Rep (class Generic)
+import Data.Generic.Rep.Show (genericShow)
 import Data.List (List)
 import Data.NonEmpty (NonEmpty)
 import Data.Units (DerivedUnit)
@@ -32,8 +33,8 @@ data BinOp
  | ConvertTo
 
 derive instance eqBinOp ∷ Eq BinOp
-derive instance genericBinOp ∷ Generic BinOp
-instance showBinOp ∷ Show BinOp where show = gShow
+derive instance genericBinOp ∷ Generic BinOp _
+instance showBinOp ∷ Show BinOp where show = genericShow
 
 -- | Types of errors that may appear during evaluation.
 data EvalError
@@ -73,8 +74,8 @@ data Command
  | Quit
 
 derive instance eqCommand ∷ Eq Command
-derive instance genericCommand ∷ Generic Command
-instance showCommand ∷ Show Command where show = gShow
+derive instance genericCommand ∷ Generic Command _
+instance showCommand ∷ Show Command where show = genericShow
 
 -- | A statement in Insect.
 data Statement

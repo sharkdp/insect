@@ -12,7 +12,8 @@ module Insect
 import Prelude
 
 import Data.Either (Either(..))
-import Data.StrMap (keys)
+import Data.Map (keys)
+import Data.Set (toUnfoldable)
 
 import Data.Array (sort)
 
@@ -98,4 +99,4 @@ commands ∷ Array String
 commands = P.commands
 
 functions ∷ Environment → Array String
-functions env = keys env.functions <> ["sum", "product"]
+functions env = toUnfoldable (keys env.functions) <> ["sum", "product"]

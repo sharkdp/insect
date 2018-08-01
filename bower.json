@@ -13,15 +13,15 @@
     "output"
   ],
   "dependencies": {
-    "purescript-quantities": "^7.1.0",
-    "purescript-parsing": "^4.2.0",
-    "purescript-maps": "^3.0.0",
+    "purescript-quantities": "^8.0.0",
+    "purescript-parsing": "^5.0.0",
+    "purescript-ordered-collections": "^1.0.0",
     "jquery.terminal": "=1.6.3",
     "keyboardevent-key-polyfill": "=1.1.0",
-    "purescript-generics": "^4.0.0"
+    "purescript-generics-rep": "^6.0.0"
   },
   "devDependencies": {
-    "purescript-psci-support": "^3.0.0",
-    "purescript-test-unit": "^11.0.0"
+    "purescript-psci-support": "^4.0.0",
+    "purescript-test-unit": "^14.0.0"
   }
 }
