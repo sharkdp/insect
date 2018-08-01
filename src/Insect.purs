@@ -7,6 +7,7 @@ module Insect
   , fmtConsole
   , commands
   , functions
+  , identifiers
   ) where
 
 import Prelude
@@ -100,3 +101,6 @@ commands = P.commands
 
 functions ∷ Environment → Array String
 functions env = toUnfoldable (keys env.functions) <> ["sum", "product"]
+
+identifiers ∷ Environment → Array String
+identifiers env = toUnfoldable (keys env.values)
