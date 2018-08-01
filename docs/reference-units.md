@@ -32,6 +32,8 @@
     | [Farad](https://en.wikipedia.org/wiki/Farad) | `farad`, `F` |
     | [Fortnight](https://en.wikipedia.org/wiki/Fortnight) | `fortnights`, `fortnight` |
     | [Fluid ounce](https://en.wikipedia.org/wiki/Fluid_ounce) | `fluidounces`, `fluidounce`, `floz` |
+    | [Frame](https://en.wikipedia.org/wiki/Film_frame) | `frames`, `frame` |
+    | [Frames per second](https://en.wikipedia.org/wiki/Frame_rate) | `fps` |
     | [Furlong](https://en.wikipedia.org/wiki/Furlong) | `furlongs`, `furlong` |
     | [Foot](https://en.wikipedia.org/wiki/Foot_(unit)) | `feet`, `foot`, `ft` |
     | [Gallon](https://en.wikipedia.org/wiki/Gallon) | `gallons`, `gallon`, `gal` |

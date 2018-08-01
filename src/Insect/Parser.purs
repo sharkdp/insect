@@ -244,6 +244,8 @@ normalUnitDict = Dictionary
   , Q.liter ==> ["liters", "liter", "litres", "litre", "L", "l"]
   , Q.atm ==> ["atm"]
   , Q.pixel ==> ["pixels", "pixel", "px"]
+  , Q.frame ==> ["frames", "frame"]
+  , Q.frame ./ Q.second ==> ["fps"]
   , Q.dot ==> ["dots", "dot"]
   ]
 
