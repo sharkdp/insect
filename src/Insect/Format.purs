@@ -102,7 +102,7 @@ jtClass name str = "[[;;;hl-" <> name <> "]" <> str <> "]"
 
 -- | Formatter for rich text output on jquery.terminal.
 fmtJqueryTerminal ∷ Formatter
-fmtJqueryTerminal _ FTText = id
+fmtJqueryTerminal _ FTText = identity
 fmtJqueryTerminal _ FTEmphasized = jtClass "emphasized"
 fmtJqueryTerminal _ FTError = jtClass "error"
 fmtJqueryTerminal _ FTValue = jtClass "value"

@@ -14,7 +14,7 @@ import Data.Either (Either(..))
 import Data.List (List(..), (:))
 import Data.List.NonEmpty (NonEmptyList(..), head, length)
 import Data.NonEmpty (NonEmpty, (:|))
-import Data.StrMap (StrMap, fromFoldable)
+import Data.Map (Map, fromFoldable)
 import Data.Tuple (Tuple(..))
 
 import Quantities (Quantity, ConversionError)
@@ -41,8 +41,8 @@ data StoredFunction = StoredFunction StorageType MathFunction
 -- | The environment consists of identifiers that are mapped to specific
 -- | quantities.
 type Environment =
-  { values    ∷ StrMap StoredValue
-  , functions ∷ StrMap StoredFunction
+  { values    ∷ Map String StoredValue
+  , functions ∷ Map String StoredFunction
   }
 
 -- | The initial environment contains a few useful mathematical and physical

@@ -26,8 +26,8 @@ import Data.Foldable as F
 import Data.List (List, many, init, last)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|), foldl1)
-import Data.StrMap (lookup)
-import Data.String (fromCharArray, singleton)
+import Data.Map (lookup)
+import Data.String (fromCodePointArray, codePointFromChar, singleton)
 
 import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
 import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>),
@@ -124,11 +124,13 @@ number = do
       ds ← some $ oneOf ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] <?> "a digit"
       pure $ fromCharArray (fromFoldable ds)
 
+    fromCharArray = fromCodePointArray <<< map codePointFromChar
+
     signAndDigits ∷ P String
     signAndDigits = do
       sign ← option '+' (oneOf ['+', '-'])
       intPart ← digits
-      pure $ singleton sign <> intPart
+      pure $ singleton (codePointFromChar sign) <> intPart
 
 -- | A helper type for entries in the dictionary.
 data DictEntry a = DictEntry a (Array String)
@@ -182,7 +184,7 @@ prefixDict = Dictionary
 
 -- | Parse a SI or IEC prefix like `µ`, `G`, `pico` or `Ki`.
 prefix ∷ P (DerivedUnit → DerivedUnit)
-prefix = buildDictParser prefixDict <|> pure id
+prefix = buildDictParser prefixDict <|> pure identity
 
 -- | Normal (SI-conform, non-imperial) units
 normalUnitDict ∷ Dictionary DerivedUnit
@@ -394,7 +396,7 @@ expression env =
             a ← suffixPow
             as ← many do
               powOp
-              func ← (subOp *> pure Negate) <|> (addOp *> pure id) <|> pure id
+              func ← (subOp *> pure Negate) <|> (addOp *> pure identity) <|> pure identity
               expr ← e
               pure (func expr)
             pure (a :| as)

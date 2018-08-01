@@ -2,22 +2,19 @@ module Test.Main where
 
 import Prelude hiding (degree)
 
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE)
-import Control.Monad.Aff (Aff)
-import Control.Monad.Aff.AVar (AVAR)
+import Effect (Effect)
+import Effect.Aff (Aff)
 
 import Data.Decimal (fromNumber)
 import Data.Either(Either(..))
 import Data.Foldable (traverse_, for_, intercalate)
 import Data.List (List(..), (:))
 import Data.NonEmpty ((:|))
-import Data.StrMap (insert, keys)
+import Data.Map (insert, keys)
 
 import Test.Unit (suite, test, failure)
 import Test.Unit.Assert (equal)
 import Test.Unit.Main (runTest)
-import Test.Unit.Console (TESTOUTPUT)
 
 import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
 import Text.Parsing.Parser.Pos (Position(..))
@@ -35,7 +32,7 @@ import Insect.Format (format, fmtPlain)
 import Insect.PrettyPrint (pretty)
 import Insect (repl)
 
-shouldParseAs ∷ ∀ eff. Statement → String → Aff eff Unit
+shouldParseAs ∷ Statement → String → Aff Unit
 shouldParseAs expected input =
   case parseInsect initialEnvironment input of
     Left err →
@@ -52,16 +49,16 @@ shouldParseAs expected input =
                   "Output:   " <> show output <> "\n" <>
                   "Expected: " <> show expected <> "\n"
 
-allParseAs ∷ ∀ eff. Statement → Array String → Aff eff Unit
+allParseAs ∷ Statement → Array String → Aff Unit
 allParseAs expected = traverse_ (shouldParseAs expected)
 
-shouldFail ∷ ∀ eff. String → Aff eff Unit
+shouldFail ∷ String → Aff Unit
 shouldFail input = do
   case parseInsect initialEnvironment input of
    Left _ → pure unit
    Right output → failure $ "input is expected to throw a parse error: '" <> input <> "'"
 
-expectOutput ∷ ∀ eff. Environment → String → String → Aff eff Unit
+expectOutput ∷ Environment → String → String → Aff Unit
 expectOutput env expected inp =
   let res = repl fmtPlain env inp
       out = res.msg
@@ -72,7 +69,7 @@ expectOutput env expected inp =
                 "Output:   '" <> out <> "'\n" <>
                 "Expected: '" <> expected <> "'\n"
 
-prettyPrintCheck ∷ ∀ eff. String → Aff eff Unit
+prettyPrintCheck ∷ String → Aff Unit
 prettyPrintCheck input =
   case parseInsect initialEnvironment input of
     Left err →
@@ -92,7 +89,7 @@ prettyPrintCheck input =
           failure $ "Input is not an expression"
 
 
-main ∷ Eff (console ∷ CONSOLE, testOutput ∷ TESTOUTPUT, avar ∷ AVAR) Unit
+main ∷ Effect Unit
 main = runTest do
   -- Helper to construct scalars
   let scalar n = Scalar (fromNumber n)
