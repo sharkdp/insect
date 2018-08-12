@@ -681,15 +681,162 @@ return S(E.withErrorMessage(a)(d)("literal string"))}();return{identifier:ma,res
 commaSep1:function(b){return E.sepBy1(a)(b)(ra)}}}};a.digit=pa;a.hexDigit=V;a.octDigit=x;a.upper=da;a.space=u;a.letter=function(a){return E.withErrorMessage(a)(G.satisfy(G.stringLikeString)(a)(C.isAlpha))("letter")}})(b["Text.Parsing.Parser.Token"]=b["Text.Parsing.Parser.Token"]||{});(function(a){var d=b["Control.Alt"],c=b["Control.Applicative"],g=b["Control.Apply"],k=b["Control.Bind"],v=b["Control.Category"],n=b["Control.Lazy"],m=b["Data.Array"],w=b["Data.Boolean"],t=b["Data.Decimal"],C=b["Data.Either"],
 p=b["Data.Foldable"],r=b["Data.Functor"],l=b["Data.Identity"],U=b["Data.List"],N=b["Data.List.Types"],M=b["Data.Map.Internal"],F=b["Data.Maybe"],H=b["Data.NonEmpty"],S=b["Data.Ord"],X=b["Data.Semigroup"],I=b["Data.String.CodePoints"],Y=b["Data.Unit"],P=b["Data.Units"],da=b["Data.Units.Astronomical"],fa=b["Data.Units.Bit"],ea=b["Data.Units.CGS"],A=b["Data.Units.Currency"],h=b["Data.Units.Imperial"],E=b["Data.Units.Misc"],G=b["Data.Units.SI"],va=b["Data.Units.SI.Accepted"],ja=b["Data.Units.SI.Derived"],
 u=b["Data.Units.Time"],ua=b["Data.Units.USCustomary"],aa=b["Insect.Language"],x=b["Text.Parsing.Parser"],na=b["Text.Parsing.Parser.Combinators"],ca=b["Text.Parsing.Parser.String"],wa=b["Text.Parsing.Parser.Token"],L=function(){function a(a,b){this.value0=a;this.value1=b}a.create=function(b){return function(c){return new a(b,c)}};return a}(),D=function(){function a(a){this.value0=a}a.create=function(b){return new a(b)};return a}(),bb=d.alt(x.altParserT(l.monadIdentity))(g.applySecond(x.applyParserT(l.monadIdentity))(ca.string(ca.stringLikeString)(l.monadIdentity)("d"))(c.pure(x.applicativeParserT(l.monadIdentity))(u.day)))(g.applySecond(x.applyParserT(l.monadIdentity))(ca.string(ca.stringLikeString)(l.monadIdentity)("t"))(c.pure(x.applicativeParserT(l.monadIdentity))(va.tonne))),
-Aa=function(a){return function(b){return function(d){return k.bind(x.bindParserT(a))(b)(function(h){return k.bind(x.bindParserT(a))(U.many(x.alternativeParserT(a))(x.lazyParserT)(g.applySecond(x.applyParserT(a))(d)(b)))(function(b){return c.pure(x.applicativeParserT(a))(new H.NonEmpty(h,b))})})}}},V=new D([new L(P.kibi,["kibi","Ki"]),new L(P.mebi,["mebi","Mi"]),new L(P.gibi,["gibi","Gi"]),new L(P.tebi,["tebi","Ti"]),new L(P.pebi,["pebi","Pi"]),new L(P.exbi,["exbi","Ei"]),new L(P.zebi,["zebi","Zi"]),
-new L(P.yobi,["yobi","Yi"]),new L(P.atto,["atto","a"]),new L(P.femto,["femto","f"]),new L(P.peta,["peta"]),new L(P.mega,["mega"]),new L(P.pico,["pico","p"]),new L(P.nano,["nano","n"]),new L(P.micro,["micro","u","\u00b5","\u03bc"]),new L(P.milli,["milli","m"]),new L(P.centi,["centi","c"]),new L(P.deci,["deci","d"]),new L(P.hecto,["hecto","h"]),new L(P.kilo,["kilo","k"]),new L(P.mega,["M"]),new L(P.giga,["giga","G"]),new L(P.tera,["tera","T"]),new L(P.peta,["P"]),new L(P.exa,["exa","E"])]);da=new D([new L(ja.radian,
-["radians","radian","rad"]),new L(va.degree,["degrees","degree","deg","\u00b0"]),new L(ja.hertz,["hertz","Hz"]),new L(E.rpm,["RPM","rpm"]),new L(ja.newton,["newton","N"]),new L(ja.joule,["joules","joule","J"]),new L(ja.pascal,["pascal","Pa"]),new L(ja.volt,["volts","volt","V"]),new L(ja.farad,["farad","F"]),new L(ja.ohm,["ohms","ohm","\u03a9"]),new L(ja.sievert,["sievert","Sv"]),new L(ja.weber,["weber","Wb"]),new L(ja.tesla,["tesla","T"]),new L(ja.henry,["henry","H"]),new L(ja.coulomb,["coulomb",
-"C"]),new L(ja.siemens,["siemens","S"]),new L(ja.lumen,["lumen","lm"]),new L(ja.lux,["lux","lx"]),new L(ja.becquerel,["becquerel","Bq"]),new L(ja.gray,["gray","Gy"]),new L(ja.katal,["katal","kat"]),new L(va.hectare,["hectare","ha"]),new L(va.tonne,["tonnes","tonne","tons","ton"]),new L(va.electronvolt,["electronvolt","eV"]),new L(E.calorie,["calories","calorie","cal"]),new L(va.bel,["bel"]),new L(va.astronomicalUnit,["AU"]),new L(da.parsec,["parsecs","parsec","pc"]),new L(da.lightyear,["lightyears",
-"lightyear","ly"]),new L(va.barn,["barn"]),new L(va.bar,["bar"]),new L(va.angstrom,["angstrom","\u00c5"]),new L(ea.gauss,["gauss"]),new L(G.ampere,["amperes","ampere","A"]),new L(G.mole,["mole","mol"]),new L(G.kelvin,["kelvin","K"]),new L(G.candela,["candela","cd"]),new L(X.append(P.semigroupDerivedUnit)(ja.watt)(u.hour),["Wh"]),new L(ja.watt,["watts","watt","W"]),new L(fa["byte"],"Bytes bytes Byte byte B Octets octets Octet octet".split(" ")),new L(fa.bit,["bits","bit"]),new L(P.divideUnits(fa.bit)(G.second),
-["bps"]),new L(G.second,["seconds","second","sec","s"]),new L(u.minute,["minutes","minute","min"]),new L(u.hour,["hours","hour","h"]),new L(u.day,["days","day"]),new L(u.week,["weeks","week"]),new L(E.fortnight,["fortnights","fortnight"]),new L(u.month,["months","month"]),new L(u.year,["years","year"]),new L(G.gram,["grammes","gramme","grams","gram","g"]),new L(G.meter,["metres","metre","meters","meter","m"]),new L(va.liter,"liters liter litres litre L l".split(" ")),new L(E.atm,["atm"]),new L(E.pixel,
-["pixels","pixel","px"]),new L(E.frame,["frames","frame"]),new L(P.divideUnits(E.frame)(G.second),["fps"]),new L(E.dot,["dots","dot"])]);P=new D([new L(h.mile,["miles","mile"]),new L(P.divideUnits(h.mile)(u.hour),["mph"]),new L(h.inch,["inches","inch","in"]),new L(h.yard,["yards","yard","yd"]),new L(h.foot,["feet","foot","ft"]),new L(h.ounce,["ounces","ounce","oz"]),new L(E.lbf,["pound_force","lbf"]),new L(h.pound,["pounds","pound","lb"]),new L(ua.gallon,["gallons","gallon","gal"]),new L(ua.pint,
-["pints","pint"]),new L(ua.cup,["cups","cup"]),new L(ua.tablespoon,["tablespoons","tablespoon","tbsp"]),new L(ua.teaspoon,["teaspoons","teaspoon","tsp"]),new L(ua.fluidounce,["fluidounces","fluidounce","floz"]),new L(h.furlong,["furlong"]),new L(E.btu,["BTU"]),new L(E.psi,["psi"]),new L(E.mmHg,["mmHg"]),new L(ua.hogshead,["hogsheads","hogshead"]),new L(ua.rod,["rods","rod"]),new L(P.divideUnits(E.pixel)(h.inch),["ppi"]),new L(P.divideUnits(E.dot)(h.inch),["dpi"]),new L(E.piece,["pieces","piece"]),
-new L(E.person,["persons","person","people"]),new L(A.dollar,["dollars","dollar","USD","$"]),new L(A.euro,["euros","euro","EUR","\u20ac"])]);var pa=d.alt(x.altParserT(l.monadIdentity))(wa.letter(l.monadIdentity))(ca["char"](ca.stringLikeString)(l.monadIdentity)("_")),B=d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(wa.letter(l.monadIdentity))(wa.digit(l.monadIdentity)))(ca["char"](ca.stringLikeString)(l.monadIdentity)("_")))(ca["char"](ca.stringLikeString)(l.monadIdentity)("'")),
+Aa=function(a){return function(b){return function(d){return k.bind(x.bindParserT(a))(b)(function(h){return k.bind(x.bindParserT(a))(U.many(x.alternativeParserT(a))(x.lazyParserT)(g.applySecond(x.applyParserT(a))(d)(b)))(function(b){return c.pure(x.applicativeParserT(a))(new H.NonEmpty(h,b))})})}}},
+
+V=new D([
+	new L(P.kibi,["kibi","Ki","киби","Ки"])
+,	new L(P.mebi,["mebi","Mi","меби","Mи"])
+,	new L(P.gibi,["gibi","гиби"])					//+ [Gi] after giga G
+,	new L(P.tebi,["tebi","Ti","теби","Ти"])
+,	new L(P.pebi,["pebi","Pi","пеби","Пи"])
+,	new L(P.exbi,["exbi","Ei","эксби","Эи"])
+,	new L(P.zebi,["zebi","Zi","зеби","Зи"])
+,	new L(P.yobi,["yobi","Yi","йоби","Йи"])
+,	new L(P.atto,["atto","a","атто","а"])
+,	new L(P.femto,["femto","f","фемто","ф"])
+,	new L(P.pico,["pico","пико"])				//+[p,п] after peta [P,пета]
+,	new L(P.nano,["nano","n","нано","н"])
+,	new L(P.micro,["micro","u","\u00b5","\u03bc","микро","мк"])
+,	new L(P.milli,["milli","милли"])				//+ [m, м] after mega [M, М]
+,	new L(P.centi,["centi","c","санти","с"])
+,	new L(P.deci,["deci","d","деци","д"])
+,	new L(P.hecto,["hecto","h","гекто"])			//+ [г] after giga [Г]
+,	new L(P.kilo,["kilo","k","кило","к"])
+	//mega moved before milli. Else, megaJoules not working.
+,	new L(P.mega,["Mega","mega","Мега","мега","M",/*latin*/"М"/*cyrillic*/])		//mega - fail, if after milli. M letter. Now 1 megaByte is ok.
+,	new L(P.milli,["m","м"]) //after mega [M,М]										//1mm, 1мм - OK, 1 megaJoules - OK.
+,	new L(P.giga,["giga","Giga","гига","Гига"]) //+ [Г] after Ги
+,	new L(P.gibi,["Gi","Ги"])						//after Gi, гига and Г
+,	new L(P.giga,["G","Г"])							//After Ги
+,	new L(P.hecto,["г"])							//after гига and Г
+,	new L(P.tera,["tera","T","тера","Т"])
+,	new L(P.peta,["peta","P","пета","П"])
+,	new L(P.pico,["p","п"])							//after peta [P,пета]
+,	new L(P.exa,["Exa","exa","E","Экза","экза","Э"])
+]);
+
+da=new D([
+	new L(ja.radian,["Radians","radians","Radian","radian","Rad","rad","Радиан","радиан","Рад","рад"])
+,	new L(va.degree,["Degrees","degrees","Degree","degree","deg","Deg","\u00b0","Градусов","градусов","Градусы","градусы","Градус","градус"])
+,	new L(ja.hertz,["Hertz","hertz","Hz","Герц","герц","Гц"])
+,	new L(E.rpm,["RPM","rpm","оборот в минуту","Оборот в минуту","Оборот за минуту","оборотов за минуту","об/мин","Об/мин"])
+,	new L(ja.newton,["newtons","Newtons","newton","Newton","N","Ньютонов","ньютонов","Ньютона","ньютона","ньютон","Ньютон"])//+["Н"] after weeks ["Недели"]
+,	new L(ja.joule,["joules","Joules","joule","Joule","j","J","джоули","Джоули","джоуль","Джоуль","джоулей","Джоулей","джоуля","Джоуля","дж","Дж"])
+,	new L(ja.pascal,["Pascals","pascals","Pascal","pascal","паскаль","Паскаль","паскалей","Паскалей","паскаля","Паскаля"])//+["Pa","Па"] after Parsec, Парсек
+,	new L(ja.volt,["Volts","volts","Volt","volt","V","вольта","Вольта","вольт","Вольт"])	// + ["В.","В"] after watts ["Вт.","Вт"]
+,	new L(ja.farad,["farads","Farads","farad","Farad","фарады","Фарады","фарада","Фарада","фарад","Фарад"])//+["F","Ф"] after Frames 
+,	new L(ja.ohm,["ohms","Ohms","ohm","Ohm","\u03a9","омы","Омы","омa","Омa","ом","Ом"])
+,	new L(ja.sievert,["sievert","Sievert","Sv","Зиверты","зиверты","Зиверта","зиверта","зиверт","Зиверт","Зв"])
+,	new L(ja.weber,["Webers","webers","weber","Weber","Wb","веберы","Веберы","вебер","Вебер","Вб"])
+,	new L(ja.tesla,["tesla","Tesla","тесла","Тесла","теслы","Теслы"])//+["T"] after ["Tonnes"]; "Тл" - interpreted as tera-liters, so this was been commented.
+,	new L(ja.henry,["henry","Henry","генри","Генри","Гн"]) //+ "H",after [Hours, Hectare]
+,	new L(ja.coulomb,["coulombs","Coulombs","coulomb","Coulomb","кулоны","Кулоны","кулона","Кулона","кулон","Кулон","Кл"])//+["C"] after Candela
+,	new L(ja.siemens,["siemens","Siemens","Сименс","сименс","См"]) //+"S", after sec
+,	new L(ja.lumen,["Lumens","lumens","lumen","Lumen","lm","люмены","Люмены","люмена","Люмена","люмен","Люмен", "Лм"])
+,	new L(ja.lux,["lux","Lux","lx","Люксы","люксы","Люкса","люкса","люкс","Люкс","лк"])
+,	new L(ja.becquerel,["Becquerels","becquerels","Becquerel","becquerel","Bq","беккерель","Беккерель","беккерели","Беккерели","беккереля","Беккереля","Бк"])
+,	new L(ja.gray,["grays","Grays","gray","Gray","Gy","греи","Греи","грей","Грей","грея","Грея"])//+["Гр.","Гр"] after Грамм
+,	new L(ja.katal,["katal","Katal","kat","Kat","катал","Катал","кат","Кат"])
+,	new L(va.hectare,["hectare","Hectare","ha","Ha","гектар","Гектар","га","Га"])
+,	new L(va.tonne,["tonnes","Tonnes","tonne","Tonne","tons","Tons","ton","Ton","тонна","Тонна","тонны","Тонны","тонн","Тонн","т."])//+["т"] after dots ["точек"]
+,	new L(ja.tesla,["T"])//+["T"] after ["Tonnes"];
+,	new L(va.electronvolt,["electronvolt","Electronvolt","eV","электронвольты","Электронвольты","электрон-вольты","Электрон-вольты","электрон-вольт","Электрон-вольт","электронвольт","Электронвольт","эВ"])
+,	new L(E.calorie,["calories","Сalories","calorie","Сalorie","cal","Сal","калорий","Калорий","калории","Калории","калория","Калория","кал.","Кал.","кал","Кал"])
+,	new L(va.bel,["bel","Bel","бел","Бел"])//short value "Б" - reserved for Б -> байт
+,	new L(va.astronomicalUnit,["AU","au","a.u.","ua"/*old name*/,"а.е."])
+,	new L(da.parsec,["parsecs","Parsecs","parsec","Parsec","pc","парсеков","Парсеков","парсека","Парсека","парсек","Парсек","пк"])
+,	new L(ja.pascal,["Pa","Па"])//+["Pa","Па"] after Parsec, Парсек
+,	new L(da.lightyear,["lightyears","Lightyears","lightyear","Lightyear","ly","световых лет","св.лет", "св. лет","световой год","св.год","св. год"])
+,	new L(va.barn,["barn","Barn","барн","Барн","бн"]) //+ б after бар and байт
+,	new L(va.bar,["bar","Bar","бар","Бар"])
+,	new L(va.angstrom,["angstrom","Angstrom","\u00c5","ангстрем","Ангстрем"])
+,	new L(ea.gauss,["gauss","Gauss"])//,"гаусс","Гаусс","Гс"]) //Гс - interpreted as giga-second, гаусс and Гаусс show an error.
+,	new L(G.ampere,["amperes","Amperes","ampere","Ampere","амперы","Амперы","Ампер","ампер"])//+["A","А"] latin and cyrillic, after Atm.
+,	new L(G.mole,["mole","Mole","mol","Mol","моль","Моль"])
+,	new L(G.kelvin,["kelvin","Kelvin","K","кельвинов","Кельвинов","кельвин","Кельвин"])//+["К"] after Кандела
+,	new L(G.candela,["candela","Candela","cd","канделы","Канделы","Кандела","кандела","кандел","Кандел","кд"])
+,	new L(ja.coulomb,["C"]) //after Candela
+,	new L(G.kelvin,["К"])	// after Кандела
+,	new L(X.append(P.semigroupDerivedUnit)(ja.watt)(u.hour),["Wh","wh","Watt-hour","watt-hour","ватт-часы","Вт час","Вт-ч","Втч","вт\u22C5ч"])
+,	new L(ja.watt,["watts","Watts","watt","Watt","ватты","Ватты","Ватта","ватта","ватт","Ватт","Вт.","Вт"])//+["W"] after Weeks
+,	new L(fa["byte"],"Bytes bytes Byte byte Octets octets Octet octet Байты байты Байтов байтов Байта байта байт Байт".split(" ")) // + [B, Б] after bit, Bit, Бит
+,	new L(P.divideUnits(fa.bit)(G.second),["bps","bits per second","бит в секунду","Бит в секунду","бит/s","Бит/s","бит/сек","Бит/сек","бит/с","Бит/с","бит за секунду","Бит за секунду"])
+,	new L(fa.bit,["bits","Bits","bit","Bit","битов","Битов","бита","Бита","бит","Бит"])
+,	new L(fa["byte"],["B","Б"])	//аfter [Bits, Бит]
+
+,	new L(va.barn,["б"])			//now here can be placed this for barn, барн - after [бар, байт, бит, бит/с]
+
+	//Just leave this here:
+	//	video formats (24, 25, 30, 48, 50, 60, 90, 100, 120) fps...
+	//	audio formats (8, 16, 22.05, 24, 32, 44.1, 48, 88, 96 и 192) kHz...
+	//	705600000 % [(all_this) 8, 16, 22.05, 24, 25, 30, 32, 44.1, 48, 50, 60, 90, 100 и 120] === 0;
+	//	1 flick = 1/705600000 or 1,417233560090703e-9 seconds.
+	//	So time for each period can be calculated as whole integers of flicks to synchronize different video-audio devices. 
+//,	new L(G.flick,["flick","flicks"])
+
+,	new L(G.second,["seconds","Seconds","second","Second","sec","Sec","s","секунды","Секунды","секунда","Секунда","секунд","Секунд","в секунду","В секунду","за секунду","За секунду","за сек","За сек","в сек","В сек","сек","Сек","с."])//+["с"] after days ["суток"]
+,	new L(ja.siemens,["S"]) //after Sec
+,	new L(ja.volt,["В.","В"])	//after ["Вт"], and ["В секунду"]
+,	new L(u.minute,["minutes","Minutes","minute","Minute","min","Min","минуты","Минуты","минута","Минута","минут","Минут","мин.","Мин.","мин","Мин"])
+,	new L(u.hour,["hours","Hours","hour","Hour","h","часов","Часов","часы","Часы","часа","Часа","час","Час","ч.","ч"])
+,	new L(ja.henry,["H"])	//after Hours, Hectare
+,	new L(u.day,["days","Days","day","Day","дни","Дни","дней","Дней","день","День","ДН.","дн","д.","д","сут.","суток"])
+,	new L(G.second,["с"])//after day ["сут","суток"]
+,	new L(u.week,["weeks","Weeks","week","Week","недели","Недели","Недель","недель","неделя","Неделя"])
+,	new L(ja.watt,["W"])//after Weeks
+,	new L(ja.newton,["Н"])//+after weeks ["Недели"]
+,	new L(E.fortnight,["fortnights","fortnight"])			//don't know russian equivalent
+,	new L(u.month,["months","Months","month","Month","месяцев","Месяцев","месяц","Месяц","мес.","мес"])
+//, new L(u.quarter,["quarter","Quarter","quarter-year","Quarter-year","квартал","Квартал","кварталы","Кварталы","кварталов","Кварталов"])	//1/4 from a year ~ 4 mounths... u.quarter not defined.
+,	new L(u.year,["years","Years","year","Year","лет","Лет","год","Год"])
+,	new L(G.gram,["grammes","Grammes","gramme","Gramme","grams","Grams","gram","Gram","g","граммы","Граммы","граммов","Граммов","грамм","Грамм","г.","г"])
+,	new L(ja.gray,["Гр.","Гр"])//+after Грамм
+,	new L(G.meter,["metres","Metres","metre","Metre","meters","Meters","meter","Meter","m","метры","Метры","метров","Метров","метр","Метр","м.","м"])
+,	new L(va.liter,"liters liter litres litre L l литров Литров литры Литры литр Литр л. л".split(" "))
+,	new L(E.atm,["atm.","Atm.","atm","Atm","атмосферы","Атмосферы","атмосфера","Атмосфера","атмосфер","Aтмосфер","атм.","атм"])
+,	new L(G.ampere,["A", "А"]) //after atm
+,	new L(E.pixel,["pixels","Pixels","pixel","Pixel","px","pel","пикселей","Пикселей","пиксель","Пиксель","пиксел","Пиксел"])
+,	new L(P.divideUnits(E.frame)(G.second),["frames per second","FPS","fps","фреймов в секунду","фпс","ФПС"])
+,	new L(E.frame,["frames","Frames","frame","Frame","фреймов","Фреймов","фрейм","Фрейм"])
+,	new L(ja.farad,["F","Ф"])// after Frames 
+,	new L(E.dot,["dots","Dots","dot","Dot","точек","Точек","точка","Точка"])
+,	new L(va.tonne,["т"])// after dots ["точек"]
+
+]);
+
+P=new D([
+	new L(P.divideUnits(h.mile)(u.hour),["miles per hour", "mph","m/h","миль/с","миль в секунду"])
+,	new L(h.mile,["miles","Miles","mile","Mile","мили","Мили","миль","Mиль","миля","Миля"])
+,	new L(h.inch,["inches","Inches","inch","Inch","in","In","дюймов","Дюймов","дюйм","Дюйм","\u2033"])
+,	new L(h.yard,["yards","Yards","yard","Yard","yd","Yd","ярдов","Ярдов","ярд","Ярд"])
+,	new L(h.foot,["feet","Feet","foot","Foot","ft","Ft","футов","Футов","фут","Фут","\u02B9"])
+,	new L(h.ounce,["ounces","Ounces","ounce","Ounce","oz","Oz","унции","Унции","унций","Унций","унция","Унция"])
+,	new L(E.lbf,["Pound_force","pound_force","lbf","Lbf","фунт-сила","Фунт-сила","фунт-силы","Фунт-силы","фунт-сил","Фунт-сил"])
+,	new L(h.pound,["pounds","Pounds","pound","Pound","lb","Lb","фунтов","Фунтов","фунт","Фунт"])
+,	new L(ua.gallon,["gallons","Gallons","gallon","Gallon","gal","Gal","галлонов","Галлонов","галлон","Галлон"])
+,	new L(ua.pint,["pints","Pints","pint","Pint","пинта","Пинта","пинт","Пинт"])
+,	new L(ua.cup,["cups","Cups","cup","Cup","чашек","Чашек","чашка","Чашка","стаканов","Стаканов","стакан","Стакан"])
+,	new L(ua.tablespoon,["tablespoons","Tablespoons","tablespoon","Tablespoon","tbsp","Tbsp","ложек","Ложек","ложка","Ложка"])
+,	new L(ua.teaspoon,["teaspoons","Teaspoons","teaspoon","Teaspoon","tsp","Tsp","чайных ложек","Чайных ложек","чайная ложка","Чайная ложка"])
+,	new L(ua.fluidounce,["fluidounces","Fluidounces","fluidounce","Fluidounce","floz","Floz","жидких унций","Жидких унций","жидкая унция","Жидкая унция"])
+,	new L(h.furlong,["furlong","Furlong","фурлонг","Фурлонг"])
+,	new L(E.btu,["BTU","БТЕ"])
+,	new L(E.psi,["psi","Psi"])
+,	new L(E.mmHg,["mmHg","мм рт.ст.","мм рт. ст."])
+,	new L(ua.hogshead,["hogsheads","Hogsheads","hogshead","Hogshead","хогсхедов","Хогсхедов","хогсхед","Хогсхед","оксефтов","Оксефтов","оксефт","Оксефт"])
+,	new L(ua.rod,["rods","Rods","rod","Rod","польей","Польей","поль","Поль","перчей","Перчей","перч","Перч"])
+,	new L(P.divideUnits(E.pixel)(h.inch),["ppi","PPI","пикселей на дюйм","Пикселей на дюйм"])
+,	new L(P.divideUnits(E.dot)(h.inch),["dpi","DPI","точек на дюйм","Точек на дюйм"])
+,	new L(E.piece,["pieces","Pieces","piece","Piece","штука","Штука","штук","Штук","шт.","Шт.","шт","Шт"])
+,	new L(E.person,["persons","Persons","person","Person","people","People","человека","Человека","человек","Человек","чел.","Чел.","чел","Чел"])
+,	new L(A.dollar,["dollars","Dollars","dollar","Dollar","USD","usd","$","долларов","Долларов","доллар","Доллар","дол.","дол","у.е."])
+,	new L(A.euro,["euros","Euros","euro","Euro","EUR","\u20ac","евро","Eвро"])
+//,	new L(A.bitcoin,["bitcoins","Bitcoins","bitcoin","Bitcoin","BTC","btc","\u20BF","биткоинов","биткоин"])	//just leave this here, if you want to add bitcoin.
+]);
+//show objects
+//console.log('var V', V, 'var da', da, 'var P', P);
+
+var pa=d.alt(x.altParserT(l.monadIdentity))(wa.letter(l.monadIdentity))(ca["char"](ca.stringLikeString)(l.monadIdentity)("_")),B=d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(wa.letter(l.monadIdentity))(wa.digit(l.monadIdentity)))(ca["char"](ca.stringLikeString)(l.monadIdentity)("_")))(ca["char"](ca.stringLikeString)(l.monadIdentity)("'")),
 T=function(a){return function(b){var c=U.last(b.value1),d=U.init(b.value1);return d instanceof F.Just&&c instanceof F.Just?a(b.value0)(p.foldr(N.foldableList)(a)(c.value0)(d.value0)):b.value0}};A="help ? list ls ll reset clear cls quit exit".split(" ");h={commentStart:"",commentEnd:"",commentLine:"#",nestedComments:!1,identStart:pa,identLetter:B,opStart:ca.oneOf(ca.stringLikeString)(l.monadIdentity)("+-*\u00b7\u22c5\u00d7/\u00f7%^!\u2192\u279e=".split("")),opLetter:ca.oneOf(ca.stringLikeString)(l.monadIdentity)([]),
 reservedNames:X.append(X.semigroupArray)(A)("\u00b9 \u00b2 \u00b3 \u2074 \u2075 \u207b\u00b9 \u207b\u00b2 \u207b\u00b3 \u207b\u2074 \u207b\u2075 to per".split(" ")),reservedOpNames:"-> + - * \u00b7 \u22c5 \u00d7 / \u00f7 % ^ ! ** = ,".split(" "),caseSensitive:!0};var J=wa.makeTokenParser(l.monadIdentity)(h),Da=function(a){return k.bind(x.bindParserT(l.monadIdentity))(J.identifier)(function(b){if("sum"===b||"product"===b)return c.pure(x.applicativeParserT(l.monadIdentity))(b);var d=M.lookup(S.ordString)(b)(a.functions);
 if(d instanceof F.Just)return c.pure(x.applicativeParserT(l.monadIdentity))(b);if(d instanceof F.Nothing)return x.fail(l.monadIdentity)("Unknown function '"+(b+"'"));throw Error("Failed pattern match at Insect.Parser line 345, column 7 - line 347, column 61: "+[d.constructor.name]);})},Ba=J.parens,W=J.reserved,la=J.reservedOp,Ma=r.map(x.functorParserT(l.functorIdentity))(aa.Variable.create)(J.identifier),ha=J.whiteSpace,Ca=function(){var a=k.bind(x.bindParserT(l.monadIdentity))(m.some(x.alternativeParserT(l.monadIdentity))(x.lazyParserT)(na.withErrorMessage(l.monadIdentity)(ca.oneOf(ca.stringLikeString)(l.monadIdentity)("0123456789".split("")))("a digit")))(function(a){var b=
@@ -700,7 +847,25 @@ Pa=g.applyFirst(x.applyParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdent
 wa=function(a){var b=function(a){return function(b){return g.applySecond(x.applyParserT(l.monadIdentity))(ca.string(ca.stringLikeString)(l.monadIdentity)(b))(c.pure(x.applicativeParserT(l.monadIdentity))(a))}};return p.oneOf(p.foldableArray)(x.plusParserT(l.monadIdentity))(r.map(r.functorArray)(function(a){return p.oneOf(p.foldableArray)(x.plusParserT(l.monadIdentity))(r.map(r.functorArray)(b(a.value0))(a.value1))})(a.value0))};var Qa=na.withErrorMessage(l.monadIdentity)(wa(P))("imperial unit"),ma=
 na.withErrorMessage(l.monadIdentity)(wa(da))("normal unit");wa=d.alt(x.altParserT(l.monadIdentity))(wa(V))(c.pure(x.applicativeParserT(l.monadIdentity))(v.identity(v.categoryFn)));var y=k.bind(x.bindParserT(l.monadIdentity))(wa)(function(a){return k.bind(x.bindParserT(l.monadIdentity))(ma)(function(b){return c.pure(x.applicativeParserT(l.monadIdentity))(a(b))})}),La=function(){var a=function(a){return g.applyFirst(x.applyParserT(l.monadIdentity))(a)(na.notFollowedBy(l.monadIdentity)(B))};return g.applyFirst(x.applyParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(na["try"](l.monadIdentity)(a(y)))(a(Qa)))(a(ma)))(a(bb)))(ha)}(),
 ya=function(a){var b=la("-"),h=function(a){return function(b){if(1===a)return b;if(w.otherwise)return new aa.BinOp(aa.Pow.value,b,aa.Scalar.create(t.fromNumber(a)));throw Error("Failed pattern match at Insect.Parser line 452, column 5 - line 453, column 65: "+[a.constructor.name,b.constructor.name]);}},m=d.alt(x.altParserT(l.monadIdentity))(la("^"))(la("**")),p=function(a){return function(b){return new aa.BinOp(aa.Pow.value,b,aa.Negate.create(aa.Scalar.create(t.fromNumber(a))))}},u=W("per"),y=d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(la("*"))(la("\u00b7")))(la("\u22c5")))(la("\u00d7")),
-A=la("%"),B=la("!"),C=d.alt(x.altParserT(l.monadIdentity))(la("/"))(la("\u00f7")),D=la(","),E=d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(la("->"))(la("\u2192")))(la("\u279e")))(W("to")),z=la("+");return n.fix(x.lazyParserT)(function(t){t=g.applySecond(x.applyParserT(l.monadIdentity))(ha)(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(Ba(t))(r.map(x.functorParserT(l.functorIdentity))(aa.Scalar.create)(Ca)))(na["try"](l.monadIdentity)(r.map(x.functorParserT(l.functorIdentity))(aa.Unit.create)(La))))(na["try"](l.monadIdentity)(g.apply(x.applyParserT(l.monadIdentity))(r.map(x.functorParserT(l.functorIdentity))(aa.Apply.create)(Da(a)))(Ba(Aa(l.monadIdentity)(t)(D))))))(Ma));
+A=la("%"),B=la("!"),C=d.alt(x.altParserT(l.monadIdentity))(la("/"))(la("\u00f7")),D=la(","),
+
+//convert using this symbols or words
+//for example: 9 J -> kcal, 15 kWh to J, 5 cal в эВ
+E=
+	d.alt(x.altParserT(l.monadIdentity))(
+		d.alt(x.altParserT(l.monadIdentity))(
+			d.alt(x.altParserT(l.monadIdentity))
+			(la("->"))
+			(la("\u2192"))
+		)
+		(la("\u279e"))
+	)(W("to"))
+,
+z=la("+");
+//console.log('d', d, W("to"));	//Wanted to add here "в"("\u0432"), "у"(\u0443) and "на" (word). This was been FAILED...
+//(la("->"))(la("\u2192")))(la("\u279e")))(W("to"))(W("в"))(W("на"))(W("у"))
+
+return n.fix(x.lazyParserT)(function(t){t=g.applySecond(x.applyParserT(l.monadIdentity))(ha)(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(Ba(t))(r.map(x.functorParserT(l.functorIdentity))(aa.Scalar.create)(Ca)))(na["try"](l.monadIdentity)(r.map(x.functorParserT(l.functorIdentity))(aa.Unit.create)(La))))(na["try"](l.monadIdentity)(g.apply(x.applyParserT(l.monadIdentity))(r.map(x.functorParserT(l.functorIdentity))(aa.Apply.create)(Da(a)))(Ba(Aa(l.monadIdentity)(t)(D))))))(Ma));
 t=k.bind(x.bindParserT(l.monadIdentity))(t)(function(a){return k.bind(x.bindParserT(l.monadIdentity))(na.optionMaybe(l.monadIdentity)(g.applySecond(x.applyParserT(l.monadIdentity))(B)(c.pure(x.applicativeParserT(l.monadIdentity))(aa.Factorial.create))))(function(b){if(b instanceof F.Just)return c.pure(x.applicativeParserT(l.monadIdentity))(b.value0(a));if(b instanceof F.Nothing)return c.pure(x.applicativeParserT(l.monadIdentity))(a);throw Error("Failed pattern match at Insect.Parser line 367, column 9 - line 369, column 27: "+
 [b.constructor.name]);})});var w=k.bind(x.bindParserT(l.monadIdentity))(t)(function(a){return k.bind(x.bindParserT(l.monadIdentity))(na.optionMaybe(l.monadIdentity)(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u00b9"))(c.pure(x.applicativeParserT(l.monadIdentity))(h(1))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u00b2"))(c.pure(x.applicativeParserT(l.monadIdentity))(h(2)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u00b3"))(c.pure(x.applicativeParserT(l.monadIdentity))(h(3)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u2074"))(c.pure(x.applicativeParserT(l.monadIdentity))(h(4)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u2075"))(c.pure(x.applicativeParserT(l.monadIdentity))(h(5)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u207b\u00b9"))(c.pure(x.applicativeParserT(l.monadIdentity))(p(1)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u207b\u00b2"))(c.pure(x.applicativeParserT(l.monadIdentity))(p(2)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u207b\u00b3"))(c.pure(x.applicativeParserT(l.monadIdentity))(p(3)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u207b\u2074"))(c.pure(x.applicativeParserT(l.monadIdentity))(p(4)))))(g.applySecond(x.applyParserT(l.monadIdentity))(la("\u207b\u2075"))(c.pure(x.applicativeParserT(l.monadIdentity))(p(5))))))(function(b){if(b instanceof
 F.Just)return c.pure(x.applicativeParserT(l.monadIdentity))(b.value0(a));if(b instanceof F.Nothing)return c.pure(x.applicativeParserT(l.monadIdentity))(a);throw Error("Failed pattern match at Insect.Parser line 385, column 9 - line 387, column 27: "+[b.constructor.name]);})});t=function(){var a=function(a){return k.bind(x.bindParserT(l.monadIdentity))(w)(function(h){return k.bind(x.bindParserT(l.monadIdentity))(U.many(x.alternativeParserT(l.monadIdentity))(x.lazyParserT)(k.discard(k.discardUnit)(x.bindParserT(l.monadIdentity))(m)(function(){return k.bind(x.bindParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(d.alt(x.altParserT(l.monadIdentity))(g.applySecond(x.applyParserT(l.monadIdentity))(b)(c.pure(x.applicativeParserT(l.monadIdentity))(aa.Negate.create)))(g.applySecond(x.applyParserT(l.monadIdentity))(z)(c.pure(x.applicativeParserT(l.monadIdentity))(v.identity(v.categoryFn)))))(c.pure(x.applicativeParserT(l.monadIdentity))(v.identity(v.categoryFn))))(function(b){return k.bind(x.bindParserT(l.monadIdentity))(a)(function(a){return c.pure(x.applicativeParserT(l.monadIdentity))(b(a))})})})))(function(a){return c.pure(x.applicativeParserT(l.monadIdentity))(new H.NonEmpty(h,
