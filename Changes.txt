@@ -1,0 +1,12 @@
+Add russian units. Add UpperCase for first symbol for english units.
+See in insect.js from the line 686:
+	Object V (kilo-, mega-, milli-, micro-),
+	Object da (phisics units),
+	and P (english units).
+Add Jasmine SpecRunner test for all this.
+	see ./web/jasmine/SpecRunner.html
+	and see the source code of ./web/jasmine/spec_test_insect.js
+	TESTS WAS BEEN SUCCESSFULLY PASSED. Fails - commented.
+Try to add flick and bitcoin. Fail.
+Try to add convertation commands "в", "на" - FAIL.
+I see terminal error, after copying some text here and press the key with any symbol - this symbol have double printing.
