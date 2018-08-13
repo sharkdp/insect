@@ -13,7 +13,9 @@
 
 A high precision scientific calculator with full support for physical units.
 
-**Try the web version here**: https://insect.sh
+**Try the web version here**: https://insect.sh or https://username1565.github.io/insect/web/
+
+**[Jasmine test for web version - you can see here](https://username1565.github.io/insect/web/jasmine/SpecRunner.html)**
 
 Contents
 --------
