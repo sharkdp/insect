@@ -67,6 +67,9 @@
           ga('send', 'event', 'user-input', 'success', line);
         }
 
+        const url = "/?q=" + encodeURIComponent(line)
+        history.replaceState(null, "", url)
+
         return res.msg;
       }
 
