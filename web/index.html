@@ -39,6 +39,10 @@
       var insectEnv = Insect.initialEnvironment;
       var clearCommands = ["clear", "cls", "quit", "exit"];
 
+      function updateUrl(url) {
+        history.replaceState(null, null, url);
+      }
+
       function interpret(line) {
         // Skip empty lines or line comments
         var lineTrimmed = line.trim();
@@ -52,7 +56,7 @@
 
         // Handle shell commands
         if (clearCommands.indexOf(res.msgType) >= 0) {
-          history.replaceState(null, null, "/");
+          updateUrl("/");
         }
 
         if (res.msgType == "clear") {
@@ -72,8 +76,7 @@
           ga('send', 'event', 'user-input', 'success', line);
         }
 
-        var url = "/?q=" + encodeURIComponent(line);
-        history.replaceState(null, null, url);
+        updateUrl("/?q=" + encodeURIComponent(line));
 
         return res.msg;
       }
@@ -118,7 +121,13 @@
 
             cb(keywords.sort());
           },
-          completionEscape: false
+          completionEscape: false,
+          keymap: {
+            "CTRL+L": function() {
+              updateUrl("/");
+              term.clear();
+            }
+          }
         });
 
         // evaluate expression in query string if supplied (via opensearch)
