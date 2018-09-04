@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pulp browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js
+npm run browserify
 
 cp insect.js web/
 
