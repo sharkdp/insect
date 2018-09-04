@@ -38,9 +38,10 @@
 
       var insectEnv = Insect.initialEnvironment;
       var clearCommands = ["clear", "cls", "quit", "exit"];
+      var origin = location.href;
 
       function updateUrl(url) {
-        history.replaceState(null, null, url);
+        history.replaceState(null, null, origin + url);
       }
 
       function interpret(line) {
