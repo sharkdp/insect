@@ -5,10 +5,11 @@ Development
 
 Insect is written in PureScript (see [Getting Started](https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md) guide). You can install all dependencies and build the whole project by running:
 
-    bower install
     npm install
-    pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js
+    npm start
+
+Open [web/index.html](web/index.html) in your browser.
 
 Insect comes with a comprehensive set of [unit tests](test/Main.purs). You can run them by calling
 
-    pulp test
+    npm test

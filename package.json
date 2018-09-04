@@ -17,6 +17,9 @@
     "test": "test"
   },
   "scripts": {
+    "postinstall": "bower install",
+    "start": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
+    "browserify": "pulp browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
     "build": "pulp build -m Insect",
     "test": "pulp test"
   },
@@ -28,5 +31,10 @@
     "historic-readline": "^1.0.8",
     "line-reader": "^0.4.0",
     "xdg-basedir": "^2.0.0"
+  },
+  "devDependencies": {
+    "bower": "^1.8.4",
+    "pulp": "^12.3.0",
+    "purescript": "^0.12.0"
   }
 }
