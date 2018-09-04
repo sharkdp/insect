@@ -56,7 +56,7 @@
 
         // Handle shell commands
         if (clearCommands.indexOf(res.msgType) >= 0) {
-          updateUrl("/");
+          updateUrl("");
         }
 
         if (res.msgType == "clear") {
@@ -76,7 +76,7 @@
           ga('send', 'event', 'user-input', 'success', line);
         }
 
-        updateUrl("/?q=" + encodeURIComponent(line));
+        updateUrl("?q=" + encodeURIComponent(line));
 
         return res.msg;
       }
@@ -124,7 +124,7 @@
           completionEscape: false,
           keymap: {
             "CTRL+L": function() {
-              updateUrl("/");
+              updateUrl("");
               term.clear();
             }
           }
