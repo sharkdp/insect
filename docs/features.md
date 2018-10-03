@@ -77,7 +77,7 @@ Documentation
         Planck's constant (`h_bar`), electron mass (`electronMass`), elementary charge
         (`elementaryCharge`), magnetic constant (`µ0`), electric constant (`eps0`),
         Bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
-        (`k_B`), gravitational acceleration (`g0`), ...
+        (`k_B`), gravitational acceleration (`g0`), ideal gas constant (`R`), ...
 
       * **Last result**: you can use `ans` (answer) to refer to the result of the
         last calculation.

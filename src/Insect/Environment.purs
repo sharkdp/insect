@@ -80,6 +80,7 @@ initialEnvironment =
         , constVal "planckConstant"     Q.planckConstant
         , constVal "protonMass"         Q.protonMass
         , constVal "speedOfLight"       Q.speedOfLight
+        , constVal "R"                  Q.idealGasConstant
 
         -- Hidden constants
         , hiddenVal "hundred"     (Q.scalar 1.0e2)
