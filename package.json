@@ -17,7 +17,7 @@
     "test": "test"
   },
   "scripts": {
-    "postinstall": "bower install",
+    "postinstall": "bower install && npm run build",
     "start": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
     "browserify": "pulp browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
     "build": "pulp build -m Insect",
