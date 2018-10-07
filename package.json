@@ -18,9 +18,11 @@
   },
   "scripts": {
     "postinstall": "bower install && npm run build",
-    "start": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
+    "start": "run-p server browserify:watch",
+    "browserify:watch": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
     "browserify": "pulp browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
     "build": "pulp build -m Insect",
+    "server": "live-server web --open",
     "test": "pulp test"
   },
   "bugs": {
@@ -34,6 +36,8 @@
   },
   "devDependencies": {
     "bower": "^1.8.4",
+    "live-server": "^1.2.0",
+    "npm-run-all": "^4.1.3",
     "pulp": "^12.3.0",
     "purescript": "^0.12.0"
   }
