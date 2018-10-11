@@ -1,13 +1,7 @@
 #!/bin/bash
 
 npm run browserify
-
-cp insect.js web/
-
-cp bower_components/keyboardevent-key-polyfill/index.js web/keyboardevent-key-polyfill.js
-cp bower_components/jquery.terminal/js/jquery.terminal-1.6.3.min.js web/jquery.terminal.min.js
-cp bower_components/jquery/dist/jquery.min.js web/
-cp bower_components/jquery.terminal/js/jquery.mousewheel-min.js web/
+npm run copy
 
 if [[ $* == *--nexe* ]]
 then
