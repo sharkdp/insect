@@ -215,7 +215,7 @@ normalUnitDict = Dictionary
   , Q.electronvolt ==> ["electronvolt", "eV"]
   , Q.calorie ==> ["calories", "calorie", "cal"]
   , Q.bel ==> ["bel"]
-  , Q.astronomicalUnit ==> ["AU"]
+  , Q.astronomicalUnit ==> ["AU","Astronomical unit","au","astronomical unit"]
   , Q.parsec ==> ["parsecs", "parsec", "pc"]
   , Q.lightyear ==> ["lightyears", "lightyear", "ly"]
   , Q.barn ==> ["barn"]
