@@ -37,10 +37,10 @@
   },
   "devDependencies": {
     "bower": "^1.8.4",
-    "fs-extra": "^7.0.0",
-    "live-server": "^1.2.0",
-    "npm-run-all": "^4.1.3",
+    "fs-extra": "^7.0.1",
+    "live-server": "^1.2.1",
+    "npm-run-all": "^4.1.5",
     "pulp": "^12.3.0",
-    "purescript": "^0.12.0"
+    "purescript": "^0.12.1"
   }
 }
