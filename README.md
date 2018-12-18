@@ -190,7 +190,7 @@ Reference
     |------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
     | [Ampere](https://en.wikipedia.org/wiki/Ampere)                               | `amperes`, `ampere`, `A`                                                    |
     | [Ångström](https://en.wikipedia.org/wiki/Ångström)                           | `angstrom`, `Å`                                                             |
-    | [Astronomical unit](https://en.wikipedia.org/wiki/Astronomical_unit)         | `AU`                                                                        |
+    | [Astronomical unit](https://en.wikipedia.org/wiki/Astronomical_unit)         | `AU`, `au`, `astronomicalunits`, `astronomicalunit`                         |
     | [Atmosphere](https://en.wikipedia.org/wiki/Atmosphere_(unit))                | `atm`                                                                       |
     | [Bar](https://en.wikipedia.org/wiki/Bar_(unit))                              | `bar`                                                                       |
     | [Barn](https://en.wikipedia.org/wiki/Barn_(unit))                            | `barn`                                                                      |
