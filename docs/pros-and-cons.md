@@ -15,7 +15,7 @@ Pros and cons
   - The syntax of Insect is rather strict. The parser does not try to be "smart" on syntactically
     incorrect input, so there shouldn't be any surprises - and you can trust the result of your
     calculation. The parsed user input is always pretty-printed for a quick double-check.
-  - Insect is written in a [PureScript](http://www.purescript.org/) and therefore benefits from
+  - Insect is written in [PureScript](http://www.purescript.org/) and therefore benefits from
     all the safety-guarantees that a strictly-typed functional programming language gives you.
   - The source code of [purescript-quantities](https://github.com/sharkdp/purescript-quantities)
     (the underlying library for physical units) as well as the code of Insect itself is
