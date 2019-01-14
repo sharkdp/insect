@@ -54,7 +54,7 @@ if (interactive) {
   var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-    path: path.join(xdgBasedir.config, "insect-history"),
+    path: path.join(xdgBasedir.data, "insect-history"),
     completer: function(line) {
       var identifiers = Insect.identifiers(insectEnv);
 
