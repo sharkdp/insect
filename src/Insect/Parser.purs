@@ -247,6 +247,8 @@ normalUnitDict = Dictionary
   , Q.frame ==> ["frames", "frame"]
   , Q.frame ./ Q.second ==> ["fps"]
   , Q.dot ==> ["dots", "dot"]
+  , Q.knot ==> ["knot", "kn", "kt"]
+  , Q.nauticalMile ==> ["M", "NM", "nmi"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
