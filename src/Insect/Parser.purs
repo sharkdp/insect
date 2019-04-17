@@ -247,8 +247,6 @@ normalUnitDict = Dictionary
   , Q.frame ==> ["frames", "frame"]
   , Q.frame ./ Q.second ==> ["fps"]
   , Q.dot ==> ["dots", "dot"]
-  , Q.knot ==> ["knot", "kn", "kt"]
-  , Q.nauticalMile ==> ["M", "NM", "nmi"]
   ]
 
 -- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
@@ -284,6 +282,8 @@ imperialUnitDict = Dictionary
   , Q.person ==> ["persons", "person", "people"]
   , Q.dollar ==> ["dollars", "dollar", "USD", "$"]
   , Q.euro ==> ["euros", "euro", "EUR", "€"]
+  , Q.knot ==> ["knot", "kn", "kt"]
+  , Q.nauticalMile ==> ["M", "NM", "nmi"]
   ]
 
 -- | Parse an imperial unit like `ft` of `mile`.
