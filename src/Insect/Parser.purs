@@ -282,7 +282,7 @@ imperialUnitDict = Dictionary
   , Q.person ==> ["persons", "person", "people"]
   , Q.dollar ==> ["dollars", "dollar", "USD", "$"]
   , Q.euro ==> ["euros", "euro", "EUR", "€"]
-  , Q.knot ==> ["knot", "kn", "kt"]
+  , Q.knot ==> ["knots", "knot", "kn", "kt"]
   , Q.nauticalMile ==> ["M", "NM", "nmi"]
   ]
 
