@@ -256,7 +256,12 @@ normalUnit = buildDictParser normalUnitDict <?> "normal unit"
 -- | Imperial units
 imperialUnitDict ∷ Dictionary DerivedUnit
 imperialUnitDict = Dictionary
-  [ Q.mile ==> ["miles", "mile"]
+  [ Q.percent ==> ["pct", "percent"]
+  , Q.partsPerMillion ==> ["ppm"]
+  , Q.partsPerBillion ==> ["ppb"]
+  , Q.partsPerTrillion ==> ["ppt"]
+  , Q.partsPerQuadrillion ==> ["ppq"]
+  , Q.mile ==> ["miles", "mile"]
   , Q.mile ./ Q.hour ==> ["mph"]
   , Q.inch ==> ["inches", "inch", "in"]
   , Q.yard ==> ["yards", "yard", "yd"]
