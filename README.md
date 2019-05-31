@@ -246,12 +246,12 @@ Reference
     | [Ounce](https://en.wikipedia.org/wiki/Ounce)                                 | `ounces`, `ounce`, `oz`                                                     |
     | [PPI](https://en.wikipedia.org/wiki/Pixels_per_inch)                         | `ppi`                                                                       |
     | [Parsec](https://en.wikipedia.org/wiki/Parsec)                               | `parsecs`, `parsec`, `pc`                                                   |
-    | [Parts-per-million](https://en.wikipedia.org/wiki/Parts-per_notation)        | `ppm` |
-    | [Parts-per-billion](https://en.wikipedia.org/wiki/Parts-per_notation)        | `ppb` |
-    | [Parts-per-trillion](https://en.wikipedia.org/wiki/Parts-per_notation)       | `ppt` |
-    | [Parts-per-quadrillion](https://en.wikipedia.org/wiki/Parts-per_notation)    | `ppq` |
-    | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit))                        | `pascal`, `Pa` |
-    | [Percent](https://en.wikipedia.org/wiki/Parts-per_notation)                  | `percent`, `pct` |                        | `pascal`, `Pa`                                                              |
+    | [Parts-per-million](https://en.wikipedia.org/wiki/Parts-per_notation)        | `ppm`                                                                       |
+    | [Parts-per-billion](https://en.wikipedia.org/wiki/Parts-per_notation)        | `ppb`                                                                       |
+    | [Parts-per-trillion](https://en.wikipedia.org/wiki/Parts-per_notation)       | `ppt`                                                                       |
+    | [Parts-per-quadrillion](https://en.wikipedia.org/wiki/Parts-per_notation)    | `ppq`                                                                       |
+    | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit))                        | `pascal`, `Pa`                                                              |
+    | [Percent](https://en.wikipedia.org/wiki/Parts-per_notation)                  | `percent`, `pct`                                                            |
     | [Person](https://en.wiktionary.org/wiki/person)                              | `persons`, `person`, `people`                                               |
     | [Piece](https://en.wiktionary.org/wiki/piece)                                | `pieces`, `piece`                                                           |
     | [Pint](https://en.wikipedia.org/wiki/Pint)                                   | `pints`, `pint`                                                             |
@@ -302,7 +302,7 @@ Pros and cons
     "smart" on syntactically incorrect input, so there shouldn't be any
     surprises - and you can trust the result of your calculation. The
     parsed user input is always pretty-printed for a quick double-check.
--   Insect is written in a [PureScript](http://www.purescript.org/) and
+-   Insect is written in [PureScript](http://www.purescript.org/) and
     therefore benefits from all the safety-guarantees that a
     strictly-typed functional programming language gives you.
 -   The source code of
