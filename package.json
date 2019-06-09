@@ -30,17 +30,17 @@
     "url": "https://github.com/sharkdp/insect/issues"
   },
   "dependencies": {
+    "bower": "^1.8.8",
     "decimal.js": "^7.1.1",
     "historic-readline": "^1.0.8",
     "line-reader": "^0.4.0",
     "xdg-basedir": "^2.0.0"
   },
   "devDependencies": {
-    "bower": "^1.8.8",
     "fs-extra": "^7.0.1",
+    "jasmine": "^3.4.0",
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
-    "pulp": "^12.4.2",
-    "purescript": "^0.12.5"
+    "pulp": "^12.4.2"
   }
 }
