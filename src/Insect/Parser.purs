@@ -222,7 +222,7 @@ normalUnitDict = Dictionary
   , Q.bar ==> ["bar"]
   , Q.angstrom ==> ["angstrom", "Å"]
   , Q.gauss ==> ["gauss"]
-  , Q.ampere ==> ["amperes", "ampere", "A"]
+  , Q.ampere ==> ["amperes", "ampere", "A" ]
   , Q.mole ==> ["mole", "mol"]
   , Q.kelvin ==> ["kelvin", "K"]
   , Q.candela ==> ["candela", "cd"]
@@ -256,7 +256,7 @@ normalUnit = buildDictParser normalUnitDict <?> "normal unit"
 -- | Imperial units
 imperialUnitDict ∷ Dictionary DerivedUnit
 imperialUnitDict = Dictionary
-  [ Q.mile ==> ["miles", "mile"]
+  [ Q.mile ==> ["miles", "mile", "mi"]
   , Q.mile ./ Q.hour ==> ["mph"]
   , Q.inch ==> ["inches", "inch", "in"]
   , Q.yard ==> ["yards", "yard", "yd"]
