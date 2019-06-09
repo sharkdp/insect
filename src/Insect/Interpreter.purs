@@ -321,6 +321,8 @@ runInsect env (Command Help) = { msg: Message Info
   , F.emph "  > ", F.val "40000", F.text " ", F.unit "km", F.text " / ", F.ident "c", F.text " -> ", F.unit "ms", F.text "    "
   , F.emph "  > ", F.ident "pi", F.text " * ", F.ident "r", F.text "^", F.val "2", F.text " -> ", F.unit "m", F.text "^", F.val "2", F.nl
   , F.text "", F.nl
+  , F.text "For a full list of commands press tab 2x."
+  , F.text "", F.nl
   , F.text "Full documentation: https://github.com/sharkdp/insect"
   ], newEnv : env }
 
