@@ -64,7 +64,12 @@
     | [Ounce](https://en.wikipedia.org/wiki/Ounce) | `ounces`, `ounce`, `oz` |
     | [PPI](https://en.wikipedia.org/wiki/Pixels_per_inch) | `ppi` |
     | [Parsec](https://en.wikipedia.org/wiki/Parsec) | `parsecs`, `parsec`, `pc` |
+    | [Parts-per-million](https://en.wikipedia.org/wiki/Parts-per_notation) | `ppm` |
+    | [Parts-per-billion](https://en.wikipedia.org/wiki/Parts-per_notation) | `ppb` |
+    | [Parts-per-trillion](https://en.wikipedia.org/wiki/Parts-per_notation) | `ppt` |
+    | [Parts-per-quadrillion](https://en.wikipedia.org/wiki/Parts-per_notation) | `ppq` |
     | [Pascal](https://en.wikipedia.org/wiki/Pascal_(unit)) | `pascal`, `Pa` |
+    | [Percent](https://en.wikipedia.org/wiki/Parts-per_notation) | `percent`, `pct` |
     | [Person](https://en.wiktionary.org/wiki/person) | `persons`, `person`, `people` |
     | [Piece](https://en.wiktionary.org/wiki/piece) | `pieces`, `piece` |
     | [Pint](https://en.wikipedia.org/wiki/Pint) | `pints`, `pint` |
@@ -81,6 +86,7 @@
     | [Tablespoon](https://en.wikipedia.org/wiki/Tablespoon) | `tablespoons`, `tablespoon`, `tbsp` |
     | [Teaspoon](https://en.wikipedia.org/wiki/Teaspoon) | `teaspoons`, `teaspoon`, `tsp` |
     | [Tesla](https://en.wikipedia.org/wiki/Tesla_(unit)) | `tesla`, `T` |
+    | [Thou](https://en.wikipedia.org/wiki/Thousandth_of_an_inch) | `thou` |
     | [Tonne](https://en.wikipedia.org/wiki/Tonne) | `tonnes`, `tonne`, `tons`, `ton`, `t` |
     | [US Dollar](https://en.wikipedia.org/wiki/USD) | `dollars`, `dollar`, `USD`, `$` |
     | [Volt](https://en.wikipedia.org/wiki/Volt) | `volts`, `volt`, `V` |

@@ -222,7 +222,7 @@ normalUnitDict = Dictionary
   , Q.bar ==> ["bar"]
   , Q.angstrom ==> ["angstrom", "Å"]
   , Q.gauss ==> ["gauss"]
-  , Q.ampere ==> ["amperes", "ampere", "A"]
+  , Q.ampere ==> ["amperes", "ampere", "A", "amp"]
   , Q.mole ==> ["mole", "mol"]
   , Q.kelvin ==> ["kelvin", "K"]
   , Q.candela ==> ["candela", "cd"]
@@ -256,11 +256,17 @@ normalUnit = buildDictParser normalUnitDict <?> "normal unit"
 -- | Imperial units
 imperialUnitDict ∷ Dictionary DerivedUnit
 imperialUnitDict = Dictionary
-  [ Q.mile ==> ["miles", "mile"]
+  [ Q.percent ==> ["pct", "percent"]
+  , Q.partsPerMillion ==> ["ppm"]
+  , Q.partsPerBillion ==> ["ppb"]
+  , Q.partsPerTrillion ==> ["ppt"]
+  , Q.partsPerQuadrillion ==> ["ppq"]
+  , Q.mile ==> ["miles", "mile", "mi"]
   , Q.mile ./ Q.hour ==> ["mph"]
   , Q.inch ==> ["inches", "inch", "in"]
   , Q.yard ==> ["yards", "yard", "yd"]
   , Q.foot ==> ["feet", "foot", "ft"]
+  , Q.thou ==> ["thou"]
   , Q.ounce ==> ["ounces", "ounce", "oz"]
   , Q.lbf ==> ["pound_force", "lbf"]
   , Q.pound ==> ["pounds", "pound", "lb"]
@@ -470,9 +476,9 @@ command =
   (
         (reserved "help" <|> reserved "?") *> pure Help
     <|> (reserved "list" <|> reserved "ls" <|> reserved "ll") *> pure List
-    <|> (reserved "reset") *> pure Reset
-    <|> (reserved "clear" <|> reserved "cls") *> pure Clear
-    <|> (reserved "quit" <|> reserved "exit") *> pure Quit
+    <|> (reserved "reset" <|> reserved ":r") *> pure Reset
+    <|> (reserved "clear" <|> reserved "cls" <|> reserved ":c") *> pure Clear
+    <|> (reserved "quit" <|> reserved "exit" <|> reserved ":q") *> pure Quit
   ) <* eof
 
 -- | Parse a variable- or function assignment.
