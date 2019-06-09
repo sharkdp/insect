@@ -470,9 +470,9 @@ command =
   (
         (reserved "help" <|> reserved "?") *> pure Help
     <|> (reserved "list" <|> reserved "ls" <|> reserved "ll") *> pure List
-    <|> (reserved "reset") *> pure Reset
-    <|> (reserved "clear" <|> reserved "cls") *> pure Clear
-    <|> (reserved "quit" <|> reserved "exit") *> pure Quit
+    <|> (reserved "reset" <|> reserved ":r") *> pure Reset
+    <|> (reserved "clear" <|> reserved "cls" <|> reserved ":c") *> pure Clear
+    <|> (reserved "quit" <|> reserved "exit" <|> reserved ":q") *> pure Quit
   ) <* eof
 
 -- | Parse a variable- or function assignment.
