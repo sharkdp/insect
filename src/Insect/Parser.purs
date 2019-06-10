@@ -222,7 +222,7 @@ normalUnitDict = Dictionary
   , Q.bar ==> ["bar"]
   , Q.angstrom ==> ["angstrom", "Å"]
   , Q.gauss ==> ["gauss"]
-  , Q.ampere ==> ["amperes", "ampere", "A"]
+  , Q.ampere ==> ["amperes", "ampere", "amps", "amp", "A"]
   , Q.mole ==> ["mole", "mol"]
   , Q.kelvin ==> ["kelvin", "K"]
   , Q.candela ==> ["candela", "cd"]
