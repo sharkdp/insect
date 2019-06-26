@@ -842,6 +842,7 @@ main = runTest do
       expectOutput' "5.08 cm" "2in to cm"
       expectOutput' "500 m·cm" "5m^2 -> m*cm"
       expectOutput' "500 cm·m" "5m^2 -> cm*m"
+      expectOutput' "0.1 MB/s" "1 kB / 10 ms -> MB/s"
 
     test "Implicit multiplication" do
       let myEnv =
