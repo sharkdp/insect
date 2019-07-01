@@ -202,7 +202,7 @@ normalUnitDict = Dictionary
   , Q.sievert ==> ["sievert", "Sv"]
   , Q.weber ==> ["weber", "Wb"]
   , Q.tesla ==> ["tesla", "T"]
-  , Q.henry ==> ["henry", "H"]
+  , Q.henry ==> ["henrys","henries","henry", "H"]
   , Q.coulomb ==> ["coulomb", "C"]
   , Q.siemens ==> ["siemens", "S"]
   , Q.lumen ==> ["lumen", "lm"]
