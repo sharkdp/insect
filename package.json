@@ -1,6 +1,6 @@
 {
   "name": "insect",
-  "version": "5.1.0",
+  "version": "5.1.1",
   "description": "High precision scientific calculator with support for physical units",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "test": "test"
   },
   "scripts": {
-    "postinstall": "bower install && npm run browserify && npm run copy",
+    "postinstall": "bower --allow-root install && npm run browserify && npm run copy",
     "copy": "node copy",
     "start": "run-p server browserify:watch",
     "browserify:watch": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
