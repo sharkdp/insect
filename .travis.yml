@@ -2,16 +2,17 @@ dist: trusty
 sudo: required
 
 language: node_js
-node_js: "11"
+node_js: "stable"
 
-cache:
-  directories:
-    - ./bower_components
-    - ./node_modules
+env:
+  - PATH=$HOME/purescript:$PATH
 
 install:
+  - TAG=$(wget -q -O - https://github.com/purescript/purescript/releases/latest --server-response --max-redirect 0 2>&1 | sed -n -e 's/.*Location:.*tag\///p')
+  - wget -O $HOME/purescript.tar.gz https://github.com/purescript/purescript/releases/download/$TAG/linux64.tar.gz
+  - tar -xvf $HOME/purescript.tar.gz -C $HOME/
+  - chmod a+x $HOME/purescript
   - npm i
-  - npm i --no-save purescript-psa
 
 script:
   - npm -s run build
