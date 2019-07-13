@@ -1,14 +1,13 @@
 /.psci*
 /.pulp-cache
 /.travis.yml
-/DEMO
-/INTERACTIVE_TESTS
-/TODO
 /binaries
 /bower_components/
 /build.sh
 /deploy.sh
-/docs
+/docs/*.md
+/docs/*.sh
+/docs/template.readme
 /insect.js
 /node_modules/
 /output
