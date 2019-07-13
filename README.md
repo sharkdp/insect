@@ -222,7 +222,7 @@ Reference
     | [Gram](https://en.wikipedia.org/wiki/Gram)                                   | `grams`, `gram`, `grammes`, `gramme`, `g`                                   |
     | [Gray](https://en.wikipedia.org/wiki/Gray_(unit))                            | `gray`, `Gy`                                                                |
     | [Hectare](https://en.wikipedia.org/wiki/Hectare)                             | `hectare`, `ha`                                                             |
-    | [Henry](https://en.wikipedia.org/wiki/Henry_(unit))                          | `henrys`, `henries`, `henry`, `H`                                                                |
+    | [Henry](https://en.wikipedia.org/wiki/Henry_(unit))                          | `henrys`, `henries`, `henry`, `H`                                           |
     | [Hertz](https://en.wikipedia.org/wiki/Hertz)                                 | `hertz`, `Hz`                                                               |
     | [Hogshead](https://en.wikipedia.org/wiki/Hogshead)                           | `hogsheads`, `hogshead`                                                     |
     | [Hour](https://en.wikipedia.org/wiki/Hour)                                   | `hours`, `hour`, `h`                                                        |
@@ -439,7 +439,7 @@ repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
     sudo dnf copr enable fnux/insect
 
 For macOS, there is a [Homebrew
-package](http://braumeister.org/formula/insect):
+package](https://formulae.brew.sh/formula/insect):
 
     brew install insect
 

@@ -24,7 +24,6 @@ repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
 
     sudo dnf copr enable fnux/insect
 
-For macOS, there is a [Homebrew
-package](http://braumeister.org/formula/insect):
+For macOS, there is a [Homebrew package](https://formulae.brew.sh/formula/insect):
 
     brew install insect
