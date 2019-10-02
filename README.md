@@ -374,6 +374,20 @@ FAQ
 
                = 16.963
 
+-   Why are the Hz and RPM units in terms of radians?
+
+    Frequency and angular frequency have the same base SI unit which is 1/s
+    even though the latter appears a factor of 2 π greater than the former.
+    To combat this confusion all frequency terms in Insect are given in radians
+    , rather than cycles, per unit time. This also helps the consistency of radial
+    calculations such that a frequency can be multiplied by its radius to
+    give angular velocity:
+
+            > 500 RPM * 14 in -> mph
+
+               = 6.62879 mi/h
+
+
 -   Why is `1/2 x` parsed as `1/(2x)`?
 
     *Implicit* multiplication (without an explicit multiplication sign)
