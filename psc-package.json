@@ -1,0 +1,13 @@
+{
+  "name": "insect",
+  "set": "psc-0.13.6-20200123",
+  "source": "https://github.com/purescript/package-sets.git",
+  "depends": [
+    "quantities",
+    "parsing",
+    "ordered-collections",
+    "generics-rep",
+    "psci-support",
+    "test-unit"
+  ]
+}

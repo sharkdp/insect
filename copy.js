@@ -5,18 +5,18 @@ fs.copySync(
   "web/insect.js",
 )
 fs.copySync(
-  "bower_components/keyboardevent-key-polyfill/index.js",
+  "node_modules/keyboardevent-key-polyfill/index.js",
   "web/keyboardevent-key-polyfill.js",
 )
 fs.copySync(
-  "bower_components/jquery/dist/jquery.min.js",
+  "node_modules/jquery/dist/jquery.min.js",
   "web/jquery.min.js",
 )
 fs.copySync(
-  "bower_components/jquery.terminal/js/jquery.terminal-1.6.3.min.js",
+  "node_modules/jquery.terminal/js/jquery.terminal.min.js",
   "web/jquery.terminal.min.js",
 )
 fs.copySync(
-  "bower_components/jquery.terminal/js/jquery.mousewheel-min.js",
+  "node_modules/jquery.terminal/js/jquery.mousewheel-min.js",
   "web/jquery.mousewheel-min.js",
 )

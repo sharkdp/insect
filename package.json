@@ -17,7 +17,7 @@
     "test": "test"
   },
   "scripts": {
-    "postinstall": "bower --allow-root install && npm run browserify && npm run copy",
+    "postinstall": "psc-package install && npm run browserify && npm run copy",
     "copy": "node copy",
     "start": "run-p server browserify:watch",
     "browserify:watch": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
@@ -32,15 +32,17 @@
   "dependencies": {
     "decimal.js": "^7.1.1",
     "historic-readline": "^1.0.8",
+    "jquery.terminal": "=1.6.3",
+    "keyboardevent-key-polyfill": "=1.1.0",
     "line-reader": "^0.4.0",
     "xdg-basedir": "^2.0.0"
   },
   "devDependencies": {
-    "bower": "^1.8.8",
     "fs-extra": "^7.0.1",
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
-    "pulp": "^13.0.0",
-    "purescript": "^0.13.0"
+    "psc-package": "^4.0.0",
+    "purescript": "^0.13.6",
+    "pulp": "^13.0.0"
   }
 }
