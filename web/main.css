@@ -36,6 +36,37 @@ p.desc {
 }
 
 /* jQuery Terminal */
+
+.terminal {
+    --color: #F8F8F2;
+    --background: #272822;
+    --size: 1.6;
+    --link-color: #F8F8F2;
+    font-family: 'Fira Mono', monospace;
+}
+
+.terminal, .terminal .terminal-fill {
+    padding: 1.2em;
+}
+
+.terminal,
+.terminal-output > :not(.raw) span,
+.terminal-output > :not(.raw) a,
+.terminal-output > :not(.raw) div,
+.cmd,
+.cmd span,
+.cmd div {
+    font-family: 'Fira Mono', monospace;
+}
+
+.terminal-output > div {
+    padding-bottom: 1em;
+}
+
+.terminal-output > div.terminal-command {
+    padding-bottom: 0em;
+}
+
 .prompt {
     font-weight: bold;
     /* workaround for https://github.com/sharkdp/insect/issues/78 */
@@ -45,27 +76,27 @@ p.desc {
 /* syntax highlighting */
 
 .hl-emphasized {
-    font-weight: 700;
+    font-weight: 700 !important;
 }
 
 .hl-error {
-    color: #F92672;
+    color: #F92672 !important;
 }
 
 .hl-value {
-    color: #66D9EF;
+    color: #66D9EF !important;
 }
 
 .hl-identifier {
-    color: #FD971F;
+    color: #FD971F !important;
 }
 
 .hl-function {
-    font-style: italic;
+    font-style: italic !important;
 }
 
 .hl-unit {
-    color: #A6E22E;
+    color: #A6E22E !important;
 }
 
 /* Github Badge */

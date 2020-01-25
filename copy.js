@@ -20,3 +20,7 @@ fs.copySync(
   "node_modules/jquery.terminal/js/jquery.mousewheel-min.js",
   "web/jquery.mousewheel-min.js",
 )
+fs.copySync(
+  "node_modules/jquery.terminal/css/jquery.terminal.min.css",
+  "web/terminal.css",
+)
