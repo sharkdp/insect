@@ -32,7 +32,7 @@
   "dependencies": {
     "decimal.js": "^7.1.1",
     "historic-readline": "^1.0.8",
-    "jquery.terminal": "=1.6.3",
+    "jquery.terminal": "=1.21.0",
     "keyboardevent-key-polyfill": "=1.1.0",
     "line-reader": "^0.4.0",
     "xdg-basedir": "^2.0.0"
