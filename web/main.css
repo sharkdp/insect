@@ -1,6 +1,25 @@
-html, body {
+html {
     font-family: 'Exo 2', sans-serif;
     background-color: #ECF0F1;
+}
+
+.github-corner .dark {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        background: #1a1a1a;
+        color: #ecf0f1;
+    }
+
+    .github-corner .light {
+        display: none;
+    }
+
+    .github-corner .dark {
+        display: initial;
+    }
 }
 
 body {
