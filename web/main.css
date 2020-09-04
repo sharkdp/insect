@@ -122,4 +122,13 @@ p.desc {
     #terminal {
         box-shadow: 0px 3px 8px #121212;
     }
+
+    #insect-logo {
+        color: black;
+        filter: drop-shadow(0 0 10px #ECF0F1);
+    }
+
+    #insect-logo > path {
+        display: none;
+    }
 }
