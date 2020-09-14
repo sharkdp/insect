@@ -86,7 +86,7 @@
     | [Tablespoon](https://en.wikipedia.org/wiki/Tablespoon) | `tablespoons`, `tablespoon`, `tbsp` |
     | [Teaspoon](https://en.wikipedia.org/wiki/Teaspoon) | `teaspoons`, `teaspoon`, `tsp` |
     | [Tesla](https://en.wikipedia.org/wiki/Tesla_(unit)) | `tesla`, `T` |
-    | [Thou](https://en.wikipedia.org/wiki/Thousandth_of_an_inch) | `thou`, `mil`, `mils` |
+    | [Thou](https://en.wikipedia.org/wiki/Thousandth_of_an_inch) | `thou`, `mils`, `mil` |
     | [Tonne](https://en.wikipedia.org/wiki/Tonne) | `tonnes`, `tonne`, `tons`, `ton`, `t` |
     | [US Dollar](https://en.wikipedia.org/wiki/USD) | `dollars`, `dollar`, `USD`, `$` |
     | [Volt](https://en.wikipedia.org/wiki/Volt) | `volts`, `volt`, `V` |
