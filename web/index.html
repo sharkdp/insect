@@ -39,7 +39,14 @@
       var insectEnv = Insect.initialEnvironment;
       var clearCommands = ["clear", "cls", "quit", "exit"];
 
-      function updateUrl(url) {
+      function updateUrlQuery(query) {
+        url = new URL(window.location);
+        if (query == null) {
+          url.searchParams.delete('q');
+        } else {
+          url.searchParams.set('q', query);
+        }
+
         history.replaceState(null, null, url);
       }
 
@@ -56,18 +63,14 @@
 
         // Handle shell commands
         if (clearCommands.indexOf(res.msgType) >= 0) {
-          updateUrl("");
-        }
-
-        if (res.msgType == "clear") {
           // Clear screen:
           this.clear();
-          return "";
+          return;
         } else if (res.msgType == "quit") {
           // Treat as reset:
           this.clear();
           insectEnv = Insect.initialEnvironment;
-          return "";
+          return;
         }
 
         if (res.msgType === "error") {
@@ -76,7 +79,7 @@
           ga('send', 'event', 'user-input', 'success', line);
         }
 
-        updateUrl("?q=" + encodeURIComponent(line));
+        updateUrlQuery(line);
 
         return res.msg;
       }
@@ -104,14 +107,14 @@
           name: "terminal",
           height: 550,
           prompt: "[[;;;prompt]&#8811; ]",
-          clear: false, // do not include 'clear' command
-          exit: false, // do not include 'exit' command
+          // clear: false, // do not include 'clear' command
+          // exit: false, // do not include 'exit' command
           checkArity: false,
           historySize: 200,
-          historyFilter: function(line) {
+          historyFilter(line) {
             return line.trim() !== "";
           },
-          completion: function(inp, cb) {
+          completion(inp, cb) {
             var identifiers = Insect.identifiers(insectEnv);
 
             var keywords =
@@ -121,24 +124,16 @@
 
             cb(keywords.sort());
           },
-          completionEscape: false,
-          keymap: {
-            "CTRL+L": function() {
-              updateUrl("");
-              term.clear();
-            }
+          onClear() {
+            updateUrlQuery(null);
           }
         });
 
         // evaluate expression in query string if supplied (via opensearch)
         if (location.search) {
-          var queryParams = {};
-          location.search.replace(/\?([^=&]+)=([^&]*)/g, function(match, paramName, paramValue) {
-            queryParams[paramName] = paramValue;
-          });
-          if (queryParams.q) {
-            var cmd = decodeURIComponent(queryParams.q.replace(/\+/g, " "));
-            term.exec(cmd);
+          var queryParams = new URLSearchParams(location.search);
+          if (queryParams.has("q")) {
+            term.exec(queryParams.get("q").replace(/\+/g, " "));
           }
         }
       });
