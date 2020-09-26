@@ -1,18 +1,10 @@
 dist: trusty
-sudo: required
 
 language: node_js
-node_js: "stable"
-
-env:
-  - PATH=$HOME/purescript:$PATH
+node_js: "lts/*"
 
 install:
-  - TAG=$(basename $(curl --location --silent --output /dev/null -w %{url_effective} https://github.com/purescript/purescript/releases/latest))
-  - curl --location --output $HOME/purescript.tar.gz https://github.com/purescript/purescript/releases/download/$TAG/linux64.tar.gz
-  - tar -xvf $HOME/purescript.tar.gz -C $HOME/
-  - chmod a+x $HOME/purescript
-  - npm i
+  - npm ci
 
 script:
   - npm -s run build
