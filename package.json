@@ -25,8 +25,8 @@
     "start": "npm run setup && run-p server browserify:watch",
     "browserify:watch": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
     "browserify": "pulp browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
-    "build": "pulp build -m Insect",
-    "prepack": "npm run setup && npm run build",
+    "build": "npm run setup && pulp build -m Insect",
+    "prepack": "npm run build",
     "server": "live-server web --open",
     "test": "pulp test"
   },
