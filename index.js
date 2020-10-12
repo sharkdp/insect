@@ -49,6 +49,7 @@ if (interactive) {
   var readline = require('historic-readline');
   var xdgBasedir = require('xdg-basedir');
   var path = require('path');
+  var clipboardy = require('clipboardy');
 
   // Set up REPL
   var rl = readline.createInterface({
@@ -91,6 +92,13 @@ if (interactive) {
             process.exit(0);
           } else if (res.msgType == "clear") {
             process.stdout.write('\x1Bc');
+          } else if (res.msgType == "copy") {
+            if (res.msg == "") {
+              console.log("\nNo result to copy.\n");
+            } else {
+              clipboardy.writeSync(res.msg);
+              console.log("\nCopied result '" + res.msg + "' to clipboard.\n");
+            }
           } else {
             console.log(res.msg + "\n");
           }

@@ -39,7 +39,8 @@
     "jquery.terminal": "^2.18.0",
     "keyboardevent-key-polyfill": "=1.1.0",
     "line-reader": "^0.4.0",
-    "xdg-basedir": "^2.0.0"
+    "xdg-basedir": "^2.0.0",
+    "clipboardy": "^2.3.0"
   },
   "devDependencies": {
     "fs-extra": "^9.0.1",
