@@ -41,7 +41,7 @@ type Expect = Either EvalError
 data MessageType = Value | ValueSet | Info | Error
 
 -- | The output type of the interpreter.
-data Message = Message MessageType Markup | MQuit | MClear
+data Message = Message MessageType Markup | MQuit | MCopy | MClear
 
 -- | Check if the numerical value of a quantity is finite, throw a
 -- | `NumericalError` otherwise.
@@ -350,5 +350,7 @@ runInsect env (Command Reset) =
   , newEnv: initialEnvironment }
 
 runInsect env (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
+
+runInsect env (Command Copy) = { msg: MCopy, newEnv: env }
 
 runInsect env (Command Clear) = { msg: MClear, newEnv: env }

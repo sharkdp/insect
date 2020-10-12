@@ -13,10 +13,11 @@ module Insect
 import Prelude
 
 import Data.Either (Either(..))
-import Data.Map (keys)
+import Data.Map (lookup, keys)
 import Data.Set (toUnfoldable)
 
 import Data.Array (sort)
+import Data.Maybe (maybe)
 
 import Text.Parsing.Parser.Pos (Position(..))
 import Text.Parsing.Parser (parseErrorPosition, parseErrorMessage)
@@ -25,10 +26,11 @@ import Insect.Parser (Dictionary(..), (==>),
                       normalUnitDict, imperialUnitDict, parseInsect)
 import Insect.Parser as P
 import Insect.Interpreter (MessageType(..), Message(..), runInsect)
-import Insect.Environment (Environment)
+import Insect.Environment (Environment, StoredValue(..))
 import Insect.Environment as E
 import Insect.Format (Formatter, format)
 import Insect.Format as F
+import Insect.PrettyPrint (prettyQuantity)
 
 -- | List of all supported units
 supportedUnits ∷ Array String
@@ -74,6 +76,14 @@ repl fmt env userInput =
               { msgType: "quit"
               , msg: ""
               , newEnv: ans.newEnv }
+           MCopy →
+             { msgType: "copy"
+             , msg: value
+             , newEnv: ans.newEnv }
+               where
+                 storedQty (StoredValue _ q) = q
+                 maybeStoredValue = lookup "ans" ans.newEnv.values
+                 value = maybe "" (\sv -> format fmtPlain (prettyQuantity $ storedQty sv)) maybeStoredValue
            MClear →
              { msgType: "clear"
              , msg: ""

@@ -71,6 +71,7 @@ data Command
  | Reset
  | List
  | Clear
+ | Copy
  | Quit
 
 derive instance eqCommand ∷ Eq Command
