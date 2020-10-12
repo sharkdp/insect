@@ -71,6 +71,14 @@
           this.clear();
           insectEnv = Insect.initialEnvironment;
           return;
+        } else if (res.msgType == "copy") {
+          // Copy result to clipboard:
+          if (res.msg == "") {
+            res.msg = "\nNo result to copy.\n";
+          } else {
+            navigator.clipboard.writeText(res.msg);
+            res.msg = "\nCopied result '" + res.msg + "' to clipboard.\n";
+          }
         }
 
         if (res.msgType === "error") {
