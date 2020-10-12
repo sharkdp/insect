@@ -53,7 +53,7 @@ identLetter = letter <|> digit <|> char '_' <|> char '\''
 
 -- | A list of allowed commands
 commands ∷ Array String
-commands = ["help", "?", "list", "ls", "ll", "reset", "clear", "cls", "quit", "exit"]
+commands = ["help", "?", "list", "ls", "ll", "reset", "clear", "cls", "quit", "exit", "copy", "cp"]
 
 -- | The language definition.
 insectLanguage ∷ LanguageDef
@@ -478,6 +478,7 @@ command =
     <|> (reserved "list" <|> reserved "ls" <|> reserved "ll") *> pure List
     <|> (reserved "reset") *> pure Reset
     <|> (reserved "clear" <|> reserved "cls") *> pure Clear
+    <|> (reserved "copy" <|> reserved "cp") *> pure Copy
     <|> (reserved "quit" <|> reserved "exit") *> pure Quit
   ) <* eof
 
