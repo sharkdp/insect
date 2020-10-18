@@ -172,13 +172,14 @@ Reference
 
 -   Commands
 
-    | Command           | Syntax             |
-    |-------------------|--------------------|
-    | help text         | `help`, `?`        |
-    | list of variables | `list`, `ls`, `ll` |
-    | reset environment | `reset`            |
-    | clear screen      | `clear`, `cls`     |
-    | quit (CLI)        | `quit`, `exit`     |
+    | Command                  | Syntax             |
+    |--------------------------|--------------------|
+    | help text                | `help`, `?`        |
+    | list of variables        | `list`, `ls`, `ll` |
+    | reset environment        | `reset`            |
+    | clear screen             | `clear`, `cls`     |
+    | copy result to clipboard | `copy`, `cp`       |
+    | quit (CLI)               | `quit`, `exit`     |
 
 -   Supported units (remember that you can use tab completion).
 
