@@ -466,6 +466,12 @@ package](https://formulae.brew.sh/formula/insect):
 
     brew install insect
 
+For Android, install [Termux](https://termux.com/) from [Google Play](https://play.google.com/store/apps/details?id=com.termux) or [F-Droid](https://f-droid.org/packages/com.termux/).
+Install nodejs in Termux and then install `insect`.
+    
+    pkg install nodejs-lts
+    npm install -g insect
+
 Development
 -----------
 
