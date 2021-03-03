@@ -351,7 +351,7 @@ function env = do
       pure name
     else
       case lookup name env.functions of
-        Just (StoredFunction _ fn) → pure name
+        Just (StoredFunction _ fn _) → pure name
         Nothing → fail ("Unknown function '" <> name <> "'")
 
 -- | Parse a full mathematical expression.
@@ -515,6 +515,7 @@ statement ∷ Environment → P Statement
 statement env =
       (Command <$> command)
   <|> assignment env
+  <|> (try (whiteSpace *> (PrettyPrintFunction <$> function env) <* eof))
   <|> (Expression <$> fullExpression env)
 
 -- | Run the Insect-parser on a `String` input.

@@ -740,6 +740,14 @@ main = runTest do
       shouldFail "meter(x)=2" -- 'meter' is a reserved unit
       shouldFail "list(x)=4" -- 'list' is a reserved keyword
 
+  suite "Parser - Pretty print function" do
+    test "Simple" do
+      allParseAs (PrettyPrintFunction "cos") $
+        [ "cos"
+        , "  cos"
+        , "cos  "
+        ]
+
   let pretty' str =
         case parseInsect initialEnvironment str of
           Right (Expression expr) → format fmtPlain (pretty expr)

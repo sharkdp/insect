@@ -83,6 +83,7 @@ data Statement
  = Expression Expression
  | VariableAssignment Identifier Expression
  | FunctionAssignment Identifier (NonEmpty List Identifier) Expression
+ | PrettyPrintFunction Identifier
  | Command Command
 
 derive instance eqStatement ∷ Eq Statement
@@ -90,4 +91,5 @@ instance showStatement ∷ Show Statement where
   show (Expression e)              = "(Expression " <> show e <> ")"
   show (VariableAssignment i e)    = "(VariableAssignment " <> show i <> " " <> show e <> ")"
   show (FunctionAssignment f xs e) = "(FunctionAssignment " <> show f <> " " <> show xs <> " " <> show e <> ")"
+  show (PrettyPrintFunction f)     = "(PrettyPrintFunction " <> show f <> ")"
   show (Command c)                 = "(Command " <> show c <> ")"
