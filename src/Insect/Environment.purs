@@ -2,6 +2,7 @@ module Insect.Environment
   ( StorageType(..)
   , StoredValue(..)
   , MathFunction
+  , FunctionDescription(..)
   , StoredFunction(..)
   , Environment
   , initialEnvironment
@@ -13,6 +14,7 @@ import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.List (List(..), (:))
 import Data.List.NonEmpty (NonEmptyList(..), head, length)
+import Data.Maybe (Maybe(..))
 import Data.NonEmpty (NonEmpty, (:|))
 import Data.Map (Map, fromFoldable)
 import Data.Tuple (Tuple(..))
@@ -20,7 +22,7 @@ import Data.Tuple (Tuple(..))
 import Quantities (Quantity, ConversionError)
 import Quantities as Q
 
-import Insect.Language (EvalError(..), Identifier)
+import Insect.Language (EvalError(..), Identifier, Expression)
 import Insect.Functions as F
 
 -- | Values can be stored as constants, as constants that are not
@@ -35,8 +37,11 @@ data StoredValue = StoredValue StorageType Quantity
 -- | Mathematical functions on physical quantities.
 type MathFunction = NonEmpty List Quantity → Either EvalError Quantity
 
+-- | Meta information for a function, mostly for pretty printing
+data FunctionDescription = BuiltinFunction (Maybe Int) | UserFunction (NonEmpty List Identifier) Expression
+
 -- | A mathematical function with a given `StorageType`.
-data StoredFunction = StoredFunction StorageType MathFunction
+data StoredFunction = StoredFunction StorageType MathFunction FunctionDescription
 
 -- | The environment consists of identifiers that are mapped to specific
 -- | quantities.
@@ -135,9 +140,9 @@ initialEnvironment =
   where
     constVal identifier value = Tuple identifier (StoredValue Constant value)
     hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
-    constFunc  identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func))
-    constFunc2 identifier func = Tuple identifier (StoredFunction Constant (wrapSimple2 identifier func))
-    constFuncN identifier func = Tuple identifier (StoredFunction Constant func)
+    constFunc  identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func) (BuiltinFunction (Just 1)))
+    constFunc2 identifier func = Tuple identifier (StoredFunction Constant (wrapSimple2 identifier func) (BuiltinFunction (Just 2)))
+    constFuncN identifier func = Tuple identifier (StoredFunction Constant func (BuiltinFunction Nothing))
 
     wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple name func qs =

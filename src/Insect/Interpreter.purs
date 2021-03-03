@@ -15,7 +15,7 @@ import Data.Int (round, toNumber)
 import Data.List (List(..), sortBy, filter, groupBy, (..))
 import Data.List.NonEmpty (NonEmptyList(..), head, length, zip)
 import Data.Maybe (Maybe(..))
-import Data.NonEmpty ((:|), foldl1)
+import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Data.Map (lookup, insert, delete, toUnfoldable)
 import Data.String (toLower)
 import Data.Traversable (traverse)
@@ -27,9 +27,9 @@ import Quantities as Q
 import Insect.Language (BinOp(..), Expression(..), Command(..), Identifier,
                         Statement(..), EvalError(..))
 import Insect.Environment (Environment, StorageType(..), StoredValue(..),
-                           StoredFunction(..), initialEnvironment,
-                           MathFunction)
-import Insect.Format (Markup)
+                           FunctionDescription(..), StoredFunction(..),
+                           initialEnvironment, MathFunction)
+import Insect.Format (FormattedString, Markup)
 import Insect.Format as F
 import Insect.PrettyPrint (pretty, prettyQuantity)
 
@@ -117,7 +117,7 @@ eval env (Apply name xs)        =
           Left (WrongArityError name 4 (length (NonEmptyList xs)))
     else
       case lookup name env.functions of
-        Just (StoredFunction _ fn) →
+        Just (StoredFunction _ fn _) →
           traverse (eval env) xs >>= fn >>= checkFinite
         Nothing → Left (LookupError name)
 eval env (BinOp op x y)         = do
@@ -242,9 +242,16 @@ isConstant env name = isConstantValue || isConstantFunction
         _ → false
     isConstantFunction =
       case lookup name env.functions of
-        Just (StoredFunction Constant _)       → true
-        Just (StoredFunction HiddenConstant _) → true
+        Just (StoredFunction Constant _ _)       → true
+        Just (StoredFunction HiddenConstant _ _) → true
         _ → false
+
+-- | Format a function definition
+prettyPrintFunction :: Identifier -> NonEmpty List Identifier -> Array FormattedString
+prettyPrintFunction name argNames =
+  [ F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
+  where
+    fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
 
 -- | Run a single statement of an Insect program.
 runInsect ∷ Environment → Statement → Response
@@ -276,19 +283,16 @@ runInsect env (VariableAssignment name val) =
 runInsect env (FunctionAssignment name argNames expr) =
   if isConstant env name
     then
-      errorWithInput fAssign expr env (RedefinedConstantError name)
+      errorWithInput (prettyPrintFunction name argNames) expr env (RedefinedConstantError name)
     else
-      { msg: Message ValueSet $ (F.optional <$> (F.text "  " : fAssign)) <> pretty expr
-      , newEnv: env { functions = insert name (StoredFunction UserDefined userFunc) env.functions
+      { msg: Message ValueSet $ (F.optional <$> (F.text "  " : (prettyPrintFunction name argNames))) <> pretty expr
+      , newEnv: env { functions = insert name (StoredFunction UserDefined userFunc (UserFunction argNames expr)) env.functions
                     , values = delete name env.values
                     }
       }
   where
     argNames' = NonEmptyList argNames
     numExpected = length argNames'
-
-    fArgs = intercalate [ F.text ", " ] ((\a → [ F.ident a ]) <$> argNames)
-    fAssign = [ F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
 
     userFunc ∷ MathFunction
     userFunc argValues =
@@ -304,6 +308,29 @@ runInsect env (FunctionAssignment name argNames expr) =
         functionEnv = env { values = foldl insertArg env.values args
                           , functions = delete name env.functions
                           }
+
+runInsect env (PrettyPrintFunction name) =
+  { msg: message,
+    newEnv: env
+  }
+  where
+    message =
+      case lookup name env.functions of
+        Just (StoredFunction _ fn (BuiltinFunction args)) →
+          Message Info [ F.optional (F.text "  "),
+                         F.ident name,
+                         F.text "(",
+                         F.text argText,
+                         F.text ") = builtin function" ]
+          where
+            argText = case args of
+                        Just 1 -> "x"
+                        Just 2 -> "x, y"
+                        Just _ -> "x, y, …"
+                        Nothing -> "x1, x2, …"
+        Just (StoredFunction _ fn (UserFunction args expr)) →
+          Message Info $ (F.optional <$> (F.text "  " : (prettyPrintFunction name args))) <> pretty expr
+        Nothing → Message Error [ F.text "Unknown function" ]
 
 runInsect env (Command Help) = { msg: Message Info
   [ F.emph "insect", F.text " evaluates mathematical expressions that can", F.nl
