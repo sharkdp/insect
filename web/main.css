@@ -52,6 +52,7 @@ p.desc {
 
 .terminal, .terminal .terminal-fill {
     padding: 1.2em;
+    margin-bottom: 2em;
 }
 
 .terminal,
