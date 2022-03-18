@@ -141,7 +141,7 @@
         if (location.search) {
           var queryParams = new URLSearchParams(location.search);
           if (queryParams.has("q")) {
-            term.exec(queryParams.get("q").replace(/\+/g, " "));
+            term.exec(queryParams.get("q"));
           }
         }
       });
