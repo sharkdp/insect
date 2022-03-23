@@ -25,8 +25,7 @@ Contents
 -   [Terminal version](#terminal-version)
 -   [Development](#development)
 
-Documentation
--------------
+## Documentation
 
 -   **Evaluate mathematical expressions**:
 
@@ -147,8 +146,7 @@ Documentation
 -   **And more**: tab completion, command history (arrow keys,
     `Ctrl`+`R`), pretty printing, syntax highlighting, ...
 
-Reference
----------
+## Reference
 
 -   Operators (ordered by precedence: high to low)
 
@@ -188,7 +186,7 @@ Reference
     `GiB`, ...) are also supported.
 
     | Unit                                                                         | Syntax                                                                      |
-    |------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+    |-----------------------------|-------------------------------------------|
     | [Ampere](https://en.wikipedia.org/wiki/Ampere)                               | `amperes`, `ampere`, `A`                                                    |
     | [Ångström](https://en.wikipedia.org/wiki/Ångström)                           | `angstrom`, `Å`                                                             |
     | [Astronomical unit](https://en.wikipedia.org/wiki/Astronomical_unit)         | `AU`, `au`, `astronomicalunits`, `astronomicalunit`                         |
@@ -280,8 +278,7 @@ Reference
     | [Yard](https://en.wikipedia.org/wiki/Yard)                                   | `yards`, `yard`, `yd`                                                       |
     | [Year](https://en.wikipedia.org/wiki/Year)                                   | `years`, `year`                                                             |
 
-Pros and cons
--------------
+## Pros and cons
 
 **Reasons to use Insect**
 
@@ -331,8 +328,7 @@ Pros and cons
 -   Insect does not have a special mode for hexadecimal or binary
     numbers (yet).
 
-FAQ
----
+## FAQ
 
 -   Why are Celsius and Fahrenheit not supported?
 
@@ -430,8 +426,7 @@ FAQ
 
         1 RPM · (360°/revolution) = (1 revolution / minute) · (360° / revolution) = 360° / minute
 
-Terminal version
-----------------
+## Terminal version
 
 In addition to the web interface, there is also a command line version
 which can by installed via [npm](https://www.npmjs.com/package/insect):
@@ -452,28 +447,20 @@ AUR](https://aur.archlinux.org/packages/insect/):
 
     yaourt -S insect
 
-On Fedora 28+, you can install `insect` from the official sources:
-
-    sudo dnf install insect
-
-For Fedora versions 26 and 27, you need to enable this [copr
-repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
-
-    sudo dnf copr enable fnux/insect
-
 For macOS, there is a [Homebrew
 package](https://formulae.brew.sh/formula/insect):
 
     brew install insect
 
-For Android, install [Termux](https://termux.com/) from [Google Play](https://play.google.com/store/apps/details?id=com.termux) or [F-Droid](https://f-droid.org/packages/com.termux/).
-Install nodejs in Termux and then install `insect`.
-    
+For Android, install [Termux](https://termux.com/) from [Google
+Play](https://play.google.com/store/apps/details?id=com.termux) or
+[F-Droid](https://f-droid.org/packages/com.termux/). Install nodejs in
+Termux and then install `insect`.
+
     pkg install nodejs-lts
     npm install -g insect
 
-Development
------------
+## Development
 
 [![Build
 Status](https://api.travis-ci.org/sharkdp/insect.svg?branch=master)](https://travis-ci.org/sharkdp/insect)

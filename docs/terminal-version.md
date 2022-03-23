@@ -19,15 +19,12 @@ AUR](https://aur.archlinux.org/packages/insect/):
 
     yaourt -S insect
 
-On Fedora 28+, you can install `insect` from the official sources:
-
-    sudo dnf install insect
-
-For Fedora versions 26 and 27, you need to enable this [copr
-repository](https://copr.fedorainfracloud.org/coprs/fnux/insect/):
-
-    sudo dnf copr enable fnux/insect
-
 For macOS, there is a [Homebrew package](https://formulae.brew.sh/formula/insect):
 
     brew install insect
+
+For Android, install [Termux](https://termux.com/) from [Google Play](https://play.google.com/store/apps/details?id=com.termux) or [F-Droid](https://f-droid.org/packages/com.termux/).
+Install nodejs in Termux and then install `insect`.
+
+    pkg install nodejs-lts
+    npm install -g insect
