@@ -56,7 +56,7 @@ shouldFail ∷ String → Aff Unit
 shouldFail input = do
   case parseInsect initialEnvironment input of
    Left _ → pure unit
-   Right output → failure $ "input is expected to throw a parse error: '" <> input <> "'"
+   Right _ → failure $ "input is expected to throw a parse error: '" <> input <> "'"
 
 expectOutput ∷ Environment → String → String → Aff Unit
 expectOutput env expected inp =

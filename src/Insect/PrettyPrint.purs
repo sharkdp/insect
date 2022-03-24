@@ -75,7 +75,7 @@ withParens' x              = parens (pretty x)
 -- | Add parenthesis, if needed - liberal version, can not be used for
 -- | Exponentiation.
 withParens ∷ Expression → Markup
-withParens e@(BinOp Mul (Scalar s) (Unit u)) = pretty e
+withParens e@(BinOp Mul (Scalar _) (Unit _)) = pretty e
 withParens e = withParens' e
 
 -- | Pretty print an Insect expression.

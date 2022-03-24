@@ -12,7 +12,7 @@ import Prelude hiding (Unit)
 
 import Data.Decimal (Decimal)
 import Data.Generic.Rep (class Generic)
-import Data.Generic.Rep.Show (genericShow)
+import Data.Show.Generic (genericShow)
 import Data.List (List)
 import Data.NonEmpty (NonEmpty)
 import Data.Units (DerivedUnit)

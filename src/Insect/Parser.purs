@@ -14,31 +14,25 @@ import Prelude hiding (degree)
 
 import Control.Alt ((<|>))
 import Control.Lazy (fix)
-
-import Quantities (DerivedUnit, (./))
-import Quantities as Q
-
 import Data.Array (some, fromFoldable)
 import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
 import Data.Either (Either, isRight)
 import Data.Foldable (foldr, traverse_)
 import Data.Foldable as F
 import Data.List (List, many, init, last)
-import Data.Maybe (Maybe(..), fromMaybe)
-import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Data.Map (lookup)
+import Data.Maybe (Maybe(..), fromMaybe)
+import Data.NonEmpty (NonEmpty, (:|))
+import Data.Semigroup.Foldable (foldl1)
 import Data.String (fromCodePointArray, codePointFromChar, singleton)
-
-import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
-import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>),
-                                        notFollowedBy)
-import Text.Parsing.Parser.String (string, char, eof, oneOf)
-import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser,
-                                  digit, letter, makeTokenParser)
-
-import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..),
-                        Identifier)
 import Insect.Environment (Environment, StoredFunction(..))
+import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..), Identifier)
+import Quantities (DerivedUnit, (./))
+import Quantities as Q
+import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
+import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>), notFollowedBy)
+import Text.Parsing.Parser.String (string, char, eof, oneOf)
+import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser, digit, letter, makeTokenParser)
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
@@ -351,7 +345,7 @@ function env = do
       pure name
     else
       case lookup name env.functions of
-        Just (StoredFunction _ fn _) → pure name
+        Just (StoredFunction _ _ _) → pure name
         Nothing → fail ("Unknown function '" <> name <> "'")
 
 -- | Parse a full mathematical expression.
