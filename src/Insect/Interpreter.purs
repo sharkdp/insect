@@ -14,24 +14,20 @@ import Data.Foldable (foldMap, intercalate, foldl)
 import Data.Int (round, toNumber)
 import Data.List (List(..), sortBy, filter, groupBy, (..))
 import Data.List.NonEmpty (NonEmptyList(..), head, length, zip)
-import Data.Maybe (Maybe(..))
-import Data.NonEmpty (NonEmpty, (:|), foldl1)
 import Data.Map (lookup, insert, delete, toUnfoldable)
+import Data.Maybe (Maybe(..))
+import Data.NonEmpty (NonEmpty, (:|))
+import Data.Semigroup.Foldable (foldl1)
 import Data.String (toLower)
 import Data.Traversable (traverse)
 import Data.Tuple (Tuple(..), fst, snd)
-
-import Quantities (Quantity, ConversionError(..))
-import Quantities as Q
-
-import Insect.Language (BinOp(..), Expression(..), Command(..), Identifier,
-                        Statement(..), EvalError(..))
-import Insect.Environment (Environment, StorageType(..), StoredValue(..),
-                           FunctionDescription(..), StoredFunction(..),
-                           initialEnvironment, MathFunction)
+import Insect.Environment (Environment, StorageType(..), StoredValue(..), FunctionDescription(..), StoredFunction(..), initialEnvironment, MathFunction)
 import Insect.Format (FormattedString, Markup)
 import Insect.Format as F
+import Insect.Language (BinOp(..), Expression(..), Command(..), Identifier, Statement(..), EvalError(..))
 import Insect.PrettyPrint (pretty, prettyQuantity)
+import Quantities (Quantity, ConversionError(..))
+import Quantities as Q
 
 -- | A type synonym for error handling. A value of type `Expect Number` is
 -- | expected to be a number but might also result in an evaluation error.
@@ -100,8 +96,8 @@ evalSpecial func _ _ _ _ _ = Left (InvalidIdentifier func)
 
 -- | Evaluate Either.. mathematical expression involving physical quantities.
 eval ∷ Environment → Expression → Expect Quantity
-eval env (Scalar n)             = pure $ Q.scalar' n
-eval env (Unit u)               = pure $ Q.quantity 1.0 u
+eval _ (Scalar n)             = pure $ Q.scalar' n
+eval _ (Unit u)               = pure $ Q.quantity 1.0 u
 eval env (Variable name)        = case lookup name env.values of
                                     Just (StoredValue _ q) → pure q
                                     Nothing → Left (LookupError name)
@@ -316,7 +312,7 @@ runInsect env (PrettyPrintFunction name) =
   where
     message =
       case lookup name env.functions of
-        Just (StoredFunction _ fn (BuiltinFunction args)) →
+        Just (StoredFunction _ _ (BuiltinFunction args)) →
           Message Info [ F.optional (F.text "  "),
                          F.ident name,
                          F.text "(",
@@ -328,7 +324,7 @@ runInsect env (PrettyPrintFunction name) =
                         Just 2 -> "x, y"
                         Just _ -> "x, y, …"
                         Nothing -> "x1, x2, …"
-        Just (StoredFunction _ fn (UserFunction args expr)) →
+        Just (StoredFunction _ _ (UserFunction args expr)) →
           Message Info $ (F.optional <$> (F.text "  " : (prettyPrintFunction name args))) <> pretty expr
         Nothing → Message Error [ F.text "Unknown function" ]
 
@@ -372,11 +368,11 @@ runInsect env (Command List) =
                           (singleton <<< F.ident <<< fst) <$> kvPairs
           val = storedValue (snd (head kvPairs))
 
-runInsect env (Command Reset) =
+runInsect _ (Command Reset) =
   { msg: Message Info [F.text "Environment has been reset."]
   , newEnv: initialEnvironment }
 
-runInsect env (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
+runInsect _ (Command Quit) = { msg: MQuit, newEnv: initialEnvironment }
 
 runInsect env (Command Copy) = { msg: MCopy, newEnv: env }
 
