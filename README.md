@@ -459,9 +459,6 @@ For Android, install [Termux](https://termux.com/) from [F-Droid](https://f-droi
 
 ## Development
 
-[![Build
-Status](https://api.travis-ci.org/sharkdp/insect.svg?branch=master)](https://travis-ci.org/sharkdp/insect)
-
 Insect is written in PureScript (see [Getting
 Started](https://github.com/purescript/documentation/blob/master/guides/Getting-Started.md)
 guide). You can install all dependencies and build the whole project by

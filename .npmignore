@@ -1,6 +1,6 @@
+/.github/
 /.psci*
 /.pulp-cache
-/.travis.yml
 /binaries
 /bower_components/
 /build.sh
