@@ -827,7 +827,7 @@ main = runTest do
       expectOutput' "3 m" "3m"
       expectOutput' "3 m" " 3.0 meter  "
 
-    test "Square, cube and other exponentation operators" do
+    test "Square, cube and other exponentiation operators" do
       expectOutput' "18" "3²*2"
       expectOutput' "18" "3² 2"
       expectOutput' "18" "3²·2"

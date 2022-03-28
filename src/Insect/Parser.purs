@@ -78,7 +78,7 @@ parens = token.parens
 reservedOp ∷ String → P Unit
 reservedOp = token.reservedOp
 
--- | Parse a reserverd keyword.
+-- | Parse a reserved keyword.
 reserved ∷ String → P Unit
 reserved = token.reserved
 
@@ -243,7 +243,7 @@ normalUnitDict = Dictionary
   , Q.dot ==> ["dots", "dot"]
   ]
 
--- | Parse a normal (SI-conform, non-imperical) unit, like `N` or `watt`.
+-- | Parse a normal (SI-conform, non-imperial) unit, like `N` or `watt`.
 normalUnit ∷ P DerivedUnit
 normalUnit = buildDictParser normalUnitDict <?> "normal unit"
 
