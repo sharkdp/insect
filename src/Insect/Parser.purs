@@ -17,13 +17,13 @@ import Control.Lazy (fix)
 import Data.Array (some, fromFoldable)
 import Data.Decimal (Decimal, fromString, fromNumber, isFinite)
 import Data.Either (Either, isRight)
-import Data.Foldable (foldr, traverse_)
+import Data.Foldable (traverse_)
 import Data.Foldable as F
-import Data.List (List, many, init, last)
+import Data.List (List, many)
 import Data.Map (lookup)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|))
-import Data.Semigroup.Foldable (foldl1)
+import Data.Semigroup.Foldable (foldl1, foldr1)
 import Data.String (fromCodePointArray, codePointFromChar, singleton)
 import Insect.Environment (Environment, StoredFunction(..))
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..), Identifier)
@@ -329,13 +329,6 @@ sepBy1 p sep = do
   as ← many $ sep *> p
   pure (a :| as)
 
--- | Fold a non-empty structure, collecting results using a binary operation.
-foldr1 ∷ ∀ a. (a → a → a) → NonEmpty List a → a
-foldr1 f (a :| xs) =
-  case init xs, last xs of
-    Just bs, Just b → f a (foldr f b bs)
-    _, _ → a
-
 -- | Parse a function name and fail if it's not in the environment
 function ∷ Environment → P Identifier
 function env = do
@@ -366,9 +359,9 @@ expression env =
       suffixFac = do
         a ← atomic
         mf ← optionMaybe (facOp *> pure Factorial)
-        case mf of
-          Just f → pure $ f a
-          Nothing → pure a
+        pure case mf of
+          Just f → f a
+          Nothing → a
 
       suffixPow ∷ P Expression
       suffixPow = do
@@ -384,9 +377,9 @@ expression env =
                             <|> reservedOp "⁻⁴" *> pure (powNeg 4.0)
                             <|> reservedOp "⁻⁵" *> pure (powNeg 5.0)
                           )
-        case mFn of
-          Just fn → pure $ fn x
-          Nothing → pure x
+        pure case mFn of
+          Just fn → fn x
+          Nothing → x
 
       -- The power operator needs special treatment
       -- 1) it is right-associative => use foldr1 instead of foldl1
@@ -457,12 +450,7 @@ expression env =
 
 -- | Parse a mathematical expression (or conversion) like `3m+2in -> cm`.
 fullExpression ∷ Environment → P Expression
-fullExpression env = do
-  whiteSpace
-  expr ← expression env
-  eof <?> "end of input"
-
-  pure $ expr
+fullExpression env = whiteSpace *> expression env <* (eof <?> "end of input")
 
 -- | Parse an Insect command.
 command ∷ P Command

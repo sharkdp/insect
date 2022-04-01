@@ -1,4 +1,4 @@
-module Test.Main where
+module Test.Main (main) where
 
 import Prelude hiding (degree)
 
@@ -37,7 +37,7 @@ shouldParseAs expected input =
   case parseInsect initialEnvironment input of
     Left err →
       case parseErrorPosition err of
-        (Position pos) →
+        Position pos →
           failure $ "Parse error for input '" <> input <> "': "
                                 <> parseErrorMessage err
                                 <> " at position "

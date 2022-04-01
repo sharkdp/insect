@@ -13,9 +13,9 @@ import Prelude
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.List (List(..), (:))
-import Data.List.NonEmpty (NonEmptyList(..), head, length)
+import Data.List.NonEmpty (NonEmptyList(..), length)
 import Data.Maybe (Maybe(..))
-import Data.NonEmpty (NonEmpty, (:|))
+import Data.NonEmpty (NonEmpty, (:|), head)
 import Data.Map (Map, fromFoldable)
 import Data.Tuple (Tuple(..))
 
@@ -29,7 +29,7 @@ import Insect.Functions as F
 -- | displayed when calling `list`, and as user-defined quantities.
 data StorageType = Constant | HiddenConstant | UserDefined
 
-derive instance eqStorageType ∷ Eq StorageType
+derive instance Eq StorageType
 
 -- | A quantity with a given `StorageType`.
 data StoredValue = StoredValue StorageType Quantity
@@ -147,11 +147,10 @@ initialEnvironment =
     wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple name func qs =
       if numArgs == 1
-        then lmap QConversionError $ func (head args)
+        then lmap QConversionError $ func (head qs)
         else Left $ WrongArityError name 1 numArgs
       where
-        args = NonEmptyList qs
-        numArgs = length args
+        numArgs = length (NonEmptyList qs)
 
     wrapSimple2 ∷ Identifier → (Quantity → Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple2 name func qs =
@@ -159,5 +158,4 @@ initialEnvironment =
         (x1 :| x2 : Nil) → lmap QConversionError $ func x1 x2
         _                → Left $ WrongArityError name 2 numArgs
       where
-        args = NonEmptyList qs
-        numArgs = length args
+        numArgs = length (NonEmptyList qs)

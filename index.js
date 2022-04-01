@@ -50,12 +50,10 @@ if (process.env.INSECT_NO_RC !== "true") {
   var rcFile = path.join(os.homedir(), ".insectrc");
   lineReader.eachLine(rcFile, function (line) {
     var res = runInsect(Insect.fmtPlain, line);
-    if (res) {
-      // We really only care when it breaks
-      if (res.msgType === "error") {
-        console.error(res.msg);
-        process.exit(1);
-      }
+    // We really only care when it breaks
+    if (res && res.msgType === "error") {
+      console.error(res.msg);
+      process.exit(1);
     }
   }, function (err) {
     // If the file doesn't exist, that's fine
@@ -95,7 +93,7 @@ function startInsect() {
         if (line.trim() !== "") {
           var words = line.split(/\b/);
           lastWord = words[words.length - 1];
-          keywords= keywords.filter(function(kw) {
+          keywords = keywords.filter(function(kw) {
             return kw.indexOf(lastWord) === 0;
           });
         }
