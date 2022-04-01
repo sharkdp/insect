@@ -28,6 +28,7 @@ import Insect.Language (BinOp(..), Expression(..), Command(..), Identifier, Stat
 import Insect.PrettyPrint (pretty, prettyQuantity)
 import Quantities (Quantity, ConversionError(..))
 import Quantities as Q
+import Control.Apply (lift2)
 
 -- | A type synonym for error handling. A value of type `Expect Number` is
 -- | expected to be a number but might also result in an evaluation error.
@@ -80,14 +81,9 @@ evalSpecial func env expr (Variable varname) lowExpr highExpr = do
         Cons q rest → foldl1 qAdd (q :| rest)
         Nil         → pure (Q.scalar 0.0)
     else -- product
-      foldl qMultiply (Right (Q.scalar 1.0)) qs
+      foldl (lift2 Q.qMultiply) (Right (Q.scalar 1.0)) qs
 
   where
-    qMultiply q1' q2' = do
-      q1 ← q1'
-      q2 ← q2'
-      pure $ Q.qMultiply q1 q2
-
     qAdd q1' q2' = do
       q1 ← q1'
       q2 ← q2'
@@ -119,7 +115,7 @@ eval env (Apply name xs)        =
 eval env (BinOp op x y)         = do
   x' <- eval env x
   y' <- eval env y
-  (run op) x' y' >>= checkFinite
+  run op x' y' >>= checkFinite
   where
     run :: BinOp -> Quantity -> Quantity -> Expect Quantity
     run Sub       a b = qSubtract a b
@@ -345,11 +341,10 @@ runInsect env (Command Help) = { msg: Message Info
   , F.emph "  > ", F.ident "pi", F.text " * ", F.ident "r", F.text "^", F.val "2", F.text " -> ", F.unit "m", F.text "^", F.val "2", F.nl
   , F.text "", F.nl
   , F.text "Full documentation: https://github.com/sharkdp/insect"
-  ], newEnv : env }
+  ], newEnv: env }
 
 runInsect env (Command List) =
-  { msg: Message Info list
-  , newEnv: env }
+  { msg: Message Info list, newEnv: env }
   where
     storedValue (StoredValue _ value) = value
     storageType (StoredValue t _) = t

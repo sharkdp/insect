@@ -54,21 +54,20 @@ repl ∷ Formatter → Environment → String → { msg ∷ String
 repl fmt env userInput =
   case parseInsect env userInput of
     Left pErr →
-      let pos = parseErrorPosition pErr
-      in case pos of
-           (Position rec) →
-             { msg: format fmt
-                 [ F.optional (F.text "  ")
-                 , F.error $ "Parse error at position " <>
-                             show rec.column <> ": "
-                 , F.text (parseErrorMessage pErr)
-                 ]
-             , msgType: "error"
-             , newEnv: env }
+      let Position rec = parseErrorPosition pErr
+      in
+        { msg: format fmt
+             [ F.optional (F.text "  ")
+             , F.error $ "Parse error at position " <>
+                         show rec.column <> ": "
+             , F.text (parseErrorMessage pErr)
+             ]
+         , msgType: "error"
+         , newEnv: env }
     Right statement →
       let ans = runInsect env statement
       in case ans.msg of
-           (Message msgType msg) →
+           Message msgType msg →
              { msgType: msgTypeToString msgType
              , msg: format fmt msg
              , newEnv: ans.newEnv }

@@ -32,9 +32,9 @@ data BinOp
  | Mod
  | ConvertTo
 
-derive instance eqBinOp ∷ Eq BinOp
-derive instance genericBinOp ∷ Generic BinOp _
-instance showBinOp ∷ Show BinOp where show = genericShow
+derive instance Eq BinOp
+derive instance Generic BinOp _
+instance Show BinOp where show = genericShow
 
 -- | Types of errors that may appear during evaluation.
 data EvalError
@@ -55,8 +55,8 @@ data Expression
  | Apply Identifier (NonEmpty List Expression)
  | BinOp BinOp Expression Expression
 
-derive instance eqExpression ∷ Eq Expression
-instance showExpression ∷ Show Expression where
+derive instance Eq Expression
+instance Show Expression where
   show (Scalar n)          = "(Scalar " <> show n <> ")"
   show (Unit u)            = "(Unit " <> show u <> ")"
   show (Variable n)        = "(Variable " <> show n <> ")"
@@ -74,9 +74,9 @@ data Command
  | Copy
  | Quit
 
-derive instance eqCommand ∷ Eq Command
-derive instance genericCommand ∷ Generic Command _
-instance showCommand ∷ Show Command where show = genericShow
+derive instance Eq Command
+derive instance Generic Command _
+instance Show Command where show = genericShow
 
 -- | A statement in Insect.
 data Statement
@@ -86,8 +86,8 @@ data Statement
  | PrettyPrintFunction Identifier
  | Command Command
 
-derive instance eqStatement ∷ Eq Statement
-instance showStatement ∷ Show Statement where
+derive instance Eq Statement
+instance Show Statement where
   show (Expression e)              = "(Expression " <> show e <> ")"
   show (VariableAssignment i e)    = "(VariableAssignment " <> show i <> " " <> show e <> ")"
   show (FunctionAssignment f xs e) = "(FunctionAssignment " <> show f <> " " <> show xs <> " " <> show e <> ")"
