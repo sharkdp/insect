@@ -15,7 +15,7 @@ import Data.Either (Either(..))
 import Data.List (List(..), (:))
 import Data.List.NonEmpty (NonEmptyList(..), length)
 import Data.Maybe (Maybe(..))
-import Data.NonEmpty (NonEmpty, (:|), head)
+import Data.NonEmpty (NonEmpty, (:|))
 import Data.Map (Map, fromFoldable)
 import Data.Tuple (Tuple(..))
 
@@ -146,16 +146,12 @@ initialEnvironment =
 
     wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple name func qs =
-      if numArgs == 1
-        then lmap QConversionError $ func (head qs)
-        else Left $ WrongArityError name 1 numArgs
-      where
-        numArgs = length (NonEmptyList qs)
+      case qs of
+        x :| Nil → lmap QConversionError $ func x
+        _        → Left $ WrongArityError name 1 (length (NonEmptyList qs))
 
     wrapSimple2 ∷ Identifier → (Quantity → Quantity → Either ConversionError Quantity) → MathFunction
     wrapSimple2 name func qs =
       case qs of
-        (x1 :| x2 : Nil) → lmap QConversionError $ func x1 x2
-        _                → Left $ WrongArityError name 2 numArgs
-      where
-        numArgs = length (NonEmptyList qs)
+        x1 :| x2 : Nil → lmap QConversionError $ func x1 x2
+        _              → Left $ WrongArityError name 2 (length (NonEmptyList qs))
