@@ -476,7 +476,7 @@ assignment env = do
       expr ← expression env
       eof
 
-      pure { name: name, args: args, expr: expr }
+      pure { name, args, expr }
 
   -- Fail if the name can be parsed as a physical unit
   failIfUnit name

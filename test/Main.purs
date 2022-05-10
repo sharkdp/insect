@@ -6,7 +6,7 @@ import Effect (Effect)
 import Effect.Aff (Aff)
 
 import Data.Decimal (fromNumber)
-import Data.Either(Either(..))
+import Data.Either (Either(..))
 import Data.Foldable (traverse_, for_, intercalate)
 import Data.List (List(..), (:))
 import Data.NonEmpty ((:|))
@@ -43,7 +43,7 @@ shouldParseAs expected input =
                                 <> " at position "
                                 <> show pos.column
     Right output →
-      unless (output == expected) $ do
+      unless (output == expected) do
         failure $ "Unexpected result:\n" <>
                   "Input:    '" <> input <> "'\n" <>
                   "Output:   " <> show output <> "\n" <>
@@ -53,7 +53,7 @@ allParseAs ∷ Statement → Array String → Aff Unit
 allParseAs expected = traverse_ (shouldParseAs expected)
 
 shouldFail ∷ String → Aff Unit
-shouldFail input = do
+shouldFail input =
   case parseInsect initialEnvironment input of
    Left _ → pure unit
    Right _ → failure $ "input is expected to throw a parse error: '" <> input <> "'"
@@ -74,19 +74,14 @@ prettyPrintCheck input =
   case parseInsect initialEnvironment input of
     Left err →
       case parseErrorPosition err of
-        (Position pos) →
+        Position pos →
           failure $ "Parse error for input '" <> input <> "': "
                                 <> parseErrorMessage err
                                 <> " at position "
                                 <> show pos.column
-    Right output →
-      case output of
-        Expression expr →
-          -- Pretty print the AST, parse it again and check against the
-          -- original AST.
-          shouldParseAs output (format fmtPlain (pretty expr))
-        _ →
-          failure $ "Input is not an expression"
+    Right output@(Expression expr) →
+      shouldParseAs output (format fmtPlain (pretty expr))
+    _ → failure "Input is not an expression"
 
 
 main ∷ Effect Unit
@@ -173,24 +168,20 @@ main = runTest do
       unp (Dictionary dict) = dict
 
     test "All imperial units" do
-      for_ (unp imperialUnitDict) $ \(unit ==> unitStrs) → do
+      for_ (unp imperialUnitDict) \(unit ==> unitStrs) →
         allParseAs (Expression (Unit  unit))
                    unitStrs
 
     test "All normal units" do
-      for_ (unp normalUnitDict) $ \(unit ==> unitStrs) → do
+      for_ (unp normalUnitDict) \(unit ==> unitStrs) →
         allParseAs (Expression (Unit  unit))
                    unitStrs
 
-    for_ (unp prefixDict) $ \(prefix ==> prefixStrs) → do
+    for_ (unp prefixDict) \(prefix ==> prefixStrs) →
       test ("Testing all units with prefix: " <> intercalate ", " prefixStrs) do
-        for_ (unp normalUnitDict) $ \(unit ==> unitStrs) → do
-          let allCombinations = do
-                p <- prefixStrs
-                u <- unitStrs
-                pure (p <> u)
+        for_ (unp normalUnitDict) \(unit ==> unitStrs) →
           allParseAs (Expression (Unit (prefix unit)))
-                     allCombinations
+                     ((<>) <$> prefixStrs <*> unitStrs)
 
     test "Special cases" do
       allParseAs (Expression (Unit day))
@@ -312,7 +303,7 @@ main = runTest do
 
   suite "Parser - Operators" do
     test "Factorial" do
-      allParseAs (Expression (Factorial (scalar 4.0))) $
+      allParseAs (Expression (Factorial (scalar 4.0)))
         [ "4!"
         , "4.0!"
         , "4 !"
@@ -320,19 +311,19 @@ main = runTest do
         , "(4)!"
         ]
 
-      allParseAs (Expression (BinOp Pow (Factorial (scalar 5.0)) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Pow (Factorial (scalar 5.0)) (scalar 3.0)))
         [ "5!^3"
         , "5!³"
         , "(5!)^3"
         ]
 
-      allParseAs (Expression (Negate (Factorial (scalar 5.0)))) $
+      allParseAs (Expression (Negate (Factorial (scalar 5.0))))
         [ "-5!"
         , "-(5!)"
         ]
 
     test "Exponentiation" do
-      allParseAs (Expression (BinOp Pow (scalar 5.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Pow (scalar 5.0) (scalar 3.0)))
         [ "5^3"
         , " 5 ^ 3 "
         , " ( 5 ) ^ ( 3 ) "
@@ -342,10 +333,10 @@ main = runTest do
         , "+5^3"
         ]
 
-      shouldParseAs (Expression (BinOp Pow (scalar 2.0) (BinOp Pow (scalar 3.0) (BinOp Pow (scalar 4.0) (scalar 5.0))))) $
+      shouldParseAs (Expression (BinOp Pow (scalar 2.0) (BinOp Pow (scalar 3.0) (BinOp Pow (scalar 4.0) (scalar 5.0)))))
         "2^3^4^5"
 
-      allParseAs (Expression (BinOp Pow (scalar 4.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Pow (scalar 4.0) (scalar 3.0)))
         [ "4^3"
         , "4 ^ 3"
         , "4**3"
@@ -354,7 +345,7 @@ main = runTest do
         , "4  ³"
         ]
 
-      allParseAs (Expression (BinOp Pow (Variable "pi") (scalar 2.0))) $
+      allParseAs (Expression (BinOp Pow (Variable "pi") (scalar 2.0)))
         [ "pi^2"
         , "pi ^ 2"
         , "pi**2"
@@ -363,7 +354,7 @@ main = runTest do
         , "(pi)²"
         ]
 
-      allParseAs (Expression (Negate (BinOp Pow (scalar 3.0) (scalar 4.0)))) $
+      allParseAs (Expression (Negate (BinOp Pow (scalar 3.0) (scalar 4.0))))
         [ "-3^4"
         , "-3 ^ 4"
         , "-3**4"
@@ -371,7 +362,7 @@ main = runTest do
         , "-(3^4)"
         ]
 
-      allParseAs (Expression (BinOp Pow (scalar 3.0) (Negate (scalar 1.4)))) $
+      allParseAs (Expression (BinOp Pow (scalar 3.0) (Negate (scalar 1.4))))
         [ "3 ^ (-1.4)"
         , "3 ** (-1.4)"
         ]
@@ -382,7 +373,7 @@ main = runTest do
       shouldFail "^2"
 
     test "Multiplication" do
-      allParseAs (Expression (BinOp Mul (scalar 5.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Mul (scalar 5.0) (scalar 3.0)))
         [ "5*3"
         , " 5 * 3 "
         , " ( 5 ) * ( 3 ) "
@@ -395,7 +386,7 @@ main = runTest do
         , "+5*3"
         ]
 
-      allParseAs (Expression (BinOp Mul (scalar 5.0) (Negate $ scalar 3.0))) $
+      allParseAs (Expression (BinOp Mul (scalar 5.0) (Negate $ scalar 3.0)))
         [ "5*(-3)"
         , " 5 * (-3) "
         , " ( 5 ) * ( -3 ) "
@@ -407,7 +398,7 @@ main = runTest do
       shouldFail "5*"
 
     test "Division" do
-      allParseAs (Expression (BinOp Div (scalar 5.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Div (scalar 5.0) (scalar 3.0)))
         [ "5/3"
         , "5 per 3"
         , " 5 / 3 "
@@ -420,7 +411,7 @@ main = runTest do
       shouldFail "5 per"
 
     test "Modulo" do
-      allParseAs (Expression (BinOp Mod (scalar 5.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Mod (scalar 5.0) (scalar 3.0)))
         [ "5%3"
         , "5 % 3"
         , " ( 5 ) % ( 3 ) "
@@ -432,7 +423,7 @@ main = runTest do
       shouldFail "%2"
 
     test "Addition" do
-      allParseAs (Expression (BinOp Add (scalar 5.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Add (scalar 5.0) (scalar 3.0)))
         [ "5+3"
         , " 5 + 3 "
         , " ( 5 ) + ( 3 ) "
@@ -444,7 +435,7 @@ main = runTest do
       shouldFail "3 + @"
 
     test "Subtraction" do
-      allParseAs (Expression (BinOp Sub (scalar 5.0) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Sub (scalar 5.0) (scalar 3.0)))
         [ "5-3"
         , " 5 - 3 "
         , " ( 5 ) - ( 3 ) "
@@ -497,7 +488,7 @@ main = runTest do
         "2^-3^-4"
 
     test "Precedence" do
-      allParseAs (Expression (BinOp Add (q 5.0 meter) (BinOp Mul (q 3.0 inch) (scalar 7.0)))) $
+      allParseAs (Expression (BinOp Add (q 5.0 meter) (BinOp Mul (q 3.0 inch) (scalar 7.0))))
         [ "5m+3in*7"
         , "5m+(3in*7)"
         , "5m+(3in·7)"
@@ -506,7 +497,7 @@ main = runTest do
         , "  5 m +   3  in * 7    "
         ]
 
-      allParseAs (Expression (BinOp Mul (BinOp Add (q 5.0 meter) (q 3.0 inch)) (scalar 7.0))) $
+      allParseAs (Expression (BinOp Mul (BinOp Add (q 5.0 meter) (q 3.0 inch)) (scalar 7.0)))
         [ "(5m+3in)*7"
         , "((5m+3in))*7"
         , "(((((((5m))+((3in)))))))*((7))"
@@ -527,26 +518,26 @@ main = runTest do
       shouldFail "(3+)4"
 
     test "Multiple division" do
-      allParseAs (Expression (BinOp Div (BinOp Div (scalar 42.0) (scalar 7.0)) (scalar 3.0))) $
+      allParseAs (Expression (BinOp Div (BinOp Div (scalar 42.0) (scalar 7.0)) (scalar 3.0)))
         [ "42/7/3"
         , "(42/7)/3"
         , "42 per 7 per 3"
         ]
 
     test "Multiple division - per precedence" do
-      allParseAs (Expression (BinOp Div (Unit euro) (BinOp Div (Unit meter) (Unit second)))) $
+      allParseAs (Expression (BinOp Div (Unit euro) (BinOp Div (Unit meter) (Unit second))))
         [ "euro / (meter / second)"
         , "euro / meter per second"
         , "euro per (meter per second)"
         ]
 
     test "Involving units" do
-      allParseAs (Expression (BinOp Pow (q 3.0 meter) (scalar 2.0))) $
+      allParseAs (Expression (BinOp Pow (q 3.0 meter) (scalar 2.0)))
         [ "(3m)^2"
         , "(3.0m)^(2.0)"
         ]
 
-      allParseAs (Expression (BinOp Mul (scalar 3.0) (BinOp Pow (Unit meter) (scalar 2.0)))) $
+      allParseAs (Expression (BinOp Mul (scalar 3.0) (BinOp Pow (Unit meter) (scalar 2.0))))
         [ "3m^2"
         , "3.0(m)^(2.0)"
         , "3m²"
@@ -557,7 +548,7 @@ main = runTest do
         , "3·m^(2.0)"
         ]
 
-      allParseAs (Expression (BinOp Div (q 3.0 meter) (Unit second))) $
+      allParseAs (Expression (BinOp Div (q 3.0 meter) (Unit second)))
         [ "3m/s"
         , "3 meter / second"
         , "3 meter per second"
@@ -566,7 +557,7 @@ main = runTest do
         , "(3m)/s"
         ]
 
-      allParseAs (Expression (BinOp Mul (scalar 3.0) (BinOp Div (Unit meter) (Unit second)))) $
+      allParseAs (Expression (BinOp Mul (scalar 3.0) (BinOp Div (Unit meter) (Unit second))))
         [ "3·m/s"
         , "3*meter / second"
         , "3*meter / sec"
@@ -574,7 +565,7 @@ main = runTest do
         , "3*metre / sec"
         ]
 
-      allParseAs (Expression (BinOp Pow (Unit meter) (Negate $ scalar 1.0))) $
+      allParseAs (Expression (BinOp Pow (Unit meter) (Negate $ scalar 1.0)))
         [ "m^(-1)"
         , "m^(-1.0)"
         , "meter^(-1.0)"
@@ -698,7 +689,7 @@ main = runTest do
 
   suite "Parser - Variable Assignments" do
     test "Simple" do
-      allParseAs (VariableAssignment "xyz_123" (scalar 1.0)) $
+      allParseAs (VariableAssignment "xyz_123" (scalar 1.0))
         [ "xyz_123 = 1"
         , "xyz_123=1"
         , "  xyz_123  =  1  "
@@ -718,7 +709,7 @@ main = runTest do
 
   suite "Parser - Function Assignments" do
     test "Simple" do
-      allParseAs (FunctionAssignment "xyz_123" ("x" :| Nil) (scalar 1.0)) $
+      allParseAs (FunctionAssignment "xyz_123" ("x" :| Nil) (scalar 1.0))
         [ "xyz_123(x) = 1"
         , "xyz_123(x)=1"
         , "  xyz_123(x)  =  1  "
@@ -730,7 +721,7 @@ main = runTest do
       shouldFail "f(x)="
 
     test "Multiple arguments" do
-      allParseAs (FunctionAssignment "f'" ("x" :| "y" : "z" : Nil) (Variable "x")) $
+      allParseAs (FunctionAssignment "f'" ("x" :| "y" : "z" : Nil) (Variable "x"))
         [ "f'(x,y,z)=x"
         , " f'( x , y , z ) = x "
         ]
@@ -742,7 +733,7 @@ main = runTest do
 
   suite "Parser - Pretty print function" do
     test "Simple" do
-      allParseAs (PrettyPrintFunction "cos") $
+      allParseAs (PrettyPrintFunction "cos")
         [ "cos"
         , "  cos"
         , "cos  "
