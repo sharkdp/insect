@@ -89,10 +89,10 @@ whiteSpace = token.whiteSpace
 -- | Parse a number.
 number ∷ P Decimal
 number = do
-  intPart ← digits
-
-  mFracPart ← optionMaybe (append <$> string "." <*> digits)
-  let fracPart = fromMaybe "" mFracPart
+  decimalPart ← fractionalPart <|> do
+    intPart ← digits
+    mFracPart ← optionMaybe fractionalPart
+    pure (intPart <> fromMaybe "" mFracPart)
 
   mExpPart ← optionMaybe $ try do
     _ ← string "e"
@@ -103,7 +103,7 @@ number = do
 
   whiteSpace
 
-  let floatStr = intPart <> fracPart <> expPart
+  let floatStr = decimalPart <> expPart
 
   case fromString floatStr of
     Just num →
@@ -117,6 +117,9 @@ number = do
     digits = do
       ds ← some $ oneOf ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] <?> "a digit"
       pure $ fromCharArray (fromFoldable ds)
+
+    fractionalPart ∷ P String
+    fractionalPart = (<>) <$> string "." <*> digits
 
     fromCharArray = fromCodePointArray <<< map codePointFromChar
 

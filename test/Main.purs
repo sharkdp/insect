@@ -110,11 +110,28 @@ main = runTest do
         , "+3.50"
         ]
 
+      allParseAs (Expression (scalar 0.2))
+        [ "0.2"
+        , "  0.2  "
+        , "+0.2 "
+        , ".2"
+        , "+.2"
+        ]
+
+      allParseAs (Expression (Negate (scalar 0.61)))
+        [ "-0.61"
+        , "-.61"
+        , "-   .61"
+        ]
+
+      shouldParseAs (Expression (scalar 0.05)) ".05"
+
       shouldFail "123.."
       shouldFail "0.."
       shouldFail ".0."
       shouldFail "."
-      shouldFail ".2"
+      shouldFail ". 2"
+      shouldFail "..2"
 
     test "Large numbers" do
       allParseAs (Expression (scalar 1234567890000000.0))
