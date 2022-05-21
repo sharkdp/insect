@@ -71,16 +71,21 @@ function startInsect() {
   var interactive = process.stdin.isTTY;
 
   if (interactive) {
-    var readline = require('historic-readline');
+    var readline = require('readline');
     var xdgBasedir = require('xdg-basedir');
     var path = require('path');
     var clipboardy = require('clipboardy');
+    var fs = require('fs');
+
+    // Open the history file for reading and appending.
+    var historyFd = fs.openSync(path.join(xdgBasedir.data, "insect-history"), 'a+');
 
     // Set up REPL
     var rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      path: path.join(xdgBasedir.data, "insect-history"),
+      history: fs.readFileSync(historyFd, "utf8").split("\n").slice(0, -1).reverse(),
+      historySize: 0,
       completer: function(line) {
         var identifiers = Insect.identifiers(insectEnv);
 
@@ -100,41 +105,59 @@ function startInsect() {
 
         return [keywords, lastWord];
       },
-      next: function(rl) {
-        var prompt = '\x1b[01m>>>\x1b[0m ';
-
-        // The visual length of the prompt (4) needs to be set explicitly for
-        // older versions of node:
-        rl.setPrompt(prompt, 4);
-
-        rl.prompt();
-
-        rl.on('line', function(line) {
-          var res = runInsect(Insect.fmtConsole, line);
-
-          if (res) {
-            if (res.msgType == "quit") {
-              process.exit(0);
-            } else if (res.msgType == "clear") {
-              process.stdout.write('\x1Bc');
-            } else if (res.msgType == "copy") {
-              if (res.msg == "") {
-                console.log("\nNo result to copy.\n");
-              } else {
-                clipboardy.writeSync(res.msg);
-                console.log("\nCopied result '" + res.msg + "' to clipboard.\n");
-              }
-            } else {
-              console.log(res.msg + "\n");
-            }
-          }
-
-          rl.prompt();
-        }).on('close', function() {
-          process.exit(0);
-        });
-      }
     });
+
+    var prompt = '\x1b[01m>>>\x1b[0m ';
+
+    // The visual length of the prompt (4) needs to be set explicitly for
+    // older versions of node:
+    rl.setPrompt(prompt, 4);
+
+    rl.on('line', function(line) {
+      var res = runInsect(Insect.fmtConsole, line);
+
+      if (res) {
+        if (res.msgType == "quit") {
+          process.exit(0);
+        } else if (res.msgType == "clear") {
+          process.stdout.write('\x1Bc');
+        } else if (res.msgType == "copy") {
+          if (res.msg == "") {
+            console.log("\nNo result to copy.\n");
+          } else {
+            clipboardy.writeSync(res.msg);
+            console.log("\nCopied result '" + res.msg + "' to clipboard.\n");
+          }
+        } else {
+          console.log(res.msg + "\n");
+        }
+      }
+
+      rl.prompt();
+    }).on('close', function() {
+      process.exit(0);
+    });
+
+    // `createWriteStream` doesn't care about the first argument if it's given
+    // `fd`.
+    var historyStream = fs.createWriteStream(undefined, {fd: historyFd});
+
+    var oldAddHistory = rl._addHistory;
+
+    // TODO: figure out how to do this without resorting to Node.js internals.
+    rl._addHistory = function() {
+      var last = rl.history[0];
+
+      var line = oldAddHistory.call(rl);
+
+      if (line && line !== last) {
+        historyStream.write(line + "\n");
+      }
+
+      return line;
+    };
+
+    rl.prompt();
   } else {
     // Read from non-interactive stream (shell pipe)
 
