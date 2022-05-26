@@ -80,12 +80,14 @@ function startInsect() {
     // Open the history file for reading and appending.
     var historyFd = fs.openSync(path.join(xdgBasedir.data, "insect-history"), 'a+');
 
+    var maxHistoryLength = 5000;
+
     // Set up REPL
     var rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      history: fs.readFileSync(historyFd, "utf8").split("\n").slice(0, -1).reverse(),
-      historySize: 0,
+      history: fs.readFileSync(historyFd, "utf8").split("\n").slice(0, -1).reverse().slice(0, maxHistoryLength),
+      historySize: maxHistoryLength,
       completer: function(line) {
         var identifiers = Insect.identifiers(insectEnv);
 
