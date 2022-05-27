@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 # Get the directory containing this script, see
 # https://stackoverflow.com/a/29835459/704831
