@@ -24,9 +24,9 @@ hyperfine \
 hyperfine \
     --warmup=5 \
     --time-unit=millisecond \
-    --export-json results/startup-interactive.json \
-    --export-markdown results/startup-interactive.md \
-    --command-name "Startup time, interactive mode (insect < computations-1.ins)" \
+    --export-json results/startup-stdin.json \
+    --export-markdown results/startup-stdin.md \
+    --command-name "Startup time, stdin mode (insect < computations-1.ins)" \
     "node ../index.js < computations-1.ins"
 
 hyperfine \
@@ -37,7 +37,7 @@ hyperfine \
     --command-name "Evaluation speed (insect < computations-160.ins)" \
     "node ../index.js < computations-160.ins"
 
-for benchmark in startup startup-repl evaluation; do
+for benchmark in startup startup-stdin evaluation; do
     cat results/$benchmark.md >> results/report.md
     echo >> results/report.md
 done
