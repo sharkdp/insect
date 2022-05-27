@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/sh
 
-cd "$(dirname "${BASH_SOURCE[0]}")" || exit
+benchmark_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$benchmark_dir"
 
 # Check that Hyperfine is installed.
 if ! command -v hyperfine > /dev/null 2>&1; then
