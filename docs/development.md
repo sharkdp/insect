@@ -11,3 +11,9 @@ Open [web/index.html](web/index.html) in your browser.
 Insect comes with a comprehensive set of [unit tests](test/Main.purs). You can run them by calling
 
     npm test
+
+Maintainers
+-----------
+
+* [sharkdp](https://github.com/sharkdp)
+* [mhmdanas](https://github.com/mhmdanas)
