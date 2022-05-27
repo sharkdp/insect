@@ -1,5 +1,7 @@
 #!/usr/bin/sh
 
+# Get the directory containing this script, see
+# https://stackoverflow.com/a/29835459/704831
 benchmark_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 cd "$benchmark_dir"
 
