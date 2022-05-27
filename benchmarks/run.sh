@@ -37,5 +37,8 @@ hyperfine \
     --command-name "Evaluation speed (insect < computations-160.ins)" \
     "node ../index.js < computations-160.ins"
 
-cat results/startup.md results/startup-interactive.md results/evaluation.md > results/report.md
+for benchmark in startup startup-repl evaluation; do
+    cat results/$benchmark.md >> results/report.md
+    echo >> results/report.md
+done
 cat results/report.md
