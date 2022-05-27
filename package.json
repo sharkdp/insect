@@ -4,6 +4,7 @@
   "description": "High precision scientific calculator with support for physical units",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sharkdp/insect.git"
@@ -21,11 +22,11 @@
     "web/media/insect.png"
   ],
   "scripts": {
-    "setup": "psc-package install && npm run browserify && node copy",
-    "start": "npm run setup && run-p server browserify:watch",
-    "browserify:watch": "pulp -w browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
-    "browserify": "pulp browserify --skip-entry-point -m Insect --standalone Insect -O -t insect.js",
-    "build": "npm run setup && pulp build -m Insect",
+    "setup": "psc-package install && pulp build -m Insect && npm run esbuild && node copy",
+    "start": "npm run setup && run-p server esbuild:watch",
+    "esbuild:watch": "pulp -w --then 'npm run esbuild' build -m Insect",
+    "esbuild": "esbuild output/Insect/index.js --bundle --minify --outfile=web/insect.js --target=es6 --global-name=Insect",
+    "build": "npm run setup",
     "prepack": "npm run build",
     "server": "live-server web --open",
     "test": "pulp test"
@@ -34,18 +35,19 @@
     "url": "https://github.com/sharkdp/insect/issues"
   },
   "dependencies": {
-    "clipboardy": "^2.3.0",
-    "decimal.js": "^7.1.1",
+    "clipboardy": "^3.0.0",
+    "decimal.js": "^10.3.1",
     "jquery.terminal": "^2.18.0",
     "keyboardevent-key-polyfill": "=1.1.0",
     "line-reader": "^0.4.0",
-    "xdg-basedir": "^4.0.0"
+    "xdg-basedir": "^5.1.0"
   },
   "devDependencies": {
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
     "psc-package": "^4.0.1",
-    "pulp": "^16.0.0-0",
-    "purescript": "^0.14.7"
+    "pulp": "^16.0.0",
+    "purescript": "^0.15.2",
+    "esbuild": "^0.14.42"
   }
 }
