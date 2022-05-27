@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
-var os = require("os");
-var path = require("path");
-var Insect = require('./output/Insect/index.js');
+import * as Insect from "./output/Insect/index.js";
+import * as path from "path";
 
 var insectEnv = Insect.initialEnvironment;
 
@@ -46,7 +45,8 @@ if (process.argv.length >= 4) {
 }
 
 if (process.env.INSECT_NO_RC !== "true") {
-  var lineReader = require("line-reader");
+  var [os, lineReader] = await Promise.all([import("os"), import("line-reader")]);
+
   var rcFile = path.join(os.homedir(), ".insectrc");
   lineReader.eachLine(rcFile, function (line) {
     var res = runInsect(Insect.fmtPlain, line);
@@ -67,18 +67,14 @@ if (process.env.INSECT_NO_RC !== "true") {
   startInsect();
 }
 
-function startInsect() {
+async function startInsect() {
   var interactive = process.stdin.isTTY;
 
   if (interactive) {
-    var readline = require('readline');
-    var xdgBasedir = require('xdg-basedir');
-    var path = require('path');
-    var clipboardy = require('clipboardy');
-    var fs = require('fs');
+    var [fs, clipboardy, readline, xdgBasedir] = await Promise.all([import("fs"), import("clipboardy"), import("readline"), import("xdg-basedir")]);
 
     // Open the history file for reading and appending.
-    var historyFd = fs.openSync(path.join(xdgBasedir.data, "insect-history"), 'a+');
+    var historyFd = fs.openSync(path.join(xdgBasedir.xdgData, "insect-history"), 'a+');
 
     var maxHistoryLength = 5000;
 
@@ -161,11 +157,11 @@ function startInsect() {
 
     rl.prompt();
   } else {
-    // Read from non-interactive stream (shell pipe)
-
     if (typeof lineReader === "undefined") {
-      var lineReader = require("line-reader");
+      var lineReader = await import("line-reader");
     }
+
+    // Read from non-interactive stream (shell pipe)
     lineReader.eachLine(process.stdin, function(line) {
       var res = runInsect(Insect.fmtPlain, line);
       if (res) {

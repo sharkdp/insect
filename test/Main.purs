@@ -16,8 +16,7 @@ import Test.Unit (suite, test, failure)
 import Test.Unit.Assert (equal)
 import Test.Unit.Main (runTest)
 
-import Text.Parsing.Parser (parseErrorMessage, parseErrorPosition)
-import Text.Parsing.Parser.Pos (Position(..))
+import Parsing (Position(..), parseErrorMessage, parseErrorPosition)
 
 import Quantities ((./), (.*), milli, nano, meter, inch, hour, minute, kilo,
                    mile, gram, second, deci, tera, hertz, degree, radian,

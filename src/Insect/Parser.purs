@@ -29,10 +29,11 @@ import Insect.Environment (Environment, StoredFunction(..))
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..), Identifier)
 import Quantities (DerivedUnit, (./))
 import Quantities as Q
-import Text.Parsing.Parser (ParserT, Parser, ParseError, runParser, fail)
-import Text.Parsing.Parser.Combinators (option, optionMaybe, try, (<?>), notFollowedBy)
-import Text.Parsing.Parser.String (string, char, eof, oneOf)
-import Text.Parsing.Parser.Token (GenLanguageDef(..), LanguageDef, TokenParser, digit, letter, makeTokenParser)
+import Parsing (ParserT, Parser, ParseError, runParser, fail)
+import Parsing.Combinators (option, optionMaybe, try, (<?>), notFollowedBy)
+import Parsing.String (string, char, eof)
+import Parsing.String.Basic (oneOf)
+import Parsing.Token (GenLanguageDef(..), LanguageDef, TokenParser, digit, letter, makeTokenParser)
 
 -- | A type synonym for the main Parser type with `String` as input.
 type P a = Parser String a
@@ -326,7 +327,7 @@ variable ∷ P Expression
 variable = Variable <$> token.identifier
 
 -- | A version of `sepBy1` that returns a `NonEmpty List`.
-sepBy1 ∷ ∀ m s a sep. Monad m ⇒ ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
+sepBy1 ∷ ∀ m s a sep. ParserT s m a → ParserT s m sep → ParserT s m (NonEmpty List a)
 sepBy1 p sep = do
   a ← p
   as ← many $ sep *> p

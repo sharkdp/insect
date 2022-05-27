@@ -19,8 +19,7 @@ import Data.Set (toUnfoldable)
 import Data.Array (sort)
 import Data.Maybe (maybe)
 
-import Text.Parsing.Parser.Pos (Position(..))
-import Text.Parsing.Parser (parseErrorPosition, parseErrorMessage)
+import Parsing (Position(..), parseErrorPosition, parseErrorMessage)
 
 import Insect.Parser (Dictionary(..), (==>),
                       normalUnitDict, imperialUnitDict, parseInsect)

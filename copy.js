@@ -1,6 +1,5 @@
-const { copyFileSync } = require("fs");
+import { copyFileSync } from "fs";
 
-copyFileSync("insect.js", "web/insect.js");
 copyFileSync("node_modules/keyboardevent-key-polyfill/index.js", "web/keyboardevent-key-polyfill.js");
 copyFileSync("node_modules/jquery/dist/jquery.min.js", "web/jquery.min.js");
 copyFileSync("node_modules/jquery.terminal/js/jquery.terminal.min.js", "web/jquery.terminal.min.js");
