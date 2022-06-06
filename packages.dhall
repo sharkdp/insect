@@ -11,6 +11,6 @@ in      upstream
               , "decimals"
               ]
             , repo = "https://github.com/sharkdp/purescript-quantities.git"
-            , version = "v10.0.0"
+            , version = "v12.0.1"
             }
         }
