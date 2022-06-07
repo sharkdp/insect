@@ -237,6 +237,7 @@ normalUnitDict = Dictionary
   , Q.fortnight ==> ["fortnights", "fortnight"]
   , Q.month ==> ["months", "month"]
   , Q.year ==> ["years", "year"]
+  , Q.julianYear ==> ["julianYears", "julianYear"]
   , Q.gram ==> ["grammes", "gramme", "grams", "gram", "g"]
   , Q.meter ==> ["metres", "metre", "meters", "meter", "m"]
   , Q.liter ==> ["liters", "liter", "litres", "litre", "L", "l"]
