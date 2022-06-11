@@ -1,12 +1,8 @@
-/bower_components/
 /node_modules/
-/binaries/
-/.nexe/
 /.pulp-cache/
 /output/
 /.psc*
 /.psa*
 /docs/insect.1
-insect.js
 /web/*.js
 /web/terminal.css

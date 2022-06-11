@@ -1,14 +1,12 @@
 /.github/
 /.psci*
 /.pulp-cache
-/binaries
-/bower_components/
-/build.sh
+# `deploy.sh` is a local script used by @sharkdp to push the latest version of
+# Insect to https://insect.sh.
 /deploy.sh
 /docs/*.md
 /docs/*.sh
 /docs/template.readme
-/insect.js
 /node_modules/
 /output
 /web
