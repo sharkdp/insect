@@ -6,9 +6,8 @@ module Insect.PrettyPrint
 
 import Prelude
 
-import Data.Array ((:))
 import Data.Decimal as D
-import Data.Foldable (intercalate)
+import Data.Semigroup.Foldable (intercalateMap)
 import Data.List (List)
 import Data.NonEmpty (NonEmpty)
 
@@ -57,12 +56,12 @@ prettyVariable name = [ F.ident name ]
 -- | Petty print a function application.
 prettyApply ∷ Identifier → NonEmpty List Expression → Markup
 prettyApply fn xs = [ F.function fn, F.text "(" ]
-                    <> intercalate [ F.text ", " ] (map pretty xs)
+                    <> intercalateMap [ F.text ", " ] pretty xs
                     <> [ F.text ")" ]
 
 -- | Add parenthesis.
 parens ∷ Markup → Markup
-parens m = F.text "(" : m <> [ F.text ")" ]
+parens m = [ F.text "(" ] <> m <> [ F.text ")" ]
 
 -- | Add parenthesis, if needed - conservative version for exponentiation.
 withParens' ∷ Expression → Markup
@@ -84,7 +83,7 @@ pretty (Scalar n)                      = prettyScalar n
 pretty (Unit u)                        = prettyUnit u
 pretty (Variable name)                 = prettyVariable name
 pretty (Factorial x)                   = withParens x <> [F.text "!"]
-pretty (Negate x)                      = F.text "-" : withParens x
+pretty (Negate x)                      = [ F.text "-" ] <> withParens x
 pretty (Apply fnName xs)               = prettyApply fnName xs
 -- ConvertTo (->) never needs parens, it has the lowest precedence:
 pretty (BinOp ConvertTo x y)           = pretty x <> prettyOp ConvertTo <> pretty y
@@ -94,32 +93,32 @@ pretty (BinOp Mul (Scalar s) (Unit u)) = prettyQuantity' s u
 pretty (BinOp Mul x y) = addP x <> prettyOp Mul <> addP y
   where
     addP ex = case ex of
-                (BinOp Pow _ _) → pretty ex
-                (BinOp Mul _ _) → pretty ex
-                _               → withParens ex
+                BinOp Pow _ _ → pretty ex
+                BinOp Mul _ _ → pretty ex
+                _             → withParens ex
 -- Leave out parens for division, if possible:
 pretty (BinOp Div x y) = addPLeft x <> prettyOp Div <> addPRight y
   where
     addPLeft ex = case ex of
-                    (BinOp Pow _ _) → pretty ex
-                    (BinOp Mul _ _) → pretty ex
-                    _               → withParens ex
+                    BinOp Pow _ _ → pretty ex
+                    BinOp Mul _ _ → pretty ex
+                    _             → withParens ex
     addPRight ex = case ex of
-                     (BinOp Pow _ _) → pretty ex
-                     _               → withParens ex
+                     BinOp Pow _ _ → pretty ex
+                     _             → withParens ex
 -- Leave out parens for addition, if possible:
 pretty (BinOp Add x y) = addP x <> prettyOp Add <> addP y
   where
     addP ex = case ex of
-                (BinOp Pow _ _) → pretty ex
-                (BinOp Mul _ _) → pretty ex
-                (BinOp Add _ _) → pretty ex
-                _               → withParens ex
+                BinOp Pow _ _ → pretty ex
+                BinOp Mul _ _ → pretty ex
+                BinOp Add _ _ → pretty ex
+                _             → withParens ex
 -- Leave out parens for subtraction, if possible:
 pretty (BinOp Sub x y) = addP x <> prettyOp Sub <> addP y
   where
     addP ex = case ex of
-                (BinOp Pow _ _) → pretty ex
-                (BinOp Mul _ _) → pretty ex
-                _               → withParens ex
+                BinOp Pow _ _ → pretty ex
+                BinOp Mul _ _ → pretty ex
+                _             → withParens ex
 pretty (BinOp op x y) = withParens' x <> prettyOp op <> withParens' y

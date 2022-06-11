@@ -88,9 +88,7 @@ async function startInsect() {
         var identifiers = Insect.identifiers(insectEnv);
 
         var keywords =
-          identifiers.concat(Insect.functions(insectEnv))
-                     .concat(Insect.supportedUnits)
-                     .concat(Insect.commands);
+          identifiers.concat(Insect.functions(insectEnv), Insect.supportedUnits, Insect.commands);
 
         var lastWord = line;
         if (line.trim() !== "") {
@@ -115,12 +113,12 @@ async function startInsect() {
       var res = runInsect(Insect.fmtConsole, line);
 
       if (res) {
-        if (res.msgType == "quit") {
+        if (res.msgType === "quit") {
           process.exit(0);
-        } else if (res.msgType == "clear") {
+        } else if (res.msgType === "clear") {
           process.stdout.write('\x1Bc');
-        } else if (res.msgType == "copy") {
-          if (res.msg == "") {
+        } else if (res.msgType === "copy") {
+          if (res.msg === "") {
             console.log("\nNo result to copy.\n");
           } else {
             clipboardy.writeSync(res.msg);

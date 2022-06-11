@@ -22,7 +22,6 @@ module Insect.Format
 
 import Prelude
 
-import Data.Array ((:))
 import Data.Foldable (foldMap)
 
 data FormatType
@@ -89,7 +88,7 @@ uncurry fmt (Formatted ot ft s) = fmt ot ft s
 
 -- | Format an output text with a given formatter.
 format ∷ Formatter → Markup → String
-format formatter m = foldMap (uncurry formatter) (optional nl : m)
+format formatter m = foldMap (uncurry formatter) ([ optional nl ] <> m)
 
 -- | Formatter for plain text output on a command line.
 fmtPlain ∷ Formatter

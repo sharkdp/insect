@@ -66,14 +66,14 @@
           // Clear screen:
           this.clear();
           return;
-        } else if (res.msgType == "quit") {
+        } else if (res.msgType === "quit") {
           // Treat as reset:
           this.clear();
           insectEnv = Insect.initialEnvironment;
           return;
-        } else if (res.msgType == "copy") {
+        } else if (res.msgType === "copy") {
           // Copy result to clipboard:
-          if (res.msg == "") {
+          if (res.msg === "") {
             res.msg = "\nNo result to copy.\n";
           } else {
             navigator.clipboard.writeText(res.msg);
@@ -126,9 +126,7 @@
             var identifiers = Insect.identifiers(insectEnv);
 
             var keywords =
-              identifiers.concat(Insect.functions(insectEnv))
-                         .concat(Insect.supportedUnits)
-                         .concat(Insect.commands);
+              identifiers.concat(Insect.functions(insectEnv), Insect.supportedUnits, Insect.commands);
 
             cb(keywords.sort());
           },

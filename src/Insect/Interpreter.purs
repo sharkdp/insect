@@ -7,12 +7,12 @@ module Insect.Interpreter
 
 import Prelude hiding (degree)
 
-import Data.Array ((:), fromFoldable, singleton)
+import Data.Array (fromFoldable, singleton)
 import Data.Bifunctor (lmap)
 import Data.Either (Either(..))
 import Data.Foldable (foldMap, intercalate, foldl)
 import Data.Int (round, toNumber)
-import Data.List (List(..), sortBy, filter, groupBy, (..))
+import Data.List (List(..), sortBy, filter, groupBy, (..), (:))
 import Data.List.NonEmpty (NonEmptyList(..), head, length, zip)
 import Data.Map (lookup, insert, delete, toUnfoldable)
 import Data.Maybe (Maybe(..))
@@ -77,9 +77,7 @@ evalSpecial func env expr (Variable varname) lowExpr highExpr = do
 
   if func == "sum"
     then
-      case qs of
-        Cons q rest → foldl1 qAdd (q :| rest)
-        Nil         → pure (Q.scalar 0.0)
+      foldl qAdd (Right (Q.scalar 0.0)) qs
     else -- product
       foldl (lift2 Q.qMultiply) (Right (Q.scalar 1.0)) qs
 
@@ -103,7 +101,7 @@ eval env (Apply name xs)        =
   if name == "sum" || name == "product"
     then
       case xs of
-        expr :| (Cons var (Cons low (Cons high Nil))) →
+        expr :| var : low : high : Nil →
           evalSpecial name env expr var low high
         _ →
           Left (WrongArityError name 4 (length (NonEmptyList xs)))
@@ -117,7 +115,7 @@ eval env (BinOp op x y)         = do
   y' <- eval env y
   run op x' y' >>= checkFinite
   where
-    run :: BinOp -> Quantity -> Quantity -> Expect Quantity
+    run ∷ BinOp → Quantity → Quantity → Expect Quantity
     run Sub       a b = qSubtract a b
     run Add       a b = qAdd a b
     run Mul       a b = pure (Q.qMultiply a b)
@@ -174,7 +172,7 @@ conversionErrorMessage (ConversionError u1 u2) =
             then []
             else br
       where
-        br = F.text " (base units: " : usStrs <> [ F.text ")" ]
+        br = [ F.text " (base units: " ] <> usStrs <> [ F.text ")" ]
         us = Q.baseRepresentation u
         us' = sortBy (comparing Q.toString) us
         usStrs = intercalate [ F.text "·" ] $
@@ -217,8 +215,8 @@ type Response = { msg ∷ Message, newEnv ∷ Environment }
 -- | Show pretty-printed input and the error message.
 errorWithInput ∷ Markup → Expression → Environment → EvalError → Response
 errorWithInput prefix expr env err =
-  { msg: Message Error $ (F.optional <$> F.text "  " : prefix <> pretty expr)
-                         <> (F.optional <$> [ F.nl, F.nl ])
+  { msg: Message Error $ (F.optional <$> ([ F.text "  " ] <> prefix <> pretty expr ))
+                         <> [ F.optional F.nl, F.optional F.nl ]
                          <> evalErrorMessage err
   , newEnv: env
   }
@@ -239,7 +237,7 @@ isConstant env name = isConstantValue || isConstantFunction
         _ → false
 
 -- | Format a function definition
-prettyPrintFunction :: Identifier -> NonEmpty List Identifier -> Array FormattedString
+prettyPrintFunction ∷ Identifier → NonEmpty List Identifier → Array FormattedString
 prettyPrintFunction name argNames =
   [ F.function name, F.text "(" ] <> fArgs <> [ F.text ") = " ]
   where
@@ -251,7 +249,7 @@ runInsect env (Expression e) =
   case evalAndSimplify env e of
     Left evalErr → errorWithInput [] e env evalErr
     Right value →
-      { msg: Message Value $    (F.optional <$> F.text "  " : pretty e)
+      { msg: Message Value $    (F.optional <$> ([ F.text "  " ] <> pretty e))
                              <> (F.optional <$> [ F.nl, F.nl , F.text "   = " ])
                              <> prettyQuantity value
       , newEnv: env { values = insert "ans" (StoredValue UserDefined value) env.values }
@@ -277,7 +275,7 @@ runInsect env (FunctionAssignment name argNames expr) =
     then
       errorWithInput (prettyPrintFunction name argNames) expr env (RedefinedConstantError name)
     else
-      { msg: Message ValueSet $ (F.optional <$> (F.text "  " : (prettyPrintFunction name argNames))) <> pretty expr
+      { msg: Message ValueSet $ (F.optional <$> ([ F.text "  " ] <> prettyPrintFunction name argNames)) <> pretty expr
       , newEnv: env { functions = insert name (StoredFunction UserDefined userFunc (UserFunction argNames expr)) env.functions
                     , values = delete name env.values
                     }
@@ -316,12 +314,12 @@ runInsect env (PrettyPrintFunction name) =
                          F.text ") = builtin function" ]
           where
             argText = case args of
-                        Just 1 -> "x"
-                        Just 2 -> "x, y"
-                        Just _ -> "x, y, …"
-                        Nothing -> "x1, x2, …"
+                        Just 1 → "x"
+                        Just 2 → "x, y"
+                        Just _ → "x, y, …"
+                        Nothing → "x1, x2, …"
         Just (StoredFunction _ _ (UserFunction args expr)) →
-          Message Info $ (F.optional <$> (F.text "  " : (prettyPrintFunction name args))) <> pretty expr
+          Message Info $ (F.optional <$> ([ F.text "  " ] <> prettyPrintFunction name args)) <> pretty expr
         Nothing → Message Error [ F.text "Unknown function" ]
 
 runInsect env (Command Help) = { msg: Message Info
