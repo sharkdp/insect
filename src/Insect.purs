@@ -81,7 +81,7 @@ repl fmt env userInput =
                where
                  storedQty (StoredValue _ q) = q
                  maybeStoredValue = lookup "ans" ans.newEnv.values
-                 value = maybe "" (\sv -> format fmtPlain (prettyQuantity $ storedQty sv)) maybeStoredValue
+                 value = maybe "" (\sv → format fmtPlain (prettyQuantity $ storedQty sv)) maybeStoredValue
            MClear →
              { msgType: "clear"
              , msg: ""

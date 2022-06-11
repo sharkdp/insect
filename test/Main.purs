@@ -59,8 +59,7 @@ shouldFail input =
 
 expectOutput ∷ Environment → String → String → Aff Unit
 expectOutput env expected inp =
-  let res = repl fmtPlain env inp
-      out = res.msg
+  let { msg: out } = repl fmtPlain env inp
   in
     unless (out == expected) do
       failure $ "Unexpected result:\n" <>
