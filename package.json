@@ -22,11 +22,11 @@
     "web/media/insect.png"
   ],
   "scripts": {
-    "setup": "psc-package install && pulp build -m Insect && npm run esbuild && node copy",
+    "setup": "npm run build",
     "start": "npm run setup && run-p server esbuild:watch",
     "esbuild:watch": "pulp -w --then 'npm run esbuild' build -m Insect",
     "esbuild": "esbuild output/Insect/index.js --bundle --minify --outfile=web/insect.js --target=es6 --global-name=Insect",
-    "build": "npm run setup",
+    "build": "psc-package install && pulp build -m Insect && npm run esbuild && node copy",
     "prepack": "npm run build",
     "server": "live-server web --open",
     "test": "pulp test"
