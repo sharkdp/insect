@@ -252,7 +252,9 @@ runInsect env (Expression e) =
       { msg: Message Value $    (F.optional <$> ([ F.text "  " ] <> pretty e))
                              <> (F.optional <$> [ F.nl, F.nl , F.text "   = " ])
                              <> prettyQuantity value
-      , newEnv: env { values = insert "ans" (StoredValue UserDefined value) env.values }
+      , newEnv:
+          let storedValue = StoredValue UserDefined value
+          in env { values = insert "ans" storedValue (insert "_" storedValue env.values) }
       }
 
 runInsect env (VariableAssignment name val) =

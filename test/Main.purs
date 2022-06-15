@@ -912,6 +912,13 @@ main = runTest do
       expectOutput' "2500 cm²" "5cm · 5m"
       expectOutput' "0.2 km" "120km/h*6s"
 
+    test "'ans' and '_'" do
+      let env1 = initialEnvironment
+          env2 = (repl fmtPlain env1 "5").newEnv
+          env3 = (repl fmtPlain env2 "_ * 20").newEnv
+
+      expectOutput env3 "1" "ans / 100"
+
     test "Examples" do
       expectOutput' "1080" "1920/16*9"
       expectOutput' "4294967296" "2^32"
