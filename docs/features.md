@@ -79,7 +79,7 @@ Documentation
         Bohr magneton (`µ_B`), Avogadro's constant (`N_A`), Boltzmann constant
         (`k_B`), gravitational acceleration (`g0`), ideal gas constant (`R`), ...
 
-      * **Last result**: you can use `ans` (answer) to refer to the result of the
+      * **Last result**: you can use `ans` (answer) or `_` to refer to the result of the
         last calculation.
 
   - **User-defined functions**:
