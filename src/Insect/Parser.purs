@@ -483,19 +483,21 @@ assignment env = do
 
       pure { name, args, expr }
 
-  -- Fail if the name can be parsed as a physical unit
-  failIfUnit name
+  failIfReserved name
 
   case args of
     Nothing → pure (VariableAssignment name expr)
     Just xs → do
-      traverse_ failIfUnit xs
+      traverse_ failIfReserved xs
       pure (FunctionAssignment name xs expr)
 
   where
-    failIfUnit n =
+    failIfReserved n = do
       when (isRight $ runParser n (derivedUnit <* eof)) $
         fail ("'" <> n <> "' is reserved for a physical unit")
+
+      when (n == "_" || n == "ans") $
+        fail ("'" <> n <> "' is a reserved variable name")
 
 -- | Parse a statement in the Insect language.
 statement ∷ Environment → P Statement
