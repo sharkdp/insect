@@ -702,6 +702,10 @@ main = runTest do
       shouldFail "exp(1,)"
       shouldFail "exp()"
 
+  -- All of these are reserved units, except '_' and 'ans', which are reserved
+  -- variables that refer to the value of the last evaluated line.
+  let reservedNames = ["m", "meter", "kg", "kilogram", "list", "ans", "_"]
+
   suite "Parser - Variable Assignments" do
     test "Simple" do
       allParseAs (VariableAssignment "xyz_123" (scalar 1.0))
@@ -718,9 +722,7 @@ main = runTest do
       shouldFail "x=3+"
 
     test "Reserved names" do
-      shouldFail "m=2" -- 'm' is reserved unit
-      shouldFail "meter=2" -- 'meter' is a reserved unit
-      shouldFail "list=4" -- 'list' is a reserved keyword
+      for_ reservedNames \name -> shouldFail (name <> "=2")
 
   suite "Parser - Function Assignments" do
     test "Simple" do
@@ -742,9 +744,7 @@ main = runTest do
         ]
 
     test "Reserved names" do
-      shouldFail "m(x)=2" -- 'm' is reserved unit
-      shouldFail "meter(x)=2" -- 'meter' is a reserved unit
-      shouldFail "list(x)=4" -- 'list' is a reserved keyword
+      for_ reservedNames \name -> shouldFail (name <> "(x)=2")
 
   suite "Parser - Pretty print function" do
     test "Simple" do
