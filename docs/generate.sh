@@ -1,3 +1,4 @@
+#!/bin/sh
 input_format=markdown_github-hard_line_breaks
 
 # Generate combined markdown document for README.md
