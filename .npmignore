@@ -10,3 +10,6 @@
 /node_modules/
 /output
 /web
+/benchmarks/results/
+/benchmarks/results.json
+/benchmarks/results.md
