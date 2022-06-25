@@ -187,7 +187,7 @@ Contents
     `GiB`, ...) are also supported.
 
     | Unit                                                                         | Syntax                                                                      |
-    |-----------------------------|-------------------------------------------|
+    |------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
     | [Ampere](https://en.wikipedia.org/wiki/Ampere)                               | `amperes`, `ampere`, `A`                                                    |
     | [Ångström](https://en.wikipedia.org/wiki/Ångström)                           | `angstrom`, `Å`                                                             |
     | [Astronomical unit](https://en.wikipedia.org/wiki/Astronomical_unit)         | `AU`, `au`, `astronomicalunits`, `astronomicalunit`                         |
@@ -277,7 +277,8 @@ Contents
     | [Weber](https://en.wikipedia.org/wiki/Weber_(unit))                          | `weber`, `Wb`                                                               |
     | [Week](https://en.wikipedia.org/wiki/Week)                                   | `weeks`, `week`                                                             |
     | [Yard](https://en.wikipedia.org/wiki/Yard)                                   | `yards`, `yard`, `yd`                                                       |
-    | [Year](https://en.wikipedia.org/wiki/Year)                                   | `years`, `year`                                                             |
+    | [Gregorian year](https://en.wikipedia.org/wiki/Gregorian_year)               | `years`, `year`                                                             |
+    | [Julian year](https://en.wikipedia.org/wiki/Julian_year_(astronomy))         | `julianYears`, `julianYear`                                                 |
 
 ## Pros and cons
 
