@@ -23,13 +23,13 @@
   ],
   "scripts": {
     "setup": "npm run build",
-    "start": "npm run setup && run-p server esbuild:watch",
-    "esbuild:watch": "pulp -w --then 'npm run esbuild' build -m Insect",
+    "start": "node copy && run-p server esbuild:watch",
+    "esbuild:watch": "spago build -w --then 'npm run esbuild'",
     "esbuild": "esbuild output/Insect/index.js --bundle --minify --outfile=web/insect.js --target=es6 --global-name=Insect",
-    "build": "psc-package install && pulp build -m Insect && npm run esbuild && node copy",
+    "build": "spago build && npm run esbuild && node copy",
     "prepack": "npm run build",
     "server": "live-server web --open",
-    "test": "pulp test"
+    "test": "spago test"
   },
   "bugs": {
     "url": "https://github.com/sharkdp/insect/issues"
@@ -45,8 +45,7 @@
   "devDependencies": {
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
-    "psc-package": "^4.0.1",
-    "pulp": "^16.0.0",
+    "spago": "^0.20.9",
     "purescript": "^0.15.2",
     "esbuild": "^0.14.42"
   }
