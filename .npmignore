@@ -1,6 +1,4 @@
 /.github/
-/.psci*
-/.pulp-cache
 # `deploy.sh` is a local script used by @sharkdp to push the latest version of
 # Insect to https://insect.sh.
 /deploy.sh

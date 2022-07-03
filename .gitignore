@@ -1,6 +1,6 @@
 /node_modules/
-/.pulp-cache/
 /output/
+/.spago/
 /.psc*
 /.psa*
 /docs/insect.1
