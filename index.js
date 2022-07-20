@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as Insect from "./output/Insect/index.js";
+import * as Insect from "./insect.js";
 import * as path from "path";
 
 var insectEnv = Insect.initialEnvironment;
@@ -45,24 +45,27 @@ if (process.argv.length >= 4) {
 }
 
 if (process.env.INSECT_NO_RC !== "true") {
-  var [os, lineReader] = await Promise.all([import("os"), import("line-reader")]);
+  // Node 12 does not support top-level await.
+  (async function() {
+    var [os, lineReader] = await Promise.all([import("os"), import("line-reader")]);
 
-  var rcFile = path.join(os.homedir(), ".insectrc");
-  lineReader.eachLine(rcFile, function (line) {
-    var res = runInsect(Insect.fmtPlain, line);
-    // We really only care when it breaks
-    if (res && res.msgType === "error") {
-      console.error(res.msg);
-      process.exit(1);
-    }
-  }, function (err) {
-    // If the file doesn't exist, that's fine
-    if (err && err.code !== "ENOENT") {
-      throw err;
-    } else {
-      startInsect();
-    }
-  });
+    var rcFile = path.join(os.homedir(), ".insectrc");
+    lineReader.eachLine(rcFile, function (line) {
+      var res = runInsect(Insect.fmtPlain, line);
+      // We really only care when it breaks
+      if (res && res.msgType === "error") {
+        console.error(res.msg);
+        process.exit(1);
+      }
+    }, function (err) {
+      // If the file doesn't exist, that's fine
+      if (err && err.code !== "ENOENT") {
+        throw err;
+      } else {
+        startInsect();
+      }
+    });
+  })();
 } else {
   startInsect();
 }

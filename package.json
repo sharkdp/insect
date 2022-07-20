@@ -18,16 +18,18 @@
     "test": "test"
   },
   "files": [
-    "output",
+    "insect.js",
     "web/media/insect.png"
   ],
   "scripts": {
     "setup": "npm run build",
     "start": "node copy && run-p server esbuild:watch",
-    "esbuild:watch": "spago build -w --then 'npm run esbuild'",
-    "esbuild": "esbuild output/Insect/index.js --bundle --minify --outfile=web/insect.js --target=es6 --global-name=Insect",
+    "esbuild:watch": "spago build -w --then 'npm run esbuild:browser'",
+    "esbuild": "npm run esbuild:browser && npm run esbuild:node",
+    "esbuild:browser": "esbuild output/Insect/index.js --bundle --minify --outfile=web/insect.js --target=es6 --global-name=Insect",
+    "esbuild:node": "esbuild output/Insect/index.js --bundle --minify --outfile=insect.js --target=node12 --platform=node --format=esm --external:./node_modules/*",
     "build": "spago build && npm run esbuild && node copy",
-    "prepack": "npm run build",
+    "prepack": "spago build && npm run esbuild:node",
     "server": "live-server web --open",
     "test": "spago test"
   },

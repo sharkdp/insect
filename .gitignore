@@ -3,6 +3,7 @@
 /.spago/
 /.psc*
 /.psa*
+/insect.js
 /docs/insect.1
 /web/*.js
 /web/terminal.css
