@@ -702,8 +702,9 @@ main = runTest do
       shouldFail "exp(1,)"
       shouldFail "exp()"
 
-  -- All of these are reserved units, except '_' and 'ans', which are reserved
-  -- variables that refer to the value of the last evaluated line.
+  -- The first four are reserved units, 'list' is a reserved keyword, and '_'
+  -- and 'ans' are reserved variables that refer to the value of the last
+  -- evaluated line.
   let reservedNames = ["m", "meter", "kg", "kilogram", "list", "ans", "_"]
 
   suite "Parser - Variable Assignments" do
