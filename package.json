@@ -45,10 +45,10 @@
     "xdg-basedir": "^5.1.0"
   },
   "devDependencies": {
+    "esbuild": "^0.14.42",
     "live-server": "^1.2.1",
     "npm-run-all": "^4.1.5",
-    "spago": "^0.20.9",
     "purescript": "^0.15.2",
-    "esbuild": "^0.14.42"
+    "spago": "^0.20.9"
   }
 }
