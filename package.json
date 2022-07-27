@@ -19,6 +19,7 @@
   },
   "files": [
     "insect.js",
+    "docs/insect.1",
     "web/media/insect.png"
   ],
   "scripts": {
