@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Get the directory containing this script, see
+# https://stackoverflow.com/a/29835459/704831
+docs_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$docs_dir"
+
 input_format=gfm-hard_line_breaks
 
 # Generate combined markdown document for README.md
