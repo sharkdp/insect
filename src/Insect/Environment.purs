@@ -70,6 +70,8 @@ initialEnvironment =
         , constVal "electronMass"       Q.electronMass
         , constVal "G"                  Q.gravitationalConstant
         , constVal "g0"                 Q.g0
+        , constVal "goldenRatio"        Q.phi
+        , constVal "φ"                  Q.phi
         , constVal "gravity"            Q.g0
         , constVal "h_bar"              Q.ℏ
         , constVal "ℏ"                  Q.ℏ
