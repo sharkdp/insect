@@ -2,7 +2,8 @@ Terminal version
 ----------------
 
 In addition to the web interface, there is also a command line version
-which can by installed via [npm](https://www.npmjs.com/package/insect):
+(supporting Node 10 and later) which can by installed via
+[npm](https://www.npmjs.com/package/insect):
 
     npm install -g insect
 
