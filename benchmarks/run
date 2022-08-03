@@ -21,7 +21,7 @@ hyperfine \
     --export-json results/startup.json \
     --export-markdown results/startup.md \
     --command-name "Startup time (insect '1+1')" \
-    "node ../index.js '1+1'"
+    "node ../index.cjs '1+1'"
 
 hyperfine \
     --warmup=5 \
@@ -29,7 +29,7 @@ hyperfine \
     --export-json results/startup-stdin.json \
     --export-markdown results/startup-stdin.md \
     --command-name "Startup time, stdin mode (insect < computations-1.ins)" \
-    "node ../index.js < computations-1.ins"
+    "node ../index.cjs < computations-1.ins"
 
 hyperfine \
     --warmup=2 \
@@ -37,7 +37,7 @@ hyperfine \
     --export-json results/evaluation.json \
     --export-markdown results/evaluation.md \
     --command-name "Evaluation speed (insect < computations-160.ins)" \
-    "node ../index.js < computations-160.ins"
+    "node ../index.cjs < computations-160.ins"
 
 for benchmark in startup startup-stdin evaluation; do
     cat "results/$benchmark.md"

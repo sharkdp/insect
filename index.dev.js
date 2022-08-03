@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as Insect from "./insect.js";
+import * as Insect from "./output/Insect/index.js";
 import * as path from "path";
 
 var insectEnv = Insect.initialEnvironment;
@@ -45,7 +45,7 @@ if (process.argv.length >= 4) {
 }
 
 if (process.env.INSECT_NO_RC !== "true") {
-  // Node 12 does not support top-level await.
+  // Top-level await is not supported in Node 12 and earlier.
   (async function() {
     var [os, lineReader] = await Promise.all([import("os"), import("line-reader")]);
 
@@ -77,7 +77,7 @@ async function startInsect() {
     var [fs, clipboardy, readline, xdgBasedir] = await Promise.all([import("fs"), import("clipboardy"), import("readline"), import("xdg-basedir")]);
 
     // Open the history file for reading and appending.
-    var historyFd = fs.openSync(path.join(xdgBasedir.xdgData, "insect-history"), 'a+');
+    var historyFd = fs.openSync(path.join(xdgBasedir.data, "insect-history"), 'a+');
 
     var maxHistoryLength = 5000;
 
