@@ -20,7 +20,7 @@ pandoc --from="$input_format" \
        pros-and-cons.md \
        faq.md \
        terminal-version.md \
-       development.md
+       development.md &
 
 # Generate manpage
 pandoc --from="$input_format" \
@@ -34,4 +34,6 @@ pandoc --from="$input_format" \
        features.md \
        reference-syntax.md \
        faq.md \
-       manpage-footer.md
+       manpage-footer.md &
+
+wait
