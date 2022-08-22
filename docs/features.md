@@ -13,10 +13,13 @@ Documentation
       multiplication (`*`, `·`, `×`), division (`/`, `÷`, `per`),
       exponentiation (`^`, `**`). Full list: see [*Reference*](#reference) below.
 
-    * **Mathematical functions**: `abs`, `acos`, `acosh`, `asin`, `asinh`, `atan`, `atan2`,
-      `atanh`, `ceil`, `cos`, `cosh`, `exp`, `floor`, `fromCelsius`, `fromFahrenheit`, `gamma`,
-      `ln`, `log`, `log10`, `maximum`, `minimum`, `mean`, `round`, `sin`, `sinh`, `sqrt`, `tan`,
-      `tanh`, `toCelsius`, `toFahrenheit`.
+    * **Mathematical functions**: `abs`, `acos`, `acosh`, `acot`/`arccotangent`,
+      `acoth`/`archypcotangent`, `acsc`/`arccosecant`, `acsch`/`archypcosecant`, `arcsecant`,
+      `asech`/`archypsecant`, `asin`, `asinh`, `atan2`, `atan`, `atanh`, `ceil`, `cos`, `cosh`,
+      `cot`/`cotangent`, `coth`/`hypcotangent`, `csc`/`cosecant`, `csch`/`hypcosecant`, `exp`,
+      `floor`, `fromCelsius`, `fromFahrenheit`, `gamma`, `ln`, `log10`, `log`, `maximum`, `mean`,
+      `minimum`, `round`, `secant`, `sech`/`hypsecant`, `sin`, `sinh`, `sqrt`, `tan`, `tanh`,
+      `toCelsius`, `toFahrenheit`.
 
     * **High-precision numeric type** with *30* significant digits that can handle
       *very* large (or small) exponents like *10^(10^10)*.
