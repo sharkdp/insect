@@ -108,8 +108,17 @@ initialEnvironment =
         [ constFunc  "abs" (Q.abs >>> pure)
         , constFunc  "acos" Q.acos
         , constFunc  "acosh" Q.acosh
-        , constFunc  "acos" Q.acos
-        , constFunc  "acosh" Q.acosh
+        , constFunc  "acot" Q.acot
+        , constFunc  "arccotangent" Q.acot
+        , constFunc  "acoth" Q.acoth
+        , constFunc  "archypcotangent" Q.acoth
+        , constFunc  "acsc" Q.acsc
+        , constFunc  "arccosecant" Q.acsc
+        , constFunc  "acsch" Q.acsch
+        , constFunc  "archypcosecant" Q.acsch
+        , constFunc  "arcsecant" Q.asec
+        , constFunc  "asech" Q.asech
+        , constFunc  "archypsecant" Q.asech
         , constFunc  "asin" Q.asin
         , constFunc  "asinh" Q.asinh
         , constFunc  "atan" Q.atan
@@ -118,6 +127,14 @@ initialEnvironment =
         , constFunc  "ceil" Q.ceil
         , constFunc  "cos" Q.cos
         , constFunc  "cosh" Q.cosh
+        , constFunc  "cot" Q.cot
+        , constFunc  "cotangent" Q.cot
+        , constFunc  "coth" Q.coth
+        , constFunc  "hypcotangent" Q.coth
+        , constFunc  "csc" Q.csc
+        , constFunc  "cosecant" Q.csc
+        , constFunc  "csch" Q.csch
+        , constFunc  "hypcosecant" Q.csch
         , constFunc  "exp" Q.exp
         , constFunc  "floor" Q.floor
         , constFunc  "fromCelsius" F.fromCelsius
@@ -130,6 +147,9 @@ initialEnvironment =
         , constFuncN "maximum" (lmap QConversionError <<< Q.max <<< NonEmptyList)
         , constFuncN "mean" (lmap QConversionError <<< Q.mean <<< NonEmptyList)
         , constFunc  "round" Q.round
+        , constFunc  "secant" Q.sec
+        , constFunc  "sech" Q.sech
+        , constFunc  "hypsecant" Q.sech
         , constFunc  "sin" Q.sin
         , constFunc  "sinh" Q.sinh
         , constFunc  "sqrt" (Q.sqrt >>> pure)
