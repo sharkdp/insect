@@ -25,6 +25,7 @@ import Data.Maybe (Maybe(..), fromMaybe)
 import Data.NonEmpty (NonEmpty, (:|))
 import Data.Semigroup.Foldable (foldl1, foldr1)
 import Data.String (fromCodePointArray, codePointFromChar, singleton)
+import Data.Tuple.Nested ((/\))
 import Insect.Environment (Environment, StoredFunction(..))
 import Insect.Language (BinOp(..), Expression(..), Command(..), Statement(..), Identifier)
 import Quantities (DerivedUnit, (./))
@@ -32,7 +33,7 @@ import Quantities as Q
 import Parsing (ParserT, Parser, ParseError, runParser, fail)
 import Parsing.Combinators (option, optionMaybe, try, (<?>), notFollowedBy)
 import Parsing.String (string, char, eof)
-import Parsing.String.Basic (oneOf)
+import Parsing.String.Basic (hexDigit, octDigit, oneOf)
 import Parsing.Token (GenLanguageDef(..), LanguageDef, TokenParser, digit, letter, makeTokenParser)
 
 -- | A type synonym for the main Parser type with `String` as input.
@@ -90,21 +91,15 @@ whiteSpace = token.whiteSpace
 -- | Parse a number.
 number ∷ P Decimal
 number = do
-  decimalPart ← fractionalPart <|> do
-    intPart ← digits
-    mFracPart ← optionMaybe fractionalPart
-    pure (intPart <> fromMaybe "" mFracPart)
+  numberPrefix /\ digit' /\ expSymbol ←
+    option ("" /\ digit /\ "e") $ try $ char '0'
+      *> ((char 'x' <|> char 'X') $> ("0x" /\ hexDigit /\ "p")
+      <|> (char 'o' <|> char 'O') $> ("0o" /\ octDigit /\ "p")
+      <|> (char 'b' <|> char 'B') $> ("0b" /\ (oneOf ['0', '1'] <?> "binary digit") /\ "p"))
 
-  mExpPart ← optionMaybe $ try do
-    _ ← string "e"
-    notFollowedBy identStart
-    sad ← signAndDigits
-    pure ("e" <> sad)
-  let expPart = fromMaybe "" mExpPart
+  numberWithoutPrefix ← number' digit' expSymbol
 
-  whiteSpace
-
-  let floatStr = decimalPart <> expPart
+  let floatStr = numberPrefix <> numberWithoutPrefix
 
   case fromString floatStr of
     Just num →
@@ -113,11 +108,25 @@ number = do
       else fail "This number is too large"
     Nothing → fail $ "Parsing of number failed for input '" <> floatStr <> "'"
 
+number' ∷ P Char → String → P String
+number' digit' expSymbol = do
+  decimalPart ← fractionalPart <|> do
+    intPart ← digits
+    mFracPart ← optionMaybe fractionalPart
+    pure (intPart <> fromMaybe "" mFracPart)
+
+  expPart ← option "" $ try do
+    _ ← string expSymbol
+    notFollowedBy identStart
+    sad ← signAndDigits
+    pure (expSymbol <> sad)
+
+  whiteSpace
+
+  pure $ decimalPart <> expPart
   where
     digits ∷ P String
-    digits = do
-      ds ← some $ oneOf ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] <?> "a digit"
-      pure $ fromCharArray (fromFoldable ds)
+    digits = (fromCharArray <<< fromFoldable) <$> some digit'
 
     fractionalPart ∷ P String
     fractionalPart = (<>) <$> string "." <*> digits
@@ -127,7 +136,7 @@ number = do
     signAndDigits ∷ P String
     signAndDigits = do
       sign ← option '+' (oneOf ['+', '-'])
-      intPart ← digits
+      intPart ← (fromCharArray <<< fromFoldable) <$> some digit
       pure $ singleton (codePointFromChar sign) <> intPart
 
 -- | A helper type for entries in the dictionary.

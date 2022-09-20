@@ -26,6 +26,16 @@ Documentation
 
     * **Exponential notation**: `6.022e23`.
 
+    * **Hexadecimal, octal and binary number input**:
+
+      ```
+      0xFFFF
+      0b1011
+      0o32
+      0x2.F
+      0o5p3
+      ```
+
   - **Physical units**: parsing and handling, including metric prefixes:
 
     ```
