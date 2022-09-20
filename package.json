@@ -20,7 +20,8 @@
   "files": [
     "insect.js",
     "docs/insect.1",
-    "web/media/insect.png"
+    "web/media/insect.svg",
+    "insect.desktop"
   ],
   "scripts": {
     "setup": "npm run build",

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Insect
+GenericName=Scientific calculator
+TryExec=insect
+Exec=insect
+Icon=insect
+Terminal=true
+Categories=Education;Science;Math;
+Keywords=math;numerical computation;physics;quantities;units
