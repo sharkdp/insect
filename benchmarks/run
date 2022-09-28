@@ -40,7 +40,7 @@ hyperfine \
     "node ../index.js < computations-160.ins"
 
 for benchmark in startup startup-stdin evaluation; do
-    cat results/$benchmark.md >> results/report.md
-    echo >> results/report.md
-done
+    cat "results/$benchmark.md"
+    echo
+done > results/report.md
 cat results/report.md
