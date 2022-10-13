@@ -152,6 +152,48 @@ main = runTest do
       shouldFail "123e+"
       shouldFail "123e-"
 
+    test "Hexadecimal, octal and binary numbers" do
+       allParseAs (Expression (scalar 106.0))
+         [ "0x6A"
+         , "0X6a"
+         , "0b1101010"
+         , "0B1101010"
+         , "0o152"
+         , "0O152"
+         ]
+
+       allParseAs (Expression (scalar 256.0))
+         [ "0x4p6"
+         , "0b100p6"
+         , "0o10p5"
+         ]
+
+       allParseAs (Expression (Negate (scalar 3.0)))
+         [ "-0x3"
+         , "-0b11"
+         , "-0o3"
+         ]
+
+       allParseAs (Expression (scalar 1.0))
+         [ "0x2p-1"
+         , "0b10p-1"
+         , "0o2p-1"
+         ]
+
+       shouldParseAs (Expression (BinOp Add (scalar 12.75) (BinOp Sub (scalar 13.125) (scalar 18.5))))
+         "0xC.C + 0o15.1 - 0b10.01010p3"
+
+       shouldParseAs (Expression (scalar 481.65625)) "0x1E1.a8"
+
+       shouldFail "0xG"
+       shouldFail "0oG"
+       shouldFail "0oA"
+       shouldFail "0b2"
+       shouldFail "0be"
+       shouldFail "0x1p+"
+       shouldFail "0x1p-"
+       shouldFail "0x5.."
+
   suite "Parser - Units (this may take some time)" do
     test "Simple" do
       allParseAs (Expression (Unit meter))
@@ -655,6 +697,19 @@ main = runTest do
         [ "2e"
         , "2.0e"
         , "2 e"
+        ]
+
+    test "Variables which begin with 'p'" do
+      allParseAs (Expression (BinOp Mul (scalar 2.0) (Variable "pi")))
+        [ "0x2pi"
+        , "0o2.0pi"
+        , "0b10 pi"
+        ]
+
+      allParseAs (Expression (BinOp Mul (scalar 2.0) (Variable "p")))
+        [ "0b10p"
+        , "0x2.0p"
+        , "0o2 p"
         ]
 
     test "Variables before parenthesis" do
