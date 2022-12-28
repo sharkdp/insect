@@ -1,6 +1,6 @@
 {
   "name": "insect",
-  "version": "5.7.0",
+  "version": "5.8.0",
   "description": "High precision scientific calculator with support for physical units",
   "author": "David Peter <mail@david-peter.de>",
   "license": "MIT",
