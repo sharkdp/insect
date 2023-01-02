@@ -483,7 +483,7 @@ Insect itself requiring only Node 10 or later to run). If you don't have
 or want to install Node 12 or later, you can use the following
 Dockerfile to build or run Insect on Node 18:
 
-``` Dockerfile
+```Dockerfile
 FROM node:18
 
 WORKDIR /usr/src/insect
