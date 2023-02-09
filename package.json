@@ -35,7 +35,7 @@
     "build": "spago build && npm run esbuild && node copy",
     "prepack": "spago build && npm run esbuild:node",
     "server": "live-server web --open",
-    "test": "spago test"
+    "test": "spago -x test.dhall test"
   },
   "bugs": {
     "url": "https://github.com/sharkdp/insect/issues"
