@@ -5,12 +5,10 @@ Need help? See the following resources:
 -}
 { name = "insect"
 , dependencies =
-  [ "aff"
-  , "arrays"
+  [ "arrays"
   , "bifunctors"
   , "control"
   , "decimals"
-  , "effect"
   , "either"
   , "foldable-traversable"
   , "integers"
@@ -22,9 +20,8 @@ Need help? See the following resources:
   , "prelude"
   , "quantities"
   , "strings"
-  , "test-unit"
   , "tuples"
   ]
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "test/**/*.purs" ]
+, sources = [ "src/**/*.purs" ]
 }
