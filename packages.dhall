@@ -10,3 +10,4 @@ let upstream =
         sha256:c30c50d19c9eb55516b0a8a1bd368a0754bde47365be36abadb489295d86d77c
 
 in  upstream
+      with pairs.version = "v9.0.1"
