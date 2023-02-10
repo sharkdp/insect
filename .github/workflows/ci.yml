@@ -25,6 +25,9 @@ jobs:
       - name: Build Insect
         run: npm run build
 
+      - name: Check that index.cjs runs successfully
+        run: ./index.cjs '1 + 1'
+
       - name: Run tests
         run: npm test
 
