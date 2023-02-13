@@ -10,3 +10,4 @@
 /benchmarks/results/
 /benchmarks/results.json
 /benchmarks/results.md
+!/web/serviceworker.js

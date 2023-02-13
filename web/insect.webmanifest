@@ -1,0 +1,25 @@
+{
+  "name": "insect - scientific calculator",
+  "short_name": "insect",
+  "description": "High precision scientific calculator with full support for physical units.",
+  "categories": ["utilities", "productivity", "education"],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#1A1A1A",
+  "background_color": "#ECF0F1",
+  "icons":
+  [
+    {
+      "src": "media/insect-16x16.png",
+      "sizes": "16x16"
+    },
+    {
+      "src": "media/insect-32x32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "media/insect-196x196.png",
+      "sizes": "196x196"
+    }
+  ]
+}

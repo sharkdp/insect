@@ -27,6 +27,7 @@
     <link rel="icon" type="image/png" href="media/insect-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="media/insect-16x16.png" sizes="16x16">
     <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="insect.sh scientific calculator">
+    <link rel="manifest" href="insect.webmanifest">
     <script src="insect.js" type="text/javascript"></script>
     <script src="keyboardevent-key-polyfill.js" type="text/javascript"></script>
     <script src="jquery.min.js" type="text/javascript"></script>
@@ -137,6 +138,10 @@
           }
         }
       });
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('serviceworker.js', { scope: './' });
+      }
     </script>
   </head>
   <body>
