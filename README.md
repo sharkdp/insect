@@ -456,10 +456,13 @@ package](https://formulae.brew.sh/formula/insect):
 
 For Android, install [Termux](https://termux.com/) from
 [F-Droid](https://f-droid.org/packages/com.termux/). Install Node.js in
-Termux and then install `insect`.
+Termux and then install `insect`. You might have to manually create the `/data/data/com.termux/files/home/.local/share/insect-history` file.
 
     pkg install nodejs-lts
     npm install -g insect
+    mkdir $HOME/.local
+    cd $HOME/.local && mkdir share
+    cd share && touch insect-history
 
 ## Development
 
