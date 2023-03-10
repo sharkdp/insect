@@ -76,6 +76,16 @@ async function startInsect() {
   if (interactive) {
     var [fs, clipboardy, readline, xdgBasedir] = await Promise.all([import("fs"), import("clipboardy"), import("readline"), import("xdg-basedir")]);
 
+    // Create `xdgBasedir.data` if it doesn't already exist.
+    // See https://github.com/sharkdp/insect/issues/364.
+    try {
+      fs.mkdirSync(xdgBasedir.data, { recursive: true });
+    } catch (err) {
+      if (err.code !== "EEXIST") {
+        throw err;
+      }
+    }
+
     // Open the history file for reading and appending.
     var historyFd = fs.openSync(path.join(xdgBasedir.data, "insect-history"), 'a+');
 
