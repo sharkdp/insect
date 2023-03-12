@@ -35,6 +35,15 @@ p.desc {
     margin-bottom: 1.8em;
 }
 
+p.links {
+    font-size: 0.8em;
+    text-align: center;
+}
+
+p.links a {
+    color: #aaa;
+}
+
 #terminal {
     border-radius: 4px;
     box-shadow: 0px 3px 8px #1a1a1a;
