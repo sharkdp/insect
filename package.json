@@ -23,7 +23,8 @@
   "files": [
     "docs/insect.1",
     "web/media/insect.svg",
-    "insect.desktop"
+    "insect.desktop",
+    "LICENSE_THIRDPARTY"
   ],
   "scripts": {
     "setup": "npm run build",
