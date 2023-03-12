@@ -1,12 +1,12 @@
 {
   "name": "insect",
-  "version": "5.8.1",
+  "version": "5.8.2",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "insect",
-      "version": "5.8.1",
+      "version": "5.8.2",
       "license": "MIT",
       "dependencies": {
         "clipboardy": "^2.3.0",
