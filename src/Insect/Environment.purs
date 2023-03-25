@@ -35,7 +35,7 @@ derive instance Eq StorageType
 data StoredValue = StoredValue StorageType Quantity
 
 -- | Mathematical functions on physical quantities.
-type MathFunction = NonEmpty List Quantity → Either EvalError Quantity
+type MathFunction = Environment → NonEmpty List Quantity → Either EvalError Quantity
 
 -- | Meta information for a function, mostly for pretty printing
 data FunctionDescription = BuiltinFunction (Maybe Int) | UserFunction (NonEmpty List Identifier) Expression
@@ -164,16 +164,16 @@ initialEnvironment =
     hiddenVal identifier value = Tuple identifier (StoredValue HiddenConstant value)
     constFunc  identifier func = Tuple identifier (StoredFunction Constant (wrapSimple identifier func) (BuiltinFunction (Just 1)))
     constFunc2 identifier func = Tuple identifier (StoredFunction Constant (wrapSimple2 identifier func) (BuiltinFunction (Just 2)))
-    constFuncN identifier func = Tuple identifier (StoredFunction Constant func (BuiltinFunction Nothing))
+    constFuncN identifier func = Tuple identifier (StoredFunction Constant (const func) (BuiltinFunction Nothing))
 
     wrapSimple ∷ Identifier → (Quantity → Either ConversionError Quantity) → MathFunction
-    wrapSimple name func qs =
+    wrapSimple name func _ qs =
       case qs of
         x :| Nil → lmap QConversionError $ func x
         _        → Left $ WrongArityError name 1 (length (NonEmptyList qs))
 
     wrapSimple2 ∷ Identifier → (Quantity → Quantity → Either ConversionError Quantity) → MathFunction
-    wrapSimple2 name func qs =
+    wrapSimple2 name func _ qs =
       case qs of
         x1 :| x2 : Nil → lmap QConversionError $ func x1 x2
         _              → Left $ WrongArityError name 2 (length (NonEmptyList qs))
