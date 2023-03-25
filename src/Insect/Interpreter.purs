@@ -107,7 +107,7 @@ eval env (Apply name xs)        =
     else
       case lookup name env.functions of
         Just (StoredFunction _ fn _) →
-          traverse (eval env) xs >>= fn >>= checkFinite
+          traverse (eval env) xs >>= fn env >>= checkFinite
         Nothing → Left (LookupError name)
 eval env (BinOp op x y)         = do
   x' <- eval env x
@@ -286,7 +286,7 @@ runInsect env (FunctionAssignment name argNames expr) =
     numExpected = length argNames'
 
     userFunc ∷ MathFunction
-    userFunc argValues =
+    userFunc env' argValues =
       if numGiven == numExpected
         then evalAndSimplify functionEnv expr
         else Left (WrongArityError name numExpected numGiven)
@@ -296,8 +296,8 @@ runInsect env (FunctionAssignment name argNames expr) =
         args = zip argNames' argValues'
 
         insertArg map (Tuple argName val) = insert argName (StoredValue UserDefined val) map
-        functionEnv = env { values = foldl insertArg env.values args
-                          , functions = delete name env.functions
+        functionEnv = env' { values = foldl insertArg env'.values args
+                          , functions = delete name env'.functions
                           }
 
 runInsect env (PrettyPrintFunction name) =

@@ -889,6 +889,14 @@ main = runTest do
       expectOutput' "3 m" "3m"
       expectOutput' "3 m" " 3.0 meter  "
 
+    test "Function using current environment" do
+      let env1 = initialEnvironment
+          env2 = (repl fmtPlain env1 "a = 2").newEnv
+          env3 = (repl fmtPlain env2 "f(x) = a * x").newEnv
+          env4 = (repl fmtPlain env3 "a = 3").newEnv
+
+      expectOutput env4 "3" "f(1)"
+
     test "Square, cube and other exponentiation operators" do
       expectOutput' "18" "3²*2"
       expectOutput' "18" "3² 2"
