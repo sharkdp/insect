@@ -111,8 +111,11 @@ eval env (Apply name xs)        =
         Nothing → Left (LookupError name)
 eval env (BinOp op x y)         = do
   x' <- eval env x
-  y' <- eval env y
-  run op x' y' >>= checkFinite
+  if op == ConvertTo && y == Variable "base" then
+    checkFinite (Q.toStandard x')
+  else do
+    y' <- eval env y
+    run op x' y' >>= checkFinite
   where
     run ∷ BinOp → Quantity → Quantity → Expect Quantity
     run Sub       a b = qSubtract a b
