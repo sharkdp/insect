@@ -143,6 +143,9 @@ async function startInsect() {
       }
 
       rl.prompt();
+    }).on('SIGINT', function() {
+      rl.clearLine();
+      rl.prompt();
     }).on('close', function() {
       process.exit(0);
     });
