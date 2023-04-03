@@ -90,19 +90,20 @@ initialEnvironment =
         , constVal "R"                  Q.idealGasConstant
 
         -- Hidden constants
-        , hiddenVal "atto"        (Q.scalar 1.0e-18)
-        , hiddenVal "femto"       (Q.scalar 1.0e-15)
-        , hiddenVal "pico"        (Q.scalar 1.0e-12)
-        , hiddenVal "nano"        (Q.scalar 1.0e-9)
-        , hiddenVal "micro"       (Q.scalar 1.0e-6)
-        , hiddenVal "milli"       (Q.scalar 1.0e-3)
-        , hiddenVal "hundred"     (Q.scalar 1.0e2)
-        , hiddenVal "thousand"    (Q.scalar 1.0e3)
-        , hiddenVal "million"     (Q.scalar 1.0e6)
-        , hiddenVal "billion"     (Q.scalar 1.0e9)
-        , hiddenVal "trillion"    (Q.scalar 1.0e12)
-        , hiddenVal "quadrillion" (Q.scalar 1.0e15)
-        , hiddenVal "quintillion" (Q.scalar 1.0e18)
+        , hiddenVal "quintillionth" (Q.scalar 1.0e-18)
+        , hiddenVal "quadrillionth" (Q.scalar 1.0e-15)
+        , hiddenVal "trillionth"    (Q.scalar 1.0e-12)
+        , hiddenVal "billionth"     (Q.scalar 1.0e-9)
+        , hiddenVal "millionth"     (Q.scalar 1.0e-6)
+        , hiddenVal "thousandth"    (Q.scalar 1.0e-3)
+        , hiddenVal "hundredth"     (Q.scalar 1.0e-2)
+        , hiddenVal "hundred"       (Q.scalar 1.0e2)
+        , hiddenVal "thousand"      (Q.scalar 1.0e3)
+        , hiddenVal "million"       (Q.scalar 1.0e6)
+        , hiddenVal "billion"       (Q.scalar 1.0e9)
+        , hiddenVal "trillion"      (Q.scalar 1.0e12)
+        , hiddenVal "quadrillion"   (Q.scalar 1.0e15)
+        , hiddenVal "quintillion"   (Q.scalar 1.0e18)
 
         , hiddenVal "googol"      (Q.scalar 1.0e100)
 
