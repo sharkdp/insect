@@ -240,7 +240,7 @@ normalUnitDict = Dictionary
   , Q.bit ./ Q.second ==> ["bps"]
   , Q.second ==> ["seconds", "second", "sec", "s"]
   , Q.minute ==> ["minutes", "minute", "min"]
-  , Q.hour ==> ["hours", "hour", "h"]
+  , Q.hour ==> ["hours", "hour", "hr", "h"]
   , Q.day ==> ["days", "day"]
   , Q.week ==> ["weeks", "week"]
   , Q.fortnight ==> ["fortnights", "fortnight"]

@@ -233,7 +233,7 @@ Contents
   | [Henry](https://en.wikipedia.org/wiki/Henry_(unit))                          | `henrys`, `henries`, `henry`, `H`                                           |
   | [Hertz](https://en.wikipedia.org/wiki/Hertz)                                 | `hertz`, `Hz`                                                               |
   | [Hogshead](https://en.wikipedia.org/wiki/Hogshead)                           | `hogsheads`, `hogshead`                                                     |
-  | [Hour](https://en.wikipedia.org/wiki/Hour)                                   | `hours`, `hour`, `h`                                                        |
+  | [Hour](https://en.wikipedia.org/wiki/Hour)                                   | `hours`, `hour`, `hr`, `h`                                                  |
   | [Inch](https://en.wikipedia.org/wiki/Inch)                                   | `inches`, `inch`, `in`                                                      |
   | [Joule](https://en.wikipedia.org/wiki/Joule)                                 | `joules`, `joule`, `J`                                                      |
   | [Katal](https://en.wikipedia.org/wiki/Katal)                                 | `katal`, `kat`                                                              |
