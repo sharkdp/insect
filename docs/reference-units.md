@@ -1,8 +1,7 @@
   - Supported units (remember that you can use tab completion).
 
-    All SI-accepted units support metric prefixes.
-    In addition, [binary prefixes](https://en.wikipedia.org/wiki/Binary_prefix) (`MiB`, `GiB`, ...)
-    are also supported.
+    All SI-accepted units support metric prefixes and [binary
+    prefixes](https://en.wikipedia.org/wiki/Binary_prefix) (`MiB`, `GiB`, ...).
 
     | Unit | Syntax |
     | ---- | ------ |
@@ -47,6 +46,7 @@
     | [Inch](https://en.wikipedia.org/wiki/Inch) | `inches`, `inch`, `in` |
     | [Joule](https://en.wikipedia.org/wiki/Joule) | `joules`, `joule`, `J` |
     | [Katal](https://en.wikipedia.org/wiki/Katal) | `katals`, `katal`, `kat` |
+    | [Knot](https://en.wikipedia.org/wiki/Knot_(unit)) | `knots`, `knot`, `kn`, `kt` |
     | [Kelvin](https://en.wikipedia.org/wiki/Kelvin) | `kelvins`, `kelvin`, `K` |
     | [Light-year](https://en.wikipedia.org/wiki/Light-year) | `lightyears`, `lightyear`, `ly` |
     | [Liter](https://en.wikipedia.org/wiki/Liter) | `liters`, `liter`, `litres`, `litre`, `L`, `l` |
@@ -59,6 +59,7 @@
     | [Minute](https://en.wikipedia.org/wiki/Minute) | `minutes`, `minute`, `min` |
     | [Mole](https://en.wikipedia.org/wiki/Mole_(unit)) | `moles`, `mole`, `mol` |
     | [Month](https://en.wikipedia.org/wiki/Month) | `months`, `month` |
+    | [Nautical mile](https://en.wikipedia.org/wiki/Nautical_mile) | `M`, `NM`, `nmi` |
     | [Newton](https://en.wikipedia.org/wiki/Newton_(unit)) | `newtons`, `newton`, `N` |
     | [Ohm](https://en.wikipedia.org/wiki/Ohm) | `ohms`, `ohm`, `Ω` |
     | [Ounce](https://en.wikipedia.org/wiki/Ounce) | `ounces`, `ounce`, `oz` |

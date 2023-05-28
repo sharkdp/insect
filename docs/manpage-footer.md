@@ -13,4 +13,4 @@ insect is MIT-licensed. For details, see <https://github.com/sharkdp/insect>.
 # SEE ALSO
 
   - Full documentation at <https://github.com/sharkdp/insect>.
-  - Web-version at <https://insect.sh>.
+  - Web version at <https://insect.sh>.
