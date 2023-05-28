@@ -548,11 +548,11 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -------------------------------------------------------------------------------------
-jquery.terminal 2.35.3
+jquery.terminal 2.36.0
 
 The MIT License (MIT)
 
-Copyright (c) 2011-2022 Jakub T. Jankiewicz
+Copyright (c) 2011-2023 Jakub T. Jankiewicz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -704,7 +704,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 -------------------------------------------------------------------------------------
-jquery 3.6.4
+jquery 3.7.0
 
 Copyright OpenJS Foundation and other contributors, https://openjsf.org/
 
