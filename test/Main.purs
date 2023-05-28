@@ -3,7 +3,7 @@ module Test.Main (main) where
 import Prelude hiding (degree)
 
 import Effect (Effect)
-import Effect.Aff (Aff)
+import Effect.Aff (Aff, launchAff_)
 
 import Data.Decimal (fromNumber)
 import Data.Either (Either(..))
@@ -12,9 +12,10 @@ import Data.List (List(..), (:))
 import Data.NonEmpty ((:|))
 import Data.Map (insert, keys)
 
-import Test.Unit (suite, test, failure)
-import Test.Unit.Assert (equal)
-import Test.Unit.Main (runTest)
+import Test.Spec (describe, it)
+import Test.Spec.Assertions (shouldEqual, fail)
+import Test.Spec.Reporter (consoleReporter)
+import Test.Spec.Runner (runSpec)
 
 import Parsing (Position(..), parseErrorMessage, parseErrorPosition)
 
@@ -37,16 +38,16 @@ shouldParseAs expected input =
     Left err →
       case parseErrorPosition err of
         Position pos →
-          failure $ "Parse error for input '" <> input <> "': "
+          fail $ "Parse error for input '" <> input <> "': "
                                 <> parseErrorMessage err
                                 <> " at position "
                                 <> show pos.column
     Right output →
       unless (output == expected) do
-        failure $ "Unexpected result:\n" <>
-                  "Input:    '" <> input <> "'\n" <>
-                  "Output:   " <> show output <> "\n" <>
-                  "Expected: " <> show expected <> "\n"
+        fail $ "Unexpected result:\n" <>
+               "Input:    '" <> input <> "'\n" <>
+               "Output:   " <> show output <> "\n" <>
+               "Expected: " <> show expected <> "\n"
 
 allParseAs ∷ Statement → Array String → Aff Unit
 allParseAs expected = traverse_ (shouldParseAs expected)
@@ -55,17 +56,17 @@ shouldFail ∷ String → Aff Unit
 shouldFail input =
   case parseInsect initialEnvironment input of
    Left _ → pure unit
-   Right _ → failure $ "input is expected to throw a parse error: '" <> input <> "'"
+   Right _ → fail $ "input is expected to throw a parse error: '" <> input <> "'"
 
 expectOutput ∷ Environment → String → String → Aff Unit
 expectOutput env expected inp =
   let { msg: out } = repl fmtPlain env inp
   in
     unless (out == expected) do
-      failure $ "Unexpected result:\n" <>
-                "Input:    '" <> inp <> "'\n" <>
-                "Output:   '" <> out <> "'\n" <>
-                "Expected: '" <> expected <> "'\n"
+      fail $ "Unexpected result:\n" <>
+             "Input:    '" <> inp <> "'\n" <>
+             "Output:   '" <> out <> "'\n" <>
+             "Expected: '" <> expected <> "'\n"
 
 prettyPrintCheck ∷ String → Aff Unit
 prettyPrintCheck input =
@@ -73,24 +74,26 @@ prettyPrintCheck input =
     Left err →
       case parseErrorPosition err of
         Position pos →
-          failure $ "Parse error for input '" <> input <> "': "
+          fail $ "Parse error for input '" <> input <> "': "
                                 <> parseErrorMessage err
                                 <> " at position "
                                 <> show pos.column
     Right output@(Expression expr) →
       shouldParseAs output (format fmtPlain (pretty expr))
-    _ → failure "Input is not an expression"
-
+    _ → fail "Input is not an expression"
 
 main ∷ Effect Unit
-main = runTest do
+main = launchAff_ $ runSpec [consoleReporter] do
   -- Helper to construct scalars
   let scalar n = Scalar (fromNumber n)
 
   -- Helper to construct quantities
   let q s u = BinOp Mul (scalar s) (Unit u)
 
-  suite "Parser - Numbers" do
+  -- The way we use it, `test` makes more sense than `it`.
+  let test = it
+
+  describe "Parser - Numbers" do
     test "Simple numbers" do
       allParseAs (Expression (scalar 1.0))
         [ "1"
@@ -194,7 +197,7 @@ main = runTest do
        shouldFail "0x1p-"
        shouldFail "0x5.."
 
-  suite "Parser - Units (this may take some time)" do
+  describe "Parser - Units (this may take some time)" do
     test "Simple" do
       allParseAs (Expression (Unit meter))
         [ "m"
@@ -252,7 +255,7 @@ main = runTest do
         ]
 
 
-  suite "Parser - Quantities" do
+  describe "Parser - Quantities" do
     test "Simple" do
       allParseAs (Expression (q 2.3 meter))
         [ "2.3*m"
@@ -358,7 +361,7 @@ main = runTest do
         , "2.30km per h"
         ]
 
-  suite "Parser - Operators" do
+  describe "Parser - Operators" do
     test "Factorial" do
       allParseAs (Expression (Factorial (scalar 4.0)))
         [ "4!"
@@ -629,7 +632,7 @@ main = runTest do
         , "metre^(-1.0)"
         ]
 
-  suite "Parser - Conversions" do
+  describe "Parser - Conversions" do
     test "Simple" do
       allParseAs (Expression (BinOp ConvertTo (q (2.3) meter) (Unit inch)))
         [ "2.3m -> in"
@@ -664,7 +667,7 @@ main = runTest do
         , " 36km / hour->mph "
         ]
 
-  suite "Parser - Identifiers" do
+  describe "Parser - Identifiers" do
     test "Valid and invalid names" do
       shouldParseAs (Expression (Variable "x")) "x"
       shouldParseAs (Expression (Variable "µ")) "µ"
@@ -723,7 +726,7 @@ main = runTest do
       for_ (keys initialEnvironment.values) \ident →
         shouldParseAs (Expression (Variable ident)) ident
 
-  suite "Parser - Functions" do
+  describe "Parser - Functions" do
     test "Simple" do
       allParseAs (Expression (Apply "sin" (q 30.0 degree :| Nil)))
         [ "sin(30°)"
@@ -762,7 +765,7 @@ main = runTest do
   -- evaluated line.
   let reservedNames = ["m", "meter", "kg", "kilogram", "list", "ans", "_"]
 
-  suite "Parser - Variable Assignments" do
+  describe "Parser - Variable Assignments" do
     test "Simple" do
       allParseAs (VariableAssignment "xyz_123" (scalar 1.0))
         [ "xyz_123 = 1"
@@ -780,7 +783,7 @@ main = runTest do
     test "Reserved names" do
       for_ reservedNames \name -> shouldFail (name <> "=2")
 
-  suite "Parser - Function Assignments" do
+  describe "Parser - Function Assignments" do
     test "Simple" do
       allParseAs (FunctionAssignment "xyz_123" ("x" :| Nil) (scalar 1.0))
         [ "xyz_123(x) = 1"
@@ -802,7 +805,7 @@ main = runTest do
     test "Reserved names" do
       for_ reservedNames \name -> shouldFail (name <> "(x)=2")
 
-  suite "Parser - Pretty print function" do
+  describe "Parser - Pretty print function" do
     test "Simple" do
       allParseAs (PrettyPrintFunction "cos")
         [ "cos"
@@ -816,9 +819,9 @@ main = runTest do
           _ → "Error"
 
   let equalPretty out inp =
-        equal out (pretty' inp)
+        out `shouldEqual` (pretty' inp)
 
-  suite "Pretty printer" do
+  describe "Pretty printer" do
     test "Consistency" do
       prettyPrintCheck "-2.3e-12387"
       prettyPrintCheck "2.3e-12387"
@@ -884,7 +887,7 @@ main = runTest do
 
   let expectOutput' = expectOutput initialEnvironment
 
-  suite "Integration tests" do
+  describe "Integration tests" do
     test "Simple input" do
       expectOutput' "3 m" "3m"
       expectOutput' "3 m" " 3.0 meter  "
