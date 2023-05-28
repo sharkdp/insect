@@ -3,13 +3,13 @@ FAQ
 
   - Why are Celsius and Fahrenheit not supported?
 
-    Compared to the SI unit [Kelvin](https://en.wikipedia.org/wiki/Kelvin) and in contrast to all
-    other units, Celsius and Fahrenheit require an additive offset when converting into and from
-    other temperature units. This additive offset leads to all kinds of ambiguities when performing
-    calculations in these units. Adding two temperatures in Celsius, for example, is only
-    meaningful if one of them is seen as an offset value (rather than an absolute temperature).
-    Insect is primarily a scientific calculator (as opposed to a unit conversion tool) and
-    therefore focuses on getting physical calculations right.
+    In contrast to the SI unit of temperature, the [Kelvin](https://en.wikipedia.org/wiki/Kelvin),
+    and to all other units, Celsius and Fahrenheit both require an additive offset when converting into
+    and from other temperature units. This additive offset leads to all kinds of ambiguities when
+    performing calculations in these units. Adding two temperatures in Celsius, for example, is
+    only meaningful if one of them is seen as an offset value (rather than as an absolute
+    temperature). Insect is primarily a scientific calculator (as opposed to a unit conversion
+    tool) and therefore focuses on getting physical calculations right.
 
     Even though *°C* and *°F* are not supported as built-in units, there are helper functions to
     convert to and from Celsius (and Fahrenheit):
@@ -84,9 +84,9 @@ FAQ
 
     As the base unit is the same (`1 / second`), `RPM` can be converted to `rad / s`, `deg / s` or
     `Hz`. Note, however, that `1 RPM` does *not* equal `2π rad / min` or `360° / min` or `1 Hz`, as
-    some might expect. If you interested in computing the traversed angle of something that rotates
-    with a given number of revolutions per minute, you need to multiply by `2π rad` or `360 °`
-    because:
+    some might expect. If you're interested in computing the traversed angle of something that
+    rotates with a given number of revolutions per minute, you need to multiply by `2π rad` or
+    `360°` because:
     ```
     1 RPM · (360°/revolution) = (1 revolution / minute) · (360° / revolution) = 360° / minute
     ```
