@@ -297,15 +297,13 @@ runInsect env (FunctionAssignment name argNames expr) =
 
         insertArg map (Tuple argName val) = insert argName (StoredValue UserDefined val) map
         functionEnv = env' { values = foldl insertArg env'.values args
-                          , functions = delete name env'.functions
-                          }
+                           , functions = delete name env'.functions
+                           }
 
 runInsect env (PrettyPrintFunction name) =
-  { msg: message,
-    newEnv: env
-  }
+  { msg, newEnv: env }
   where
-    message =
+    msg =
       case lookup name env.functions of
         Just (StoredFunction _ _ (BuiltinFunction args)) →
           Message Info [ F.optional (F.text "  "),
