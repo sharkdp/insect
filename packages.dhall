@@ -7,7 +7,7 @@ Need help? See the following resources:
 - Dhall language tour: https://docs.dhall-lang.org/tutorials/Language-Tour.html
 -}
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.15.8-20230528/packages.dhall
-        sha256:7f1ebc6968ebabae915640456faf98f52f5606189f48cb22305fbe008723f26c
+      https://github.com/purescript/package-sets/releases/download/psc-0.15.9-20230629/packages.dhall
+        sha256:f91d36c7e4793fe4d7e042c57fef362ff3f9e9ba88454cd38686701e30bf545a
 
 in  upstream

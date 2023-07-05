@@ -166,12 +166,20 @@ prefixDict = Dictionary
   , Q.yobi ==> ["yobi", "Yi"]
   , Q.atto ==> ["atto", "a"]
   , Q.femto ==> ["femto", "f"]
-  -- peta and mega have to be up here (before pico and milli) in order for the
-  -- prefixes ('p' and 'm') not to be parsed as 'pico' or 'milli'.
+  -- peta has to be up here (before pico) in order for the prefix ('p') not to
+  -- be parsed as 'pico'. This goes for mega through quetta too.
   , Q.peta ==> ["peta"]
   , Q.mega ==> ["mega"]
+  , Q.zetta ==> ["zetta"]
+  , Q.yotta ==> ["yotta"]
+  , Q.ronna ==> ["ronna"]
+  , Q.quetta ==> ["quetta"]
   , Q.pico ==> ["pico", "p"]
   , Q.nano ==> ["nano", "n"]
+  , Q.quecto ==> ["quecto", "q"]
+  , Q.ronto ==> ["ronto", "r"]
+  , Q.yocto ==> ["yocto", "y"]
+  , Q.zepto ==> ["zepto", "z"]
   , Q.micro ==> [ "micro"
                 , "u" -- u for micro
                 , "µ" -- Micro sign U+00B5
@@ -187,6 +195,10 @@ prefixDict = Dictionary
   , Q.tera ==> ["tera", "T"]
   , Q.peta ==> ["P"]
   , Q.exa ==> ["exa", "E"]
+  , Q.zetta ==> ["Z"]
+  , Q.yotta ==> ["Y"]
+  , Q.ronna ==> ["R"]
+  , Q.quetta ==> ["Q"]
   ]
 
 -- | Parse a SI or IEC prefix like `µ`, `G`, `pico` or `Ki`.

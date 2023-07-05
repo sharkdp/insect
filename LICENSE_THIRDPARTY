@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------------
-purescript-arrays 7.2.0
+purescript-arrays 7.2.1
 
 Copyright 2018 PureScript
 
@@ -1121,7 +1121,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -------------------------------------------------------------------------------------
-purescript-quantities 12.1.0
+purescript-quantities 12.2.0
 
 MIT License
 
