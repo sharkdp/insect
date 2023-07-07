@@ -2,6 +2,7 @@
 
 import * as Insect from "./output/Insect/index.js";
 import * as path from "path";
+import * as xdgBasedir from "xdg-basedir";
 
 var insectEnv = Insect.initialEnvironment;
 
@@ -25,56 +26,53 @@ function runInsect(fmt, line) {
   return res;
 }
 
-// Handle command line arguments
-if (process.argv.length >= 4) {
-  usage();
-} else if (process.argv.length == 3) {
-  var arg = process.argv[2];
-  if (arg === "-h" || arg === "--help") {
+// Top-level await is not supported in Node 12 and earlier.
+(async function() {
+  if (process.env.INSECT_NO_RC !== "true") {
+    var [util, lineReader, os] = await Promise.all([import("util"), import("line-reader"), import("os")]);
+
+    var rcFilePaths = [path.join(xdgBasedir.config, "insect/insectrc"), path.join(os.homedir(), ".insectrc")];
+    var eachLine = util.promisify(lineReader.eachLine);
+
+    for (const rcFilePath of rcFilePaths) {
+      try {
+        await eachLine(rcFilePath, function(line) {
+          var res = runInsect(Insect.fmtPlain, line);
+          // We really only care when it breaks
+          if (res && res.msgType === "error") {
+            console.error(res.msg);
+            process.exit(1);
+          }
+        });
+        break;
+      } catch (err) {
+        if (err.code !== "ENOENT") {
+          throw err;
+        }
+      }
+    }
+  }
+
+  // Handle command line arguments
+  var args = process.argv.slice(2);
+  if (args[0] === "-h" || args[0] === "--help") {
     usage();
-  } else {
+  } else if (args.length !== 0) {
     // Execute a single command
-    var res = runInsect(Insect.fmtPlain, arg);
+    var res = runInsect(Insect.fmtPlain, args.join(" "));
     if (res.msgType === "value" || res.msgType === "info") {
       console.log(res.msg);
     } else if (res.msgType === "error") {
       console.error(res.msg);
+      process.exit(1);
     }
     process.exit(0);
   }
-}
 
-if (process.env.INSECT_NO_RC !== "true") {
-  // Top-level await is not supported in Node 12 and earlier.
-  (async function() {
-    var [os, lineReader] = await Promise.all([import("os"), import("line-reader")]);
-
-    var rcFile = path.join(os.homedir(), ".insectrc");
-    lineReader.eachLine(rcFile, function (line) {
-      var res = runInsect(Insect.fmtPlain, line);
-      // We really only care when it breaks
-      if (res && res.msgType === "error") {
-        console.error(res.msg);
-        process.exit(1);
-      }
-    }, function (err) {
-      // If the file doesn't exist, that's fine
-      if (err && err.code !== "ENOENT") {
-        throw err;
-      } else {
-        startInsect();
-      }
-    });
-  })();
-} else {
-  startInsect();
-}
-
-async function startInsect() {
   var interactive = process.stdin.isTTY;
 
   if (interactive) {
-    var [fs, clipboardy, readline, xdgBasedir] = await Promise.all([import("fs"), import("clipboardy"), import("readline"), import("xdg-basedir")]);
+    var [fs, clipboardy, readline] = await Promise.all([import("fs"), import("clipboardy"), import("readline")]);
 
     // Create `xdgBasedir.data` if it doesn't already exist.
     // See https://github.com/sharkdp/insect/issues/364.
@@ -192,4 +190,4 @@ async function startInsect() {
       }
     });
   }
-}
+}());
