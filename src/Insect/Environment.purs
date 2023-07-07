@@ -88,6 +88,7 @@ initialEnvironment =
         , constVal "protonMass"         Q.protonMass
         , constVal "speedOfLight"       Q.speedOfLight
         , constVal "R"                  Q.idealGasConstant
+        , constVal "faradayConstant"    Q.faradayConstant
 
         -- Hidden constants
         , hiddenVal "hundred"     (Q.scalar 1.0e2)
