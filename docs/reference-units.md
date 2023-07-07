@@ -57,6 +57,8 @@
     | [Miles per hour](https://en.wikipedia.org/wiki/Miles_per_hour) | `mph` |
     | [Millimeter of mercury](https://en.wikipedia.org/wiki/Millimeter_of_mercury) | `mmHg` |
     | [Minute](https://en.wikipedia.org/wiki/Minute) | `minutes`, `minute`, `min` |
+    | [Molal](https://en.wikipedia.org/wiki/Molality#Unit) | `molals`, `molal` |
+    | [Molar](https://en.wikipedia.org/wiki/Molar_concentration#Units) | `molars`, `molar` |
     | [Mole](https://en.wikipedia.org/wiki/Mole_(unit)) | `moles`, `mole`, `mol` |
     | [Month](https://en.wikipedia.org/wiki/Month) | `months`, `month` |
     | [Nautical mile](https://en.wikipedia.org/wiki/Nautical_mile) | `M`, `NM`, `nmi` |

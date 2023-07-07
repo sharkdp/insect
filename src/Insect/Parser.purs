@@ -242,6 +242,8 @@ normalUnitDict = Dictionary
   , Q.angstrom ==> ["angstroms", "angstrom", "Å"]
   , Q.gauss ==> ["gauss"]
   , Q.ampere ==> ["amperes", "ampere", "amps", "amp", "A"]
+  , Q.molal ==> ["molals", "molal"]
+  , Q.molar ==> ["molars", "molar"]
   , Q.mole ==> ["moles", "mole", "mol"]
   , Q.kelvin ==> ["kelvins", "kelvin", "K"]
   , Q.candela ==> ["candelas", "candela", "cd"]
