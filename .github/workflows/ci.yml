@@ -40,7 +40,7 @@ jobs:
         run: npm test
 
       - name: Generate README
-        uses: docker://pandoc/core:2.19
+        uses: docker://pandoc/core:3.1
         with:
           entrypoint: ./docs/generate
 
