@@ -124,7 +124,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 -------------------------------------------------------------------------------------
-semver 5.7.1
+semver 5.7.2
 
 The ISC License
 
