@@ -1,3 +1,6 @@
+## Note: Please consider using the follow-up project instead: [Numbat](https://github.com/sharkdp/numbat).
+
+
 <!--
 
     --- IMPORTANT --- IMPORTANT --- IMPORTANT ---
