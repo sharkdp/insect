@@ -19,8 +19,6 @@ you can read more about why Insect has been rewritten from scratch [here](https:
 
 A high-precision scientific calculator with full support for physical units.
 
-**Try the web version here**: https://insect.sh
-
 Contents
 --------
 
